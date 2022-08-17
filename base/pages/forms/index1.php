@@ -1,6 +1,7 @@
 <?php 
 require_once('config.php');
 require_once('core/controller.Class.php');
+
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,7 +27,17 @@ require_once('core/controller.Class.php');
   {
     $Controller = new Controller;
     if($Controller -> checkUserStatus($_COOKIE["id"],$_COOKIE["sess"])){
-      header('Location: inicio.php');
+      $sql="SELECT id_detalle FROM bd_local.tbl_detalle_emple where id_detalle='".$login."'";
+      $result=mysqli_query($conexion,$sql);
+      $row=mysqli_fetch_assoc($result);
+      if($row==$_COOKIE['id'])
+      {
+        header('Location: new_pass.php');
+      }
+      else
+      {
+         header('Location: inicio.php');
+      }
     }
     else
     {
@@ -44,7 +55,7 @@ require_once('core/controller.Class.php');
 
       <form name='formulario' id='formulario' method='Post' action="Comprobar_Login.php">
         <div class="input-group mb-3">
-          <input type="email" class="form-control" id="exampleInputEmail1" placeholder="ejemplo@outlook.hn">
+          <input type="email" class="form-control" id="exampleInputEmail1" name='exampleInputEmail1' placeholder="ejemplo@outlook.hn">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -52,7 +63,7 @@ require_once('core/controller.Class.php');
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+          <input type="password" class="form-control" id="exampleInputPassword1" name='exampleInputPassword1' placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -77,12 +88,9 @@ require_once('core/controller.Class.php');
       </form>
 
       <!-- /.social-auth-links -->
-      <p class="mb-1">
-        <a href="new_pass.php">No recuerdo mi contraseña </a>
-      </p>
-      <p class="mb-0">
-        <a href="registrar.php" class="text-center">Regitrarse</a>
-      </p>
+      <!-- <p class="mb-1">
+        <a href="forgot_password.php">No recuerdo mi contraseña </a>
+      </p> -->
     </div>
   </div>
   <?php

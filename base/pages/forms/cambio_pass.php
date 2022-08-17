@@ -38,7 +38,7 @@ $accion=isset($_POST["accion"])?$_POST["accion"]:"";
        {
         if(document.getElementById("accion").value=="")
           {
-          //  alert('si llega');
+            //alert('si llega');
             document.getElementById("accion").value="guardar";
           }
           document.getElementById("formulario").submit();
@@ -55,11 +55,8 @@ $accion=isset($_POST["accion"])?$_POST["accion"]:"";
   if($accion=="guardar")
    {
    
-  $sql="INSERT INTO `bd_local`.`tbl_detalle_emple` (`id_detalle`, `em_estado`) VALUES ('".$_COOKIE['id']."', 'ACTIVO');";
-    // echo "SQL ".$sql;
-     
+ 
     $sql1="UPDATE `bd_local`.`tbl_user` SET `password` = '".$_POST['pass']."' WHERE (`id` = '".$_COOKIE['id']."')";
-      $resultado=mysqli_query($conexion,$sql);
        $resultado=mysqli_query($conexion,$sql1);
       $accion="";
       //echo "<script>alert('Informacion Guardada Satisfactoriamente');</script>";
@@ -73,7 +70,7 @@ $accion=isset($_POST["accion"])?$_POST["accion"]:"";
       <a href="../../index2.html" class="h1"><b>Cooperativa </b>Ceibeña</a>
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Cambio de contraseña temporal</p>
+      <p class="login-box-msg">Cambio de contraseña</p>
       <form name='formulario' id='formulario' class="principal" action="new_pass.php" method="POST">
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
         <div class="input-group mb-3">

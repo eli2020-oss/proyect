@@ -1,8 +1,10 @@
 <?php
 session_start();
 include('menu.php');
-$login= $_COOKIE["id"]."";
-  ?>
+$login= $_COOKIE['id']."";
+include('Conexion.php');
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,27 +22,8 @@ $login= $_COOKIE["id"]."";
   <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<script type="text/javascript">
-  function Validar()
-      {
-       
-         <?php
-      include("Conexion.php"); 
-    $accion=isset($_POST["accion"])?$_POST["accion"]:"";
-    $estado="ACTIVO";
-    $nombre="";
-    $consulta="SELECT f_name FROM tbl_user";
-  $result=mysqli_query($conexion,$consulta);
-      while($row=mysqli_fetch_assoc($result))
-      {
-        $nombre=$row["em_nombre"]."";
-      }
-
-    $sql="";
-    //echo "<script>alert('Informacion Modificada Satisfactoriamente');</script>";
-    ?>
-  </script>
 <body class="hold-transition sidebar-mini">
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -49,7 +32,7 @@ $login= $_COOKIE["id"]."";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1><?php echo '<a href="logout.php">Logout</a>'?> </h1>
+            <h1>Inicio</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -222,5 +205,36 @@ $login= $_COOKIE["id"]."";
     });
   });
 </script>
+<script>
+  document.getElementById('sweetalert').addEventListener('click',function(){
+    const {value : pass} =  Swal.fire({
+        title:'IMPORTANTE!',
+         text:'Por favor cambiar la contraseña temporal. ',
+    
+         icon:'warning',
+       
+         padding:'1rem',
+        
+         backdrop:true,
+        
+         position:'center',
+         allowOutsideClick: false,
+         allowEscapeKey: false, 
+         allowEnterKey: false,
+         stopKeydownPropagation: false,
+    
+         input: 'password',
+         inputPlaceholder: '123' ,
+        inputValue:'',
+     
+         showConfirmButton:true,
+         confirmButtonColor:'#dc3545',
+         confirmButtonAriaLabel:'Confirmar'
+    
+       
+    });
+  })
+</script>
+
 </body>
 </html>

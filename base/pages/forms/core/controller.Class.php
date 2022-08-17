@@ -59,7 +59,7 @@ class Controller{
             $session = $this -> generateCode (10);
             $inserUser = $db -> prepare("INSERT INTO tbl_user (id,f_name,l_name, avatar,email,password,session) value (:id,:f_name, :l_name, :avatar,:email,:password,:session)");
             $inserUser -> execute([
-                ':id'=> 'US-6',
+                ':id'=> 'US-'.$this->generateCode(5),
                 ':f_name'=> $data["givenName"],
                 ':l_name'=> $data["familyName"],
                 ':avatar'=> $data["avatar"],

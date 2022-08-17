@@ -1,13 +1,25 @@
 <?php
 //session_start();
-
+include('conexion.php');
 $nombre="";
 $login= $_COOKIE["id"]."";
-$nom="";
-$accodigo="";
-$acestado="";
-$aceuser="";
-
+$avatar='';
+$sql="SELECT  concat(us.f_name,' ',us.l_name) as nombre,
+ au.acc_id as acid, ac.acc_nombre, ac.acc_id as acceso,avatar
+FROM  bd_local.tbl_user as us 
+inner join bd_local.user_acceso as au 
+inner join  bd_local.tbl_acceso as ac where au.acc_id=ac.acc_id 
+and au.us_id=us.id and au.us_id='".$login."';";
+  $result=mysqli_query($conexion,$sql);
+      while($row=mysqli_fetch_assoc($result))
+      {
+        $nombre=$row["nombre"]."";
+       $avatar=$row['avatar'];
+         $_SESSION[$row["acceso"]]=isset($row["acid"])?$row["acid"]:"";
+        
+      }
+$_SESSION['name']=$nombre;
+$_SESSION['avatar']=$avatar;
 ?>
 
 <div class="wrapper">
@@ -34,7 +46,7 @@ $aceuser="";
           <a href="#" class="dropdown-item">
             <!-- Message Start -->
             <div class="media">
-              <img src="../../dist/img/user1-128x128.jpg" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+              <img src="" alt="User Avatar" class="img-size-50 mr-3 img-circle">
               <div class="media-body">
                 <h3 class="dropdown-item-title">
                   Brad Diesel
@@ -72,10 +84,10 @@ $aceuser="";
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <img src="../../dist/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
+          <img styte='max-width: 50px;' src='<?php echo $avatar ?>' class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-            <a href="inicio.php" class="d-block"><?php echo $login; ?></a>
+            <a href="perfil.php" class="d-block"><?php echo $nombre; ?></a>
         </div>
       </div>
 
