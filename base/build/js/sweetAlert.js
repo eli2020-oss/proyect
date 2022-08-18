@@ -1,10 +1,10 @@
 
 (async ()=>{
     const {value : pass} =  Swal.fire({
-        title:'IMPORTANTE!',
-         text:'Por favor cambiar la contraseña temporal. ',
+        title:'ACCESO DENEGADO!',
+         text:'SU CUENTA A SIDO BLOQUEADA ',
         // html:
-         icon:'warning',
+         icon:'error',
         // confirmButtonText:
         // footer:
         // width:
@@ -21,9 +21,9 @@
          allowEnterKey: false,
          stopKeydownPropagation: false,
     
-         input: 'password',
-         inputPlaceholder: '123' ,
-        inputValue:'',
+        // input: 'password',
+        // inputPlaceholder: '123' ,
+       // inputValue:'',
         // inputOptions:
         
         //  customClass:
@@ -60,25 +60,5 @@
         // imageHeight:
         // imageAlt:
     });
-    if(pass)
-    {
-      //  Swal.fire({
-          //  html: 'Cambio hecho con exito!',
-            //confirmButtonText:'Aceptar',
-           // icon: 'info',
-           /// padding:'1rem',
-           // grow: 'row',
-           // backdrop: true,
-           // toast: true,
-            //pasition: 'botton',
-            //allowOutsideClick: ture,
-            //allowEscapeKey:false,
-            //stopKeydownPropagation: false,
-           // showConfirmButton: true,
-            //showCancelButton: false,
-            //showCloseButton: true
-            
-        //});
-    }
 })()
 

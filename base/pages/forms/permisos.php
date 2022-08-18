@@ -1,14 +1,16 @@
 <?php
- include("Conexion.php");
- include('menu.php');
-$accion=isset($_POST["accion"])?$_POST["accion"]:"";
+session_start();
+include('menu.php');
+$login= $_COOKIE['id']."";
+include('Conexion.php');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ACCESOS | USUARIO</title>
+  <title>ACCESOS | PERMISOS</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -53,39 +55,7 @@ $accion=isset($_POST["accion"])?$_POST["accion"]:"";
    
   
 </script>
-<?php
- $contador=0;
- $sql2="SELECT id FROM bd_local.categorias_user;"; 
-                  // echo "SQL ".$sql2;
-                $result=mysqli_query($conexion,$sql2);
-                          while($row=mysqli_fetch_assoc($result))
-                          {
-                            $contador++;
-                          } 
-                          $contador=$contador+1; 
-                        //  echo "<script>alert('".$contador."');</script>";
-               if ($accion=="agregar") 
-               {
-              // Echo "<script>alert('');</script>";
-                   
-                           
 
-                      $sql="INSERT INTO `bd_local`.`user_acceso` (`us_id`, `acc_id`, `estado`) VALUES ('".$_POST["cmbuser"]."', '".$_POST["cmbaccesos"]."', 'ACTIVO');";
-//echo " el sql    ".$sql;
- $result=mysqli_query($conexion,$sql);
-}
-if($accion=='desabilitar')
-{
-  //$variablephp="";
- //$variablephp = "<script> document.write(getInput) </script>";
-  // echo "<script>alert('".$_POST['cc']."');</script>";
- //  echo "<script>alert('".$_POST['ca']."');</script>";
-   // echo "                  ".isset($_POST['cc']);
-  $sql="UPDATE `bd_local`.`user_acceso` SET `estado` = 'INACTIVO' WHERE (`us_id` = '".$_POST["cc"]."') and (`acc_id` = '".$_POST['ca']."');";
-//echo " el sql    ".$sql;
- $result=mysqli_query($conexion,$sql);
-}
-  ?>
 <body class="hold-transition sidebar-mini">
  <div class="content-wrapper">
    <section class="content-header">
@@ -133,49 +103,7 @@ if($accion=='desabilitar')
                   </tr>
                   </thead>
                   <tbody>
-             
-                  <tr>
-                    <td>Gecko</td>
-                    <td>Netscape Browser 8</td>
-                    <td>Win 98SE+</td>
-                    <td>1.7</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Gecko</td>
-                    <td>Netscape Navigator 9</td>
-                    <td>Win 98+ / OSX.2+</td>
-                    <td>1.8</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Gecko</td>
-                    <td>Mozilla 1.0</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Gecko</td>
-                    <td>Mozilla 1.1</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1.1</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Gecko</td>
-                    <td>Mozilla 1.2</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1.2</td>
-                    <td>A</td>
-                  </tr>
-                  <tr>
-                    <td>Gecko</td>
-                    <td>Mozilla 1.3</td>
-                    <td>Win 95+ / OSX.1+</td>
-                    <td>1.3</td>
-                    <td>A</td>
-                  </tr>
+
                   <tr>
                     <td>Gecko</td>
                     <td>Mozilla 1.4</td>

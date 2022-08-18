@@ -27,9 +27,10 @@ require_once('core/controller.Class.php');
   {
     $Controller = new Controller;
     if($Controller -> checkUserStatus($_COOKIE["id"],$_COOKIE["sess"])){
-      $sql="SELECT id_detalle FROM bd_local.tbl_detalle_emple where id_detalle='".$login."'";
+      $sql="SELECT id FROM bd_local.tbl_detalle_emple where id='".$_COOKIE['id']."'";
       $result=mysqli_query($conexion,$sql);
       $row=mysqli_fetch_assoc($result);
+      
       if($row==$_COOKIE['id'])
       {
         header('Location: new_pass.php');

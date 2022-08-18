@@ -12,11 +12,13 @@ include('menu.php');
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>MODULO DE USER</title>
-
-  <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
@@ -37,63 +39,30 @@ include('menu.php');
 <script type="text/javascript">
  function cargar2(codigo)
       {
-        //alert("Entra");
-     //  localStorage.clear();
+        
          document.getElementById("accion").value="habilitar";
          document.getElementById("cc").value=codigo;
-          //
-         //localStorage.setItem("ab",getInput);
+         
             document.getElementById("formulario").submit();
       } 
    
   
 </script>
-<script type="text/javascript">
-     function search(codigo)
-      {
-       alert("Entra");
-       var getInput =codigo;
-              document.getElementById("buscar").value=codigo;
-            document.getElementById("formulario").submit();
-      } 
-  </script>
-  <?php
-  //  
-  $variablephp="";
-  $variablephp = "<script> document.write(getInput) </script>";
-  //echo "<script>alert('".$variablephp."');</script>";
-    $estado="ACTIVO";
-    $nombre="";
-    $id="";
-    $empresa="";
-    $consulta="SELECT em_nombre, em_id, emp_nombre FROM bd_local.tbl_emple inner join bd_local.tbl_empresa ";
-     $result=mysqli_query($conexion,$consulta);
-      while($row=mysqli_fetch_assoc($result))
-      {
-        $nombre=$row["em_nombre"]."";
-         $id=$row["em_id"]."";
-         $empresa=$row["emp_nombre"]."";
-      }
-    
-if($accion=='desabilitar')
-{
-  //
-  // 
-   // echo "                  ".isset($_POST['cc']);
- $sql="UPDATE `bd_local`.`tbl_user` SET `u_estado` = 'INACTIVO' WHERE (`us_id` = '".$_POST['cc']."');";
-//echo " el sql    ".$sql;
-$result=mysqli_query($conexion,$sql);
-}
-if($accion=='habilitar')
-{
-  //$variablephp="";
- //$variablephp = "<script> document.write(getInput) </script>";
-  // echo "<script>alert('PRIMERO');</script>";
-   // echo "                  ".isset($_POST['cc']);
- $sql="UPDATE `bd_local`.`tbl_user` SET `u_estado` = 'ACTIVO' WHERE (`us_id` = '".$_POST['cc']."');";
-//echo " el sql    ".$sql;
-$result=mysqli_query($conexion,$sql);
-}
+  <?php    
+      //MANEJO DEL ESTADO DE LOS USUARIOS 
+        if($accion=='desabilitar')
+        {  
+          $sql="UPDATE `bd_local`.`tbl_detalle_emple` SET `em_estado` = 'INACTIVO' WHERE (`id` = '".$_POST['cc']."');";
+          //echo " el sql    ".$sql;
+          $result=mysqli_query($conexion,$sql);
+        }
+        if($accion=='habilitar')
+        {
+          
+          $sql="UPDATE `bd_local`.`tbl_detalle_emple` SET `em_estado` = 'ACTIVO' WHERE (`id` = '".$_POST['cc']."');";
+          //echo " el sql    ".$sql;
+          $result=mysqli_query($conexion,$sql);
+        }
     ?>
 <body class="hold-transition sidebar-mini">
   <!-- ENCABEZADO -->
@@ -128,89 +97,51 @@ $result=mysqli_query($conexion,$sql);
           <h3 class="card-title">Lista de usuarios</h3>
            <div class="card-tools">
                   <div class="input-group input-group-sm" style="width: 300px;">
-                    <input type="text" name="table_search" id="table_search" class="form-control float-right" placeholder='<?php echo $buscar; ?>'>
-
-                    <div class="input-group-append">
-                      <button type="submit" class="btn btn-default" onclick='return search("<?php echo $_POST['table_search'] ?>")'>
-                        <i class="fas fa-search"></i>
-                      </button>
-                    </div>
                   </div>
-                </div>
-              </div>
-
-        <div class="card-body">
-           <div id="control-table" method="POST" action="#">
-              <div class="card-body table-responsive p-0" style="height: 300px;">
-           <table class="table table-head-fixed text-nowrap" name="table">
-              <thead>
+            </div>
+        </div>
+              <div class="card-body">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
                   <tr>
-                      <th style="width: 1%">
-                          ID
-                      </th>
-                      <th style="width: 20%">
-                          Nombre
-                      </th>
-                      <th style="width: 30%">
-                          Correo
-                      </th>
-                      
-                      <th style="width: 8%" class="text-center">
-                          Estado
-                      </th>
-                      <th style="width: 20%">
-                      </th>
+                    <th>Identificador</th>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th>Habilitado</th>
+                    <th></th>
                   </tr>
-              </thead>
-              <tbody>
-                <?php
-
-                    $sql="SELECT u.us_id as id, e.em_id as codigo,u_estado as estado, em_nombre as nombre,
-                         em_correo as correo FROM bd_local.tbl_user as u inner join bd_local.tbl_emple as e where e.em_id=u.em_id;";
+                  </thead>
+                 
+                    <tbody>
+                    <?php 
+                    $sql="SELECT u.id,concat(f_name,' ',l_name) as nombre,email,e.em_estado as estado 
+                    FROM bd_local.tbl_user  as u inner join bd_local.tbl_detalle_emple as e where u.id=e.id;";
                     $result=mysqli_query($conexion,$sql);
                     while($row=mysqli_fetch_assoc($result))
                     {
-                      //$estado="".$_POST['estado'];
                       echo "
                       <tr>
-                         <tr>
-                      <td>
-                          ".$row["codigo"]."
-                      </td>
-                      <td>
-                          <a>
-                           " .$row["nombre"]."
-                          </a>
-                          <br/>
-                      </td>
-                      <td>
-                        ".$row["correo"]."
-                      </td>
-                      
-                       <td class='project-state'>
-
-                          <span class=''>".$row["estado"]."</span>
-                      </td>
-                       <td class='project-actions text-right'>
-                          <a class='btn btn-danger btn-sm' onclick='return cargar1(\"".$row["id"]."\")' >
-                             DESABILITAR
-                          </a>
-                          <a class='btn btn-primary btn-sm' onclick='return cargar2(\"".$row["id"]."\")' >
-                            HABILITAR
-                          </a>
-                    
-
-                      </td>
-                      "?>
-                  </tr>
-                 <?php  
-                    }
-
-                 ?>
+                        <td>".$row['id']."</td>
+                        <td>".$row['nombre']."</td>
+                        <td>".$row['email']."</td>
+                        <td>".$row['estado']."</td>
+                        <td class='project-actions text-right'>
+                        <a class='btn btn-danger btn-sm' onclick='return cargar1(\"".$row["id"]."\")' >
+                           DESABILITAR
+                        </a>
+                        <a class='btn btn-primary btn-sm' onclick='return cargar2(\"".$row["id"]."\")' >
+                          HABILITAR
+                        </a>
                   
-              </tbody>
-          </table>
-        </div>
+
+                    </td>
+                      </tr>
+                      ";
+                   }?>
+                  </tbody>
+                
+                </table>
+              </div>
         <!-- /.card-body -->
       </div>
       <!-- /.card -->
@@ -232,13 +163,43 @@ $result=mysqli_query($conexion,$sql);
 </div>
 <!-- ./wrapper -->
 
-<!-- jQuery -->
 <script src="../../plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="../../plugins/jszip/jszip.min.js"></script>
+<script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+<script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../dist/js/demo.js"></script>
+<!-- Page specific script -->
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
 </body>
 </html>

@@ -35,62 +35,91 @@ include('menu.php');
   <link rel="stylesheet" href="../../plugins/dropzone/min/dropzone.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
-   <!-- Google Font: Source Sans Pro -->
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
-  <!-- DataTables -->
-  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
-  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
-  <!-- Theme style -->
-  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
 <script type="text/javascript">
- function cargar1(codigo)
+ function cargar()
       {
-       // alert("Entra");
-     //  localStorage.clear();
-         document.getElementById("accion").value="desabilitar";
-         document.getElementById("cc").value=codigo;
-          //var getInput =codigo;
-        // alert(codigo);
-         //localStorage.setItem("ab",getInput);
-            document.getElementById("formulario").submit();
+         if(document.getElementById("accion").value=="")
+          {
+            document.getElementById("accion").value="agregar";
+          }
+        
+          document.getElementById("formulario").submit();
+           return false;
       } 
    
   
 </script>
-<?php    
-      //MANEJO DEL ESTADO DE LOS USUARIOS 
-        if($accion=='desabilitar')
-        {  
-          $sql="UPDATE `bd_local`.`categorias_user` SET `estado` = 'INACTIVO' WHERE (`id` = '".$_POST['cc']."');";
-        //echo " el sql    ".$sql;
-          $result=mysqli_query($conexion,$sql);
-        // echo "<script>alert('desabilitar');</script>";
-        }
-        if($accion=='habilitar')
-        {
-          
-          $sql="UPDATE `bd_local`.`categorias_user` SET `estado` = 'ACTIVO' WHERE (`id` =  '".$_POST['cc']."');";
-        // echo " el sql    ".$sql;
-         $result=mysqli_query($conexion,$sql);
-       // echo "<script>alert('habilitar');</script>";;
-        }
-    ?>
-<script type="text/javascript">
- function cargar2(codigo)
-      {
-        
-         document.getElementById("accion").value="habilitar";
-         document.getElementById("cc").value=codigo;
-         
-            document.getElementById("formulario").submit();
-      } 
-   
-  
-</script>     
+
+<?php
+ $contador=0;
+ $sql2="SELECT id FROM bd_local.categorias_user;"; 
+                  // echo "SQL ".$sql2;
+                $result=mysqli_query($conexion,$sql2);
+                          while($row=mysqli_fetch_assoc($result))
+                          {
+                            $contador++;
+                          } 
+                          $contador=$contador+1; 
+                        //  echo "<script>alert('".$contador."');</script>";
+               if ($accion=="agregar") 
+               {
+                            //Echo "<script>alert('NO deberia entrar');</script>";
+                            $temporal=isset($_POST['estado']);
+                            $final;
+                            if($temporal=='on')
+                               $final='ACTIVO';
+                            else
+                               $final='INACTIVO';
+                            //echo "<script>alert('".$final."');</script>";
+                                    $cate_id="";
+                                    $t_categoria="";
+                                    $sql1="";
+                        
+                            $sql1="SELECT cate_id as cate,t_categoria as des FROM bd_local.tbl_categoria  where cate_id='".$_POST["cmbtareas"]."'"; 
+                            //  echo $sql1;
+                            $log=$_SESSION['login']."";
+                          $resultado=mysqli_query($conexion,$sql1);
+                          while($row=mysqli_fetch_assoc($resultado))
+                          {
+ 
+                               $cate_id=$row['cate']."";
+                               $t_categoria=$row['des']."";
+                                
+                          }
+                          $sql="SELECT id_categoria as cate, u.id as id,concat(u.f_name,' ',u.l_name) as nombre
+                          FROM bd_local.categorias_user  inner join bd_local.tbl_user as u where u.id=id_user";
+                          $existir; 
+                          $user='';
+                        $resultado=mysqli_query($conexion,$sql);
+                        while($row=mysqli_fetch_assoc($resultado))
+                        {
+                            if($row['cate']==$_POST['cmbtareas'] && $row['id']==$_POST['cmbuser'])
+                            {
+                                $existir=true;
+                                
+                                 $user=$row['nombre'];
+                            }
+                            else if($row['cate']!=$_POST['cmbtareas'] && $row['id']!=$_POST['cmbuser'])
+                            {
+                                $existir=false;
+                               
+                            }
+                          
+                        }
+                        if($existir==true)
+                        {
+                            echo "<script>alert('La tarea ya fue asignada a el usuario ".$user."');</script>";
+                        }else if($existir==false)
+                        {
+                            $sql="INSERT INTO `bd_local`.`categorias_user` (`id`, `id_user`, `id_categoria`, `t_descripcion`, `estado`) VALUES ('CU-".$contador."', '".$_POST['cmbuser']."', '".$_POST['cmbtareas']."', '".$t_categoria."', '".$final."');";
+                            //   echo " el sql    ".$sql;
+                                 $result=mysqli_query($conexion,$sql);
+                                
+                        }
+                }
+
+  ?>
 <body class="hold-transition sidebar-mini">
  <div class="content-wrapper">
    <section class="content-header">
@@ -101,8 +130,9 @@ include('menu.php');
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">tareas</li>
+              <li class="breadcrumb-item"><a href="inicio.php">Inicio</a></li>
+              <li class="breadcrumb-item active"><a href="tareas.php">Tareas</a></li>
+              <li class="breadcrumb-item active">Asignacion</li>
             </ol>
           </div>
         </div>
@@ -116,63 +146,72 @@ include('menu.php');
         <!-- SELECT2 EXAMPLE -->
         <div class="card card-default">
           <div class="card-header">
-            <h3 class="card-title">Control de tareas</h3>
+            <h3 class="card-title">Asignacion de tarea</h3>
           </div>
           <!-- /.card-header -->
-           <form name='formulario' id='formulario' class="principal" action="tareas.php" method="POST">
+           <form name='formulario' id='formulario' class="principal" action="asignar_tarea.php" method="POST">
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
              <input type="hidden" name="cc" id="cc" value="<?php echo $cc; ?>">
-
-        
-             <div class="card">
-             <div class="input-group-prepend">
-             <a href="asignar_tarea.php" class="nav-link">
-                    <button type="button" class="btn btn-danger" id="btnguardar" >Asignar nueva tarea</button>
-    </a>
-                  </div>
-              <div class="card-body">
-                <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>Identificador</th>
-                    <th>Nombre</th>
-                    <th>Estado</th>
-                    <th></th>
-                  </tr>
-                  </thead>
-                 
-                    <tbody>
-                    <?php 
-                    $sql="SELECT c.id as cate,t_descripcion as descrip, u.id,concat(u.f_name,' ',u.l_name) 
-                    as nombre, estado FROM bd_local.categorias_user as c 
-                    inner join bd_local.tbl_user as u where u.id=id_user";
-                    $result=mysqli_query($conexion,$sql);
-                    while($row=mysqli_fetch_assoc($result))
-                    {
-                      echo "
-                      <tr>
-                        <td>".$row['descrip']."</td>
-                        <td>".$row['nombre']."</td>
-                        <td>".$row['estado']."</td>
-                        <td class='project-actions text-right'>
-                        <a class='btn btn-danger btn-sm' onclick='return cargar1(\"".$row["cate"]."\")' >
-                           DESABILITAR
-                        </a>
-                        <a class='btn btn-primary btn-sm' onclick='return cargar2(\"".$row["cate"]."\")' >
-                          HABILITAR
-                        </a>
-                  
-
-                    </td>
-                      </tr>
-                      ";
-                   }?>
-                  </tbody>
-                
-                </table>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Usuario</label>
+                  <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" >
+                 <?php 
+                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
+                      inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
+                      $result=mysqli_query($conexion,$sql);
+                      while($row=mysqli_fetch_assoc($result)) 
+                      {
+                        $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
+                        echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
+                      }
+                    ?>
+                  </select>
+                </div>
+                <div class="card card-secondary">
+              <div class="card-header">
+                <h3 class="card-title">Estado de la asginacion</h3>
               </div>
-        <!-- /.card-body -->
-      </div>
+              <div class="card-body">
+                <input type="checkbox"  name="estado" id="estado"  checked data-bootstrap-switch data-off-color="danger" data-on-color="success">
+              </div>
+            </div>
+                <!-- /.form-group -->
+              
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Tareas</label>
+                  <select class="form-control select2" id="cmbtareas" name="cmbtareas"  style="width: 100%;">
+                     <?php 
+                      $sql="SELECT cate_id as codigo,t_categoria as nombre FROM bd_local.tbl_categoria where cate_estado='ACTIVO';";
+                      $result=mysqli_query($conexion,$sql);
+                      while($row=mysqli_fetch_assoc($result)) 
+                      {
+                        $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
+                        echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
+                      }
+                    ?>
+                   
+                  </select>
+                </div>
+              </div>
+              <!-- /.col -->
+              <div class="btn-group w-100">
+                      <span class="btn btn-success col fileinput-button" onclick="return cargar();">
+                        <i class="fas fa-plus"></i>
+                        <span>Agregar tarea</span>
+                      </span>
+            </div>
+            <!-- /.row -->
+          </div>
+          <br>
+        
+    
 <!-- ./wrapper -->
 
 <!-- jQuery -->
@@ -203,31 +242,6 @@ include('menu.php');
 <!-- AdminLTE for demo purposes -->
 <script src="../../dist/js/demo.js"></script>
 <!-- Page specific script -->
-<script src="../../plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- DataTables  & Plugins -->
-
-<script src="../../plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- DataTables  & Plugins -->
-<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
-<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
-<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
-<script src="../../plugins/jszip/jszip.min.js"></script>
-<script src="../../plugins/pdfmake/pdfmake.min.js"></script>
-<script src="../../plugins/pdfmake/vfs_fonts.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- AdminLTE App -->
-<script src="../../dist/js/adminlte.min.js"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="../../dist/js/demo.js"></script>
 <script>
   $(function () {
     //Initialize Select2 Elements
@@ -358,22 +372,6 @@ include('menu.php');
   };
   // DropzoneJS Demo Code End
 </script>
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
+
 </body>
 </html>
