@@ -1,14 +1,14 @@
 <?php
 session_start();
 include('menu.php');
-$login= $_SESSION["login"]."";
+//$login= $_SESSION["login"]."";
   ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TICKES</title>
+  <title>NUEVO TICKES</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -66,7 +66,8 @@ $fechaan="";
 $fechanew="";
 $contadord;
 $orig="";
-$consulta="SELECT fecha,concat(CURDATE()) as compa,us_id,nuser,contador_transacciones FROM   bd_local.transacciones inner join bd_local.tbl_user";
+$consulta="SELECT fecha,concat(CURDATE()) as compa,id,concat(f_name,' ',l_name) 
+as nombre,contador_transacciones FROM   bd_local.transacciones inner join bd_local.tbl_user";
  $resultado=mysqli_query($conexion,$consulta);
   while($row=mysqli_fetch_assoc($resultado))
       {
@@ -74,11 +75,7 @@ $consulta="SELECT fecha,concat(CURDATE()) as compa,us_id,nuser,contador_transacc
          $fechanew=$row["compa"]."";
          $contadord=$row["contador_transacciones"]."";
 
-         if($login==$row["nuser"]."")
-         {
-           $orig=$row["us_id"]."";
-        //  echo "<script>alert('".$contadord."');</script>"; 
-         }
+         
       }
 if ($fechaan!=$fechanew) {
   //echo "<script>alert('Nuevo dia');</script>";
@@ -100,26 +97,26 @@ else
     if($accion=="guardar")
      {
 
-     $sqlc="SELECT id_user as mante FROM bd_local.categorias_user as cu inner join bd_local.tbl_user as u 
-inner join bd_local.tbl_categoria as c where cu.id_user=u.us_id 
-and cu.id_categoria=c.cate_id and cu.id_categoria='".$_POST['cmbcategoria']."'"; 
-echo "SQL ".$sqlc;
-$resultado=mysqli_query($conexion,$sqlc);
- while($row=mysqli_fetch_assoc($resultado))
-      {
-        $man=$row['mante']."";
-      }
-      echo "man  ".$man;
-      
-    $sql="INSERT INTO `bd_local`.`tbl_ticketsc` (`tickes_id`, `o_us`, `us_id`, `cate_id`, `tk_nivel`, `tk_descripcion`, `t_fechaini`, `tfechafinal`, `tic_estado`) VALUES ( concat(CURDATE()+0,'-".$cambio."'), '".$orig."', '".$man."', '".$_POST['cmbcategoria']."', '".$_POST['cmbnivel']."', '".$_POST['textarea']."', now(), '".$fechande."', 'ACTIVO');";
-       echo "SQL ".$sql;
-       
-      $sql1=" UPDATE `bd_local`.`transacciones` SET `contador_transacciones` = '".$cambio."' WHERE (`codigo` = '0');";
-        $resultado=mysqli_query($conexion,$sql);
-         $resultado=mysqli_query($conexion,$sql1);
-        $accion="";
-        echo "<script>alert('Informacion Guardada Satisfactoriamente');</script>";
-     }
+              $sqlc="SELECT id_user as mante FROM bd_local.categorias_user as cu inner join bd_local.tbl_user as u 
+          inner join bd_local.tbl_categoria as c where cu.id_user=u.us_id 
+          and cu.id_categoria=c.cate_id and cu.id_categoria='".$_POST['cmbcategoria']."'"; 
+          echo "SQL ".$sqlc;
+          $resultado=mysqli_query($conexion,$sqlc);
+          while($row=mysqli_fetch_assoc($resultado))
+                {
+                  $man=$row['mante']."";
+                }
+                echo "man  ".$man;
+                
+              $sql="INSERT INTO `bd_local`.`tbl_ticketsc` (`tickes_id`, `o_us`, `us_id`, `cate_id`, `tk_nivel`, `tk_descripcion`, `t_fechaini`, `tfechafinal`, `tic_estado`) VALUES ( concat(CURDATE()+0,'-".$cambio."'), '".$_COOKIE['id']."', '".$man."', '".$_POST['cmbcategoria']."', '".$_POST['cmbnivel']."', '".$_POST['textarea']."', now(), '".$fechande."', 'ACTIVO');";
+                echo "SQL ".$sql;
+                
+                $sql1=" UPDATE `bd_local`.`transacciones` SET `contador_transacciones` = '".$cambio."' WHERE (`codigo` = '0');";
+                  $resultado=mysqli_query($conexion,$sql);
+                  $resultado=mysqli_query($conexion,$sql1);
+                  $accion="";
+                  echo "<script>alert('Informacion Guardada Satisfactoriamente');</script>";
+              }
 }
  
  ?>

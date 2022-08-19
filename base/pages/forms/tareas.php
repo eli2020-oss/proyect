@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('menu.php');
-  $_SESSION["login"];
+ // $_SESSION["login"];
       include("Conexion.php"); 
     $accion=isset($_POST["accion"])?$_POST["accion"]:"";
 ?>
@@ -128,7 +128,7 @@ include('menu.php');
              <div class="input-group-prepend">
              <a href="asignar_tarea.php" class="nav-link">
                     <button type="button" class="btn btn-danger" id="btnguardar" >Asignar nueva tarea</button>
-    </a>
+                    </a>
                   </div>
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">

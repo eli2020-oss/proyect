@@ -1,19 +1,19 @@
 <?php
 session_start();
 include('menu.php');
-$login= $_COOKIE['id']."";
-include('Conexion.php');
-
+ // $_SESSION["login"];
+      include("Conexion.php"); 
+    $accion=isset($_POST["accion"])?$_POST["accion"]:"";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ACCESOS | PERMISOS</title>
+  <title>FILIAL | DEPARTAMENTO</title>
 
-   <!-- Google Font: Source Sans Pro -->
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
   <!-- daterange picker -->
@@ -33,9 +33,10 @@ include('Conexion.php');
   <link rel="stylesheet" href="../../plugins/bs-stepper/css/bs-stepper.min.css">
   <!-- dropzonejs -->
   <link rel="stylesheet" href="../../plugins/dropzone/min/dropzone.min.css">
-
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+   <!-- Google Font: Source Sans Pro -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
   <!-- DataTables -->
@@ -49,62 +50,62 @@ include('Conexion.php');
 <script type="text/javascript">
  function cargar1(codigo)
       {
-        // alert("Entra");
+   //    alert("Entra1");
      //  localStorage.clear();
-     document.getElementById("accion").value="desabilitar";
+         document.getElementById("accion").value="desabilitar";
          document.getElementById("cc").value=codigo;
           //var getInput =codigo;
-         alert(codigo);
+        // alert(codigo);
          //localStorage.setItem("ab",getInput);
             document.getElementById("formulario").submit();
       } 
    
   
-function cambiar(e,id,user)
-		{
-      $.ajax({
-				type: 'POST',
-				url: "cambio_estado.php",
-				data: {ida:id,us:user,estado:e},
-				success: function(data)
-				{
-					//$("#tabla").append(data);
-          alert(data);
-				},
-				error: function(error)
-				{
-					//alert("Error");
-				}
-			});
-			return false;
-		}
-
-
-
 </script>
 <script type="text/javascript">
- function cambio()
+ function cargar2(codigo)
       {
-       /// alert("Entra");
-   
-           document.getElementById("formulario").submit();
+      //  alert("Entra");
+         document.getElementById("accion").value="habilitar";
+         document.getElementById("cc").value=codigo;
+         
+            document.getElementById("formulario").submit();
       } 
-      
+   
   
 </script>
-
+<?php
+      //MANEJO DEL ESTADO DE LOS USUARIOS 
+        if($accion=='desabilitar')
+        {  
+          $sql="UPDATE `bd_local`.`tbl_filial` SET `estado` = 'INACTIVO' WHERE (`id_filial` = '".$_POST['cc']."');";
+        //echo " el sql    ".$sql;
+          $result=mysqli_query($conexion,$sql);
+       //  echo "<script>alert('desabilitar');</script>";
+       //  echo "<script>alert('".$_POST['cc']."');</script>";
+        }
+        if($accion=='habilitar')
+        {
+          
+          $sql="UPDATE `bd_local`.`tbl_filial` SET `estado` = 'ACTIVO' WHERE (`id_filial` =  '".$_POST['cc']."');";
+        // echo " el sql    ".$sql;
+     $result=mysqli_query($conexion,$sql);
+     //   echo "<script>alert('habilitar');</script>";
+      //  echo "<script>alert('".$_POST['cc']."');</script>";
+        }
+    ?>   
 <body class="hold-transition sidebar-mini">
  <div class="content-wrapper">
    <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Control</h1>
+            <h1>Control de Filiales</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">tareas</li>
+              <li class="breadcrumb-item"><a href="inicio.php">Inicio</a></li>
+              <li class="breadcrumb-item active">Control de filiales</li>
             </ol>
           </div>
         </div>
@@ -117,87 +118,50 @@ function cambiar(e,id,user)
       <div class="container-fluid">
         <!-- SELECT2 EXAMPLE -->
         <div class="card card-default">
-        
+          <div class="card-header">
+            <h3 class="card-title">Historial de filiales</h3>
+          </div>
           <!-- /.card-header -->
-           <form name='formulario' id='formulario' class="principal" action="permisos.php" method="POST">
+           <form name='formulario' id='formulario' class="principal" action="control_filiales.php" method="POST">
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
              <input type="hidden" name="cc" id="cc" value="<?php echo $cc; ?>">
-             <input type="hidden" name="ca" id="ca" value="<?php echo $ca; ?>">
-            
-          <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Permisos</h3>
-              </div>
+
+        
+             <div class="card">
+             <div class="input-group-prepend">
+             <a href="crear_filial.php" class="nav-link">
+                    <button type="button" class="btn btn-danger" id="btnguardar" >Crear nueva Filial</button>
+                    </a>
+                  </div>
               <div class="card-body">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                <label>Usuario</label>
-                  <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" onchange="return cambio();" >
-                 <?php 
-                    echo "<option value=''>[----SELECCIONE UN USUARIO----]</option>";
-                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
-                      inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
-                      $result=mysqli_query($conexion,$sql);
-                      while($row=mysqli_fetch_assoc($result)) 
-                      {
-                        $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
-                        echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
-                      }
-                    ?>
-                  </select>
-                  
-                </div>
-                <!-- /.form-group -->
-              
-                <!-- /.form-group -->
-              </div>
-              <!-- /.col -->
-              <div class="col-md-2">
-               
-              </div>
-              <!-- /.col -->
-              <div class="btn-group w-100">
-                      
-            </div>
-            <!-- /.row -->
-          </div>
-          <br>
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
                     <th>Identificador</th>
                     <th>Nombre</th>
+                    <th>Direccion</th>
                     <th>Estado</th>
                     <th></th>
                   </tr>
                   </thead>
-                  <tbody>
-                  <?php 
-                  $vacio=(isset($_POST["cmbuser"])?$_POST["cmbuser"]:"");
-                 //echo $_POST['cmbuser'];
-                   if($vacio!="")
-                   { $sql="SELECT 
-                    a.acc_id as accesso_id,
-                    a.acc_nombre as nacceso,
-                    ifnull(u.estado,'INACTIVO')as access
-                    FROM bd_local.tbl_acceso a
-                    left outer join bd_local.user_acceso u on u.us_id='".$_POST["cmbuser"]."' and u.acc_id=a.acc_id
-                    where a.acc_estado='ACTIVO'";
-                    //echo $sql;
+                 
+                    <tbody>
+                    <?php 
+                    $sql="SELECT id_filial as id,nombre,direccion_filial,estado FROM bd_local.tbl_filial;";
                     $result=mysqli_query($conexion,$sql);
                     while($row=mysqli_fetch_assoc($result))
                     {
                       echo "
                       <tr>
-                        <td>".$row['accesso_id']."</td>
-                        <td>".$row['nacceso']."</td>
-                        <td>".$row['access']."</td>
+                        <td>".$row['id']."</td>
+                        <td>".$row['nombre']."</td>
+                        <td>".$row['direccion_filial']."</td>
+                        <td>".$row['estado']."</td>
                         <td class='project-actions text-right'>
-                        <a class='btn btn-danger btn-sm' onclick='return cambiar(0,\"".$row["accesso_id"]."\",\"".$_POST["cmbuser"]."\")' >
+                        <a class='btn btn-danger btn-sm' onclick='return cargar1(\"".$row["id"]."\")' >
                            DESABILITAR
                         </a>
-                        <a class='btn btn-primary btn-sm'onclick='return cambiar(1,\"".$row["accesso_id"]."\",\"".$_POST["cmbuser"]."\")' >
+                        <a class='btn btn-primary btn-sm' onclick='return cargar2(\"".$row["id"]."\")' >
                           HABILITAR
                         </a>
                   
@@ -205,17 +169,47 @@ function cambiar(e,id,user)
                     </td>
                       </tr>
                       ";
-                   }
-                  }?>
+                   }?>
                   </tbody>
                 
                 </table>
               </div>
-                  
-              <!-- /.card-body -->
-            </div>
-
+        <!-- /.card-body -->
+      </div>
 <!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 -->
+<script src="../../plugins/select2/js/select2.full.min.js"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="../../plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+<!-- InputMask -->
+<script src="../../plugins/moment/moment.min.js"></script>
+<script src="../../plugins/inputmask/jquery.inputmask.min.js"></script>
+<!-- date-range-picker -->
+<script src="../../plugins/daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap color picker -->
+<script src="../../plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="../../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Bootstrap Switch -->
+<script src="../../plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<!-- BS-Stepper -->
+<script src="../../plugins/bs-stepper/js/bs-stepper.min.js"></script>
+<!-- dropzonejs -->
+<script src="../../plugins/dropzone/min/dropzone.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+<!-- Page specific script -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables  & Plugins -->
 
 <script src="../../plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -237,26 +231,6 @@ function cambiar(e,id,user)
 <script src="../../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../dist/js/demo.js"></script>
-<!-- jQuery -->
-
-
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
 <script>
   $(function () {
     //Initialize Select2 Elements
@@ -386,6 +360,23 @@ function cambiar(e,id,user)
     myDropzone.removeAllFiles(true);
   };
   // DropzoneJS Demo Code End
+</script>
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
 </script>
 </body>
 </html>

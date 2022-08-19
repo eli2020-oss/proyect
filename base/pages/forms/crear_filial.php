@@ -1,19 +1,19 @@
 <?php
 session_start();
 include('menu.php');
-$login= $_COOKIE['id']."";
-include('Conexion.php');
-
+ // $_SESSION["login"];
+      include("Conexion.php"); 
+    $accion=isset($_POST["accion"])?$_POST["accion"]:"";
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ACCESOS | PERMISOS</title>
+  <title>FILIAL | DEPARTAMENTO</title>
 
-   <!-- Google Font: Source Sans Pro -->
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
   <!-- daterange picker -->
@@ -33,9 +33,10 @@ include('Conexion.php');
   <link rel="stylesheet" href="../../plugins/bs-stepper/css/bs-stepper.min.css">
   <!-- dropzonejs -->
   <link rel="stylesheet" href="../../plugins/dropzone/min/dropzone.min.css">
-
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+   <!-- Google Font: Source Sans Pro -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
   <!-- DataTables -->
@@ -45,66 +46,60 @@ include('Conexion.php');
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
-<script src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript">
- function cargar1(codigo)
+  function Validar()
       {
-        // alert("Entra");
-     //  localStorage.clear();
-     document.getElementById("accion").value="desabilitar";
-         document.getElementById("cc").value=codigo;
-          //var getInput =codigo;
-         alert(codigo);
-         //localStorage.setItem("ab",getInput);
-            document.getElementById("formulario").submit();
-      } 
-   
-  
-function cambiar(e,id,user)
-		{
-      $.ajax({
-				type: 'POST',
-				url: "cambio_estado.php",
-				data: {ida:id,us:user,estado:e},
-				success: function(data)
-				{
-					//$("#tabla").append(data);
-          alert(data);
-				},
-				error: function(error)
-				{
-					//alert("Error");
-				}
-			});
-			return false;
-		}
-
-
-
+        if(document.getElementById("nombre").value=="")
+        {
+          alert("Ingrese nombre de la filial");
+          document.getElementById("nombre").focus();
+        }
+        else if(document.getElementById("direccion").value=="")
+        {
+          alert("Ingrese la direccion");
+          document.getElementById("direccion").focus();
+        } 
+        else
+        {
+          if(document.getElementById("accion").value=="")
+          {
+            //alert('entra');
+            document.getElementById("accion").value="guardar";
+          //  alert( document.getElementById("accion").value="guardar";);
+          }
+          document.getElementById("formulario").submit();
+        }
+        return false;
+      }
+    
 </script>
-<script type="text/javascript">
- function cambio()
-      {
-       /// alert("Entra");
-   
-           document.getElementById("formulario").submit();
-      } 
-      
-  
-</script>
-
+<?php 
+             if($accion=="guardar")
+             {
+              $sql="INSERT INTO `bd_local`.`tbl_filial` (`nombre`, `direccion_filial`, `estado`)
+              VALUES ('".$_POST['nombre']."', '".$_POST['direccion']."', '".$_POST['estado']."');";
+              //  echo "SQL ".$sql;
+          //    echo "<script>alert('".$_POST['nombre']."');</script>";
+           //   echo "<script>alert('".$_POST['direccion']."');</script>";
+           //   echo "<script>alert('".$_POST['estado']."');</script>";
+                  $resultado=mysqli_query($conexion,$sql);
+                  $accion="";
+                  //echo "<script>alert('Informacion Guardada Satisfactoriamente');</script>";
+             }
+ ?>    
 <body class="hold-transition sidebar-mini">
  <div class="content-wrapper">
    <section class="content-header">
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Control</h1>
+            <h1>Control de Filiales</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">tareas</li>
+              <li class="breadcrumb-item"><a href="inicio.php">Inicio</a></li>
+              <li class="breadcrumb-item active"><a href="control_filiales.php">Control de filiales</a></li>
+              <li class="breadcrumb-item active">Crear nueva filial</li>
             </ol>
           </div>
         </div>
@@ -117,105 +112,76 @@ function cambiar(e,id,user)
       <div class="container-fluid">
         <!-- SELECT2 EXAMPLE -->
         <div class="card card-default">
-        
-          <!-- /.card-header -->
-           <form name='formulario' id='formulario' class="principal" action="permisos.php" method="POST">
-            <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
-             <input type="hidden" name="cc" id="cc" value="<?php echo $cc; ?>">
-             <input type="hidden" name="ca" id="ca" value="<?php echo $ca; ?>">
-            
-          <div class="card">
-              <div class="card-header">
-                <h3 class="card-title">Permisos</h3>
-              </div>
-              <div class="card-body">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                <label>Usuario</label>
-                  <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" onchange="return cambio();" >
-                 <?php 
-                    echo "<option value=''>[----SELECCIONE UN USUARIO----]</option>";
-                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
-                      inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
-                      $result=mysqli_query($conexion,$sql);
-                      while($row=mysqli_fetch_assoc($result)) 
-                      {
-                        $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
-                        echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
-                      }
-                    ?>
-                  </select>
-                  
-                </div>
-                <!-- /.form-group -->
-              
-                <!-- /.form-group -->
-              </div>
-              <!-- /.col -->
-              <div class="col-md-2">
-               
-              </div>
-              <!-- /.col -->
-              <div class="btn-group w-100">
-                      
-            </div>
-            <!-- /.row -->
+          <div class="card-header">
+            <h3 class="card-title">Nueva filial</h3>
           </div>
-          <br>
-                <table id="example1" class="table table-bordered table-striped">
-                  <thead>
-                  <tr>
-                    <th>Identificador</th>
-                    <th>Nombre</th>
-                    <th>Estado</th>
-                    <th></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <?php 
-                  $vacio=(isset($_POST["cmbuser"])?$_POST["cmbuser"]:"");
-                 //echo $_POST['cmbuser'];
-                   if($vacio!="")
-                   { $sql="SELECT 
-                    a.acc_id as accesso_id,
-                    a.acc_nombre as nacceso,
-                    ifnull(u.estado,'INACTIVO')as access
-                    FROM bd_local.tbl_acceso a
-                    left outer join bd_local.user_acceso u on u.us_id='".$_POST["cmbuser"]."' and u.acc_id=a.acc_id
-                    where a.acc_estado='ACTIVO'";
-                    //echo $sql;
-                    $result=mysqli_query($conexion,$sql);
-                    while($row=mysqli_fetch_assoc($result))
-                    {
-                      echo "
-                      <tr>
-                        <td>".$row['accesso_id']."</td>
-                        <td>".$row['nacceso']."</td>
-                        <td>".$row['access']."</td>
-                        <td class='project-actions text-right'>
-                        <a class='btn btn-danger btn-sm' onclick='return cambiar(0,\"".$row["accesso_id"]."\",\"".$_POST["cmbuser"]."\")' >
-                           DESABILITAR
-                        </a>
-                        <a class='btn btn-primary btn-sm'onclick='return cambiar(1,\"".$row["accesso_id"]."\",\"".$_POST["cmbuser"]."\")' >
-                          HABILITAR
-                        </a>
-                  
+          <!-- /.card-header -->
+           <form name='formulario' id='formulario' class="principal" action="crear_filial.php" method="POST">
+            <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
 
-                    </td>
-                      </tr>
-                      ";
-                   }
-                  }?>
-                  </tbody>
-                
-                </table>
-              </div>
-                  
-              <!-- /.card-body -->
-            </div>
-
+        
+             <div class="card-body">
+            <!-- Inicio de formulario-->
+              <h5>Recoleccion de informacion</h5>
+              <div class="col-sm-10">
+              <label for="inputEmail3" class="col-sm-2 col-form-label" >Nombre:</label>
+               <input class="form-control" type="text" name="nombre" id="nombre">
+               <br>
+               <div class="col-sm-12">
+                      <!-- textarea -->
+                      <div class="form-group">
+                        <label>Direccion:</label>
+                        <textarea class="form-control" id="direccion" name="direccion" rows="2" ></textarea>
+                      </div>
+                    </div>
+                    <div class="form-group">
+                  <label for="exampleSelectBorderWidth2">Estado:</label>
+                  <select class="custom-select form-control-border border-width-2" id="estado" name="estado">
+                    <option>ACTIVO</option>
+                    <option>INACTIVO</option>
+                  </select>
+                </div>
+             </div>
+             <br>
+                           <div class="input-group-prepend">
+                    <button type="button" class="btn btn-danger" id="btnguardar" onclick="return Validar();">GUARDAR</button>
+                  </div>
+          </div>
+        
 <!-- ./wrapper -->
+
+<!-- jQuery -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- Select2 -->
+<script src="../../plugins/select2/js/select2.full.min.js"></script>
+<!-- Bootstrap4 Duallistbox -->
+<script src="../../plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
+<!-- InputMask -->
+<script src="../../plugins/moment/moment.min.js"></script>
+<script src="../../plugins/inputmask/jquery.inputmask.min.js"></script>
+<!-- date-range-picker -->
+<script src="../../plugins/daterangepicker/daterangepicker.js"></script>
+<!-- bootstrap color picker -->
+<script src="../../plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+<!-- Tempusdominus Bootstrap 4 -->
+<script src="../../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
+<!-- Bootstrap Switch -->
+<script src="../../plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+<!-- BS-Stepper -->
+<script src="../../plugins/bs-stepper/js/bs-stepper.min.js"></script>
+<!-- dropzonejs -->
+<script src="../../plugins/dropzone/min/dropzone.min.js"></script>
+<!-- AdminLTE App -->
+<script src="../../dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="../../dist/js/demo.js"></script>
+<!-- Page specific script -->
+<script src="../../plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- DataTables  & Plugins -->
 
 <script src="../../plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
@@ -237,26 +203,6 @@ function cambiar(e,id,user)
 <script src="../../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../dist/js/demo.js"></script>
-<!-- jQuery -->
-
-
-<script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
-</script>
 <script>
   $(function () {
     //Initialize Select2 Elements
@@ -386,6 +332,23 @@ function cambiar(e,id,user)
     myDropzone.removeAllFiles(true);
   };
   // DropzoneJS Demo Code End
+</script>
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
 </script>
 </body>
 </html>
