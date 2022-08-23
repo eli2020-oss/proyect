@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('menu.php');
-  $_SESSION["login"];
+  //$_SESSION["login"];
       include("Conexion.php"); 
     $accion=isset($_POST["accion"])?$_POST["accion"]:"";
 ?>

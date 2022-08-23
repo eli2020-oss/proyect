@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('menu.php');
-$login= $_SESSION["login"]."";
+//$login= $_SESSION["login"]."";
 $estado='ACTIVO';
 $accion=isset($_POST["accion"])?$_POST["accion"]:"";
 $codigo=isset($_POST["codigo"])?$_POST["codigo"]:""; 
@@ -184,44 +184,47 @@ if($accion=='filtro1')
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
           
               <div class="card-body table-responsive p-0" style="height: 300px;">
-                <table  class="table table-head-fixed text-nowrap" name="table">
+                <table  class="table table-bordered table-striped" name="table">
                   <tbody>
                          <?php
                          $permitir="";
                          $id="";
-                          $consulta="SELECT id_user,nuser,u_estado FROM bd_local.categorias_user as cu inner join 
-                            bd_local.tbl_user as us inner join bd_local.tbl_categoria as ca inner join bd_local.tbl_emple as em where cu.id_user=us.us_id 
-                            and us.em_id=em.em_id and cu.id_categoria=ca.cate_id;";
+                          $consulta="
+                          SELECT us.id as identi,estado FROM bd_local.categorias_user as cu inner join 
+                          bd_local.tbl_user as us inner join bd_local.tbl_categoria as ca 
+                           where cu.id_user=us.id and cu.id_categoria=ca.cate_id and estado='ACTIVO';";
+                         //  echo $consulta;
                              $result=mysqli_query($conexion,$consulta);
                              while($row=mysqli_fetch_assoc($result))
                           {
-                                if($row['nuser']==$_SESSION['login'])
+                                if($row['identi']==$_COOKIE['id'])
                                 {
-                                  //echo "<script>alert('hola');</script>";
-                                  $id=$row['id_user']."";
+                                  //SE IDENTIFICA QUE TIPO DE USUARIO ES
+                                  $id=$row['identi']."";
                                   $permitir="ACTIVO";
+                                 // echo $row['identi'];
                                 }
                                
                           }
                           if ($permitir=='ACTIVO') 
                           {
-                             //echo "<script>alert('Primero');</script>";
-                          $sql="SELECT ti.tickes_id as ids,em.em_nombre as nombre,ti.tk_descripcion as descrip,ti.t_fechaini as fecha,ti.tic_estado as estado
-                           FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
-                           inner join bd_local.tbl_emple as em inner join bd_local.tbl_categoria as ca  
-                           inner join bd_local.categorias_user as cu where ti.o_us=us.us_id and us.em_id=em.em_id 
-                           and ca.cate_id= ti.cate_id and ti.cate_id=cu.id_categoria and ti.us_id='".$id."' and ti.tic_estado='".$estado."' ";
+                             //Usuario ADMINISTRADOR
+                          $sql="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre,ti.tk_descripcion as descrip,ti.t_fechaini as fecha,
+                          ti.tic_estado as estado FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
+                          inner join bd_local.tbl_categoria as ca inner join 
+                           bd_local.categorias_user as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id
+                           and ti.cate_id=cu.id_categoria and ti.us_id='".$id."' and ti.tic_estado='".$estado."' ";
                         // echo $sql;
                          }
-                         else if ($permitir!="ACTIVO")
+                         else 
                          {
-                        // echo "<script>alert('hola');</script>";
-                         $sql="SELECT ti.tickes_id as ids,em.em_nombre as nombre,ti.tk_descripcion as descrip,ti.t_fechaini as fecha,ti.tic_estado as estado
-                           FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
-                           inner join bd_local.tbl_emple as em inner join bd_local.tbl_categoria as ca  
-                           inner join bd_local.categorias_user as cu where ti.o_us=us.us_id and us.em_id=em.em_id 
-                           and ca.cate_id= ti.cate_id and ti.cate_id=cu.id_categoria and us.nuser='".$_SESSION['login']."' and ti.tic_estado='".$estado."' ";
-                           // echo $sql;
+                        // USUARIO BASE SIN PERMISOS
+                         $sql="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre ,ti.tk_descripcion as descrip,ti.t_fechaini as fecha,ti.tic_estado as estado
+                         FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
+                          inner join bd_local.tbl_categoria as ca  inner join bd_local.categorias_user
+                           as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id and ti.cate_id=cu.id_categoria 
+                           and us.id='".$_COOKIE['id']."' and ti.tic_estado='".$estado."' ";
+                         //   echo $sql;
                          }
                           $result=mysqli_query($conexion,$sql);
                           $data="";

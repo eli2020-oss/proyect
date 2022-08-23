@@ -2,6 +2,7 @@
 session_start();
 
 $login= $_COOKIE["id"]."";
+//echo "<script>alert('".$login."');</script>";
 include('Conexion.php');
 $accion=isset($_POST["accion"])?$_POST["accion"]:"";
 ?>

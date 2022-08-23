@@ -69,11 +69,11 @@ function cambiar(e,id,user)
 				success: function(data)
 				{
 					//$("#tabla").append(data);
-          alert(data);
+          //alert(data);
 				},
 				error: function(error)
 				{
-					//alert("Error");
+					alert("Error");
 				}
 			});
 			return false;

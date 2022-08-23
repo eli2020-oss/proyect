@@ -10,12 +10,13 @@ FROM  bd_local.tbl_user as us
 inner join bd_local.user_acceso as au 
 inner join  bd_local.tbl_acceso as ac where au.acc_id=ac.acc_id 
 and au.us_id=us.id and au.us_id='".$login."';";
+//echo $sql;
   $result=mysqli_query($conexion,$sql);
       while($row=mysqli_fetch_assoc($result))
       {
         $nombre=$row["nombre"]."";
        $avatar=$row['avatar'];
-         $_SESSION[$row["acceso"]]=isset($row["acid"])?$row["acid"]:"";
+      $_SESSION[$row["acceso"]]=isset($row["acid"])?$row["acid"]:"";
         
       }
 $_SESSION['name']=$nombre;
@@ -191,7 +192,7 @@ $_SESSION['avatar']=$avatar;
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-copy"></i>
               <p>
-                Filiales
+                Ajustes
                 <i class="fas fa-angle-left right"></i>
                 <span class="badge badge-info right"></span>
               </p>
@@ -208,9 +209,10 @@ $_SESSION['avatar']=$avatar;
           </li>
          <?php 
         } 
-           if (isset($_SESSION["AC-4"])==true) {
-            ?>
-          <li class="nav-item menu-open">
+            if (isset($_SESSION["AC-5"])==true)
+             {
+             ?>
+               <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-edit"></i>
               <p>
@@ -218,10 +220,6 @@ $_SESSION['avatar']=$avatar;
                 <i class="fas fa-angle-left right"></i>
               </p>
             </a>
-            <?php  
-            if (isset($_SESSION["AC-5"])==true)
-             {
-             ?>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="bandeja.php" class="nav-link">
@@ -229,7 +227,6 @@ $_SESSION['avatar']=$avatar;
                   <p>Bandeja de entrada</p>
                 </a>
               </li>
-            <?php }  ?>
             <ul class="nav nav-treeview">
               <li class="nav-item">
                 <a href="titecks.php" class="nav-link">

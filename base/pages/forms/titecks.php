@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('menu.php');
-//$login= $_SESSION["login"]."";
+$accion="";
   ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -34,92 +34,48 @@ include('menu.php');
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
+
+<script src="js/jquery-1.10.2.min.js"></script>
+
 <script type="text/javascript">
-  function Validar()
+ function Validar()
       {
-        if(document.getElementById("txtnombre").value=="")
+       // alert("Entra");
+       if(document.getElementById("cmbcategoria").value=="[--SELECCIONE LO QUE SE LE INDICA--]")
         {
-          alert("No se reconoce el usuario");
-          document.getElementById("txtnombre").focus();
+          alert("Seleccione el tipo de problema que presenta");
+          document.getElementById("cmbcategoria").focus();
         }
-        else
+        else if(document.getElementById("cmbprioridad").value=="[--SELECCIONE LO QUE SE LE INDICA--]")
         {
-          if(document.getElementById("accion").value=="")
-          {
-            document.getElementById("accion").value="guardar";
-          }
+          alert("Seleccione el nivel de prioridad de el ticket");
+          document.getElementById("cmbprioridad").focus();
+        } 
+        else if(document.getElementById("cmbfilial").value=="[--SELECCIONE LO QUE SE LE INDICA--]")
+        {
+          alert("Selecccione la filial a la que pertenece");
+          document.getElementById("cmbfilial").focus();
+        } 
+        else if(document.getElementById("cmbarea").value=="[--SELECCIONE LO QUE SE LE INDICA--]")
+        {
+          alert("Selecccione la filial a la que pertenece");
+          document.getElementById("cmbarea").focus();
+        }
+        else if(document.getElementById("textarea").value=="[--SELECCIONE LO QUE SE LE INDICA--]")
+        {
+          alert("Selecccione la filial a la que pertenece");
+          document.getElementById("textarea").focus();
+        }
+        else 
+        {
           document.getElementById("formulario").submit();
         }
-        return false;
-      }
-         <?php
-      include("Conexion.php"); 
-    $accion=isset($_POST["accion"])?$_POST["accion"]:"";
-    $estado="ACTIVO";
-     //echo "<script>alert('Informacion Modificada Satisfactoriamente');</script>";
-    ?>
+       return false;
+      } 
+   
   
 </script>
 <body class="hold-transition sidebar-mini">
-<?php 
-$fechaan="";
-$fechanew="";
-$contadord;
-$orig="";
-$consulta="SELECT fecha,concat(CURDATE()) as compa,id,concat(f_name,' ',l_name) 
-as nombre,contador_transacciones FROM   bd_local.transacciones inner join bd_local.tbl_user";
- $resultado=mysqli_query($conexion,$consulta);
-  while($row=mysqli_fetch_assoc($resultado))
-      {
-        $fechaan=$row["fecha"]."";
-         $fechanew=$row["compa"]."";
-         $contadord=$row["contador_transacciones"]."";
-
-         
-      }
-if ($fechaan!=$fechanew) {
-  //echo "<script>alert('Nuevo dia');</script>";
-
-
-  $sql=" UPDATE `bd_local`.`transacciones` SET `fecha` = CURDATE(), `contador_transacciones` = '0' WHERE (`codigo` = '0');";
-    //echo "<script>alert('Distintos');</script>";
-        $resultado=mysqli_query($conexion,$sql);
-
-}
-else
-{
-  $cambio;
-    for ($i = 0; $i <= $contadord; $i++) {
-    $cambio=$i+1;
-    }
-
-    $fechande='0-0-0 0:0:0';
-    if($accion=="guardar")
-     {
-
-              $sqlc="SELECT id_user as mante FROM bd_local.categorias_user as cu inner join bd_local.tbl_user as u 
-          inner join bd_local.tbl_categoria as c where cu.id_user=u.us_id 
-          and cu.id_categoria=c.cate_id and cu.id_categoria='".$_POST['cmbcategoria']."'"; 
-          echo "SQL ".$sqlc;
-          $resultado=mysqli_query($conexion,$sqlc);
-          while($row=mysqli_fetch_assoc($resultado))
-                {
-                  $man=$row['mante']."";
-                }
-                echo "man  ".$man;
-                
-              $sql="INSERT INTO `bd_local`.`tbl_ticketsc` (`tickes_id`, `o_us`, `us_id`, `cate_id`, `tk_nivel`, `tk_descripcion`, `t_fechaini`, `tfechafinal`, `tic_estado`) VALUES ( concat(CURDATE()+0,'-".$cambio."'), '".$_COOKIE['id']."', '".$man."', '".$_POST['cmbcategoria']."', '".$_POST['cmbnivel']."', '".$_POST['textarea']."', now(), '".$fechande."', 'ACTIVO');";
-                echo "SQL ".$sql;
-                
-                $sql1=" UPDATE `bd_local`.`transacciones` SET `contador_transacciones` = '".$cambio."' WHERE (`codigo` = '0');";
-                  $resultado=mysqli_query($conexion,$sql);
-                  $resultado=mysqli_query($conexion,$sql1);
-                  $accion="";
-                  echo "<script>alert('Informacion Guardada Satisfactoriamente');</script>";
-              }
-}
- 
- ?>
   <!-- ENCABEZADO -->
   <div class="content-wrapper">
     <!-- DONDE ME ENCUENTRO -->
@@ -151,18 +107,38 @@ else
           <!-- /FINAL-->
           <div class="card-body">
             <!-- Inicio de formulario-->
-            <form name='formulario' id='formulario' class="principal" action="titecks.php" method="POST">
-            <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
-              <h5>Recoleccion de informacion</h5>
+                <form class="form-horizontal" action="core/files.php" enctype="multipart/form-data" id="formulario" name="formulario" method="POST">
+               <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
               <div class="row">
-              <label for="inputEmail3" class="col-sm-2 col-form-label" >Nombre</label>
-               <input class="form-control" type="text" name="txtnombre" id="txtnombre" value="<?php echo $nombre; ?>">
+              <label for="inputEmail3" class="col-sm-2 col-form-label" >Nombre: </label>
+               <input class="form-control" type="text" name="txtnombre" id="txtnombre" disabled="disabled" value="<?php echo $nombre; ?>">
                <br>
-             <div class="form-group">
-                
-                  <label>Ayuda con:</label>
-                  <select class="form-control select2" id="cmbcategoria" name="cmbcategoria" style="width: 100%;">
-                    <?php 
+
+                  <label> CC: </label>
+                  <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" >
+                  <option></option>
+                 <?php 
+                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
+                      inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
+                      $result=mysqli_query($conexion,$sql);
+                    
+                      while($row=mysqli_fetch_assoc($result)) 
+                      {
+                        $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
+                        echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
+                      }
+                    ?>
+                  </select>
+                </div>
+               <label for="inputEmail3" class="col-sm-2 col-form-label" >Titulo:</label>
+               <input class="form-control" type="text" name="titulo" id="titulo" value="">
+               <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Categoria de problema:</label>
+                 <select class="form-control select2" id="cmbcategoria" name="cmbcategoria" style="width: 100%;">
+                 <option selected="selected">[--SELECCIONE LO QUE SE LE INDICA--]</option>
+                 <?php 
                       $sql="SELECT cate_id as codigo ,t_categoria as nombre  FROM 
                       tbl_categoria where cate_estado='ACTIVO'";
                       $result=mysqli_query($conexion,$sql);
@@ -173,36 +149,89 @@ else
                       }
                     ?>
                   </select>
-                  </div>
-             </div>
-              <div class="form-group">
-                   <label>NIVEL DE PRIORIDAD:</label>
-                   <select class="form-control select2" id="cmbnivel" name="cmbnivel" style="width: 100%;">
-                    <option selected="selected">[--SELECCIONE LO QUE SE LE INDICA--]</option>
+                </div>
+                <!-- /.form-group -->
+                <div class="form-group">
+                  <label>NIVEL DE PRIORIDAD:</label>
+                  <select class="form-control select2" id="cmbprioridad" name="cmbprioridad" style="width: 100%;">
+                  <option selected="selected">[--SELECCIONE LO QUE SE LE INDICA--]</option>
                     <option>EMERGENCIA</option>
                     <option>ALTO</option>
                     <option>MEDIO</option>
                     <option>NORMAL</option>
                   </select>
                 </div>
-             <br>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label>Filial:</label>
+                  <select class="form-control select2" id="cmbfilial" name="cmbfilial" style="width: 100%;">
+                  <option selected="selected">[--SELECCIONE LO QUE SE LE INDICA--]</option>
+                  <?php 
+                      $sql="SELECT id_filial as codigo ,nombre FROM bd_local.tbl_filial where estado='ACTIVO';";
+                      $result=mysqli_query($conexion,$sql);
+                      while($row=mysqli_fetch_assoc($result)) 
+                      {
+                        $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
+                        echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
+                      }
+                    ?>
+                  </select>
+                </div>
+                <!-- /.form-group -->
+                <div class="form-group">
+                  <label>Area:</label>
+                  <select class="form-control select2" name="cmbarea" id="cmdarea"style="width: 100%;">
+                  <option selected="selected">[--SELECCIONE LO QUE SE LE INDICA--]</option>
+                    <option>OPERACIONES</option>
+                    <option>GESTION DE NEGOCIOS</option>
+                    <option>RECURSOS HUMANOS</option>
+                    <option>MERCADEO</option>
+                    <option>PROCESOS</option>
+                    <option>GERENCIA</option>
+                    <option>GERENCIA DE NEGOCIOS</option>
+                    <option>GERENTE DE FILIAL</option>
+                    <option>CAJERO</option>
+                  </select>
+                </div>
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
                  <div class="col-sm-6">
                       <!-- textarea -->
                       <div class="form-group">
-                        <label>Textarea</label>
+                        <label>Descripcion del problema</label>
                         <textarea class="form-control" id="textarea" name="textarea" rows="3" ></textarea>
                       </div>
-                    </div>
-                           <div class="input-group-prepend">
-                    <button type="button" class="btn btn-danger" id="btnguardar" onclick="return Validar();">Enviar</button>
+                 </div>
+                 <div class="col-md-12">
+            <div class="card card-default">
+         
+              <div class="card-body">
+                <div id="actions" class="row">
+                  <div class="col-lg-6">
+                    <div class="col-md-4 col-md-offset-4">
+                    <input multiple type="file" class="form-control" id="archivo" name="archivo" >   
+                    <button type="submit" class="btn btn-danger" id="btnEnviar" onclick="return Validar();">Enviar</button>
+                 
                   </div>
+                </div>
+              </div>
+             </div>
+              <!-- /.card-body -->
+            </div>
+            <div class="input-group-prepend">
+                         </div>
+            <!-- /.card -->
           </div>
-          <div class="card-footer">
+                         
           </div>
         </div>
-            </section>
-      </div>
-    </form>
+        </form>
+      </section>
+
   <!-- FINAL DEL FORMULARIO-->
     <!-- INFERIOR DE PIE DE FORMULARIO-->
   <footer class="main-footer">
@@ -321,58 +350,34 @@ else
     window.stepper = new Stepper(document.querySelector('.bs-stepper'))
   });
 
-  // DropzoneJS Demo Code Start
-  Dropzone.autoDiscover = false;
 
-  // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
-  var previewNode = document.querySelector("#template");
-  previewNode.id = "";
-  var previewTemplate = previewNode.parentNode.innerHTML;
-  previewNode.parentNode.removeChild(previewNode);
-
-  var myDropzone = new Dropzone(document.body, { // Make the whole body a dropzone
-    url: "/target-url", // Set the url
-    thumbnailWidth: 80,
-    thumbnailHeight: 80,
-    parallelUploads: 20,
-    previewTemplate: previewTemplate,
-    autoQueue: false, // Make sure the files aren't queued until manually added
-    previewsContainer: "#previews", // Define the container to display the previews
-    clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
-  });
-
-  myDropzone.on("addedfile", function(file) {
-    // Hookup the start button
-    file.previewElement.querySelector(".start").onclick = function() { myDropzone.enqueueFile(file); };
-  });
-
-  // Update the total progress bar
-  myDropzone.on("totaluploadprogress", function(progress) {
-    document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
-  });
-
-  myDropzone.on("sending", function(file) {
-    // Show the total progress bar when upload starts
-    document.querySelector("#total-progress").style.opacity = "1";
-    // And disable the start button
-    file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
-  });
-
-  // Hide the total progress bar when nothing's uploading anymore
-  myDropzone.on("queuecomplete", function(progress) {
-    document.querySelector("#total-progress").style.opacity = "0";
-  });
-
-  // Setup the buttons for all transfers
-  // The "add files" button doesn't need to be setup because the config
-  // `clickable` has already been specified.
   document.querySelector("#actions .start").onclick = function() {
     myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
   };
   document.querySelector("#actions .cancel").onclick = function() {
     myDropzone.removeAllFiles(true);
   };
-  // DropzoneJS Demo Code End
+</script>
+<script type="text/javascript">
+
+    function subir()
+    {
+
+        var Form = new FormData($('#filesForm')[0]);
+        $.ajax({
+
+            url: "core/files.php",
+            type: "post",
+            data : Form,
+            processData: false,
+            contentType: false,
+            success: function(data)
+            {
+                alert(data);
+            }
+        });
+    }
+
 </script>
 </body>
 </html>
