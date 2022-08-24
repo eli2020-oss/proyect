@@ -42,55 +42,46 @@ $direccion=isset($_POST["direccion"])?$_POST["direccion"]:"";
       }   
 </script>
 <script type="text/javascript">
-    function cargar1(codigo)
+    function cargar1()
       {
       //alert('codigo'.codigo);
-        document.getElementById("accion").value="Final";
-         document.getElementById("direccion").value="bandeja.php";
-         document.getElementById("codigo").value=codigo;
+ 
        document.getElementById("formulario").submit();
          
       }   
 </script>
 <script type="text/javascript">
-    function cargar2()
-      {
-     // alert("ACTIVO");
-        document.getElementById("accion").value="filtro1";
-      document.getElementById("direccion").value="bandeja.php";
-         //document.getElementById("codigo").value=codigo;
-     document.getElementById("formulario").submit();
-         
-      } 
-        function cargar3()
-      {
-     // alert("FINALIZADO");
-        document.getElementById("accion").value="filtro2";
-       document.getElementById("direccion").value="bandeja.php";
-         //document.getElementById("codigo").value=codigo;
-      document.getElementById("formulario").submit();
-         
-      }     
+      function cambiar(e,id)
+		  {
+       // alert(id);
+        //alert(e);
+       $.ajax({
+				type: 'POST',
+				url: "core/controller_bandeja.php",
+				data: {ida:id,estado:e},
+				success: function(data)
+				{
+					//$("#tabla").append(data);
+          //alert(data);
+				},
+				error: function(error)
+				{
+					alert("Error");
+				}
+			});
+			return false;
+		}   
 </script>
+
 </head>
+<body class="hold-transition sidebar-mini">
 <?php
-if($accion=='Final')
-{
-  
-// echo "<script>alert('LLEGA');</script>";
- $direccion="";
- //  echo "<script>alert('".$_POST['ca']."');</script>";
-  $sql="UPDATE `bd_local`.`tbl_ticketsc` SET `tfechafinal` = now(), `tic_estado` = 'FINALIZADO' WHERE (`tickes_id` = '".$_POST['codigo']."');";
-//echo " el sql    ".$sql;
- $result=mysqli_query($conexion,$sql);
-}
 if($accion=='filtro2')
 {$estado="FINALIZADO";}
 if($accion=='filtro1')
 {$estado="ACTIVO";}
-
-  ?>
-<body class="hold-transition sidebar-mini">
+?>
+<body 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -102,7 +93,7 @@ if($accion=='filtro1')
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="muro.php">Inicio</a></li>
+              <li class="breadcrumb-item"><a href="inicio.php">Inicio</a></li>
               <li class="breadcrumb-item active">Control de Tickets</li>
             </ol>
           </div>
@@ -154,11 +145,21 @@ if($accion=='filtro1')
 
               <div class="card-tools">
                 <div class="input-group input-group-sm">
-                  <input type="text" class="form-control" placeholder="Search Mail">
+                <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" >
+                  <option></option>
+                 <?php 
+                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
+                      inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
+                      $result=mysqli_query($conexion,$sql);
+                    
+                      while($row=mysqli_fetch_assoc($result)) 
+                      {
+                        $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
+                        echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
+                      }
+                    ?>
+                  </select>
                   <div class="input-group-append">
-                    <div class="btn btn-primary">
-                      <i class="fas fa-search"></i>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -179,12 +180,12 @@ if($accion=='filtro1')
                 <!-- /.float-right -->
               </div> 
                 <input type="hidden" id="direccion" name="direccion" class="form-control" value='<?php echo $direccion ?> '>
-              <form  name='formulario' id='formulario' method='Post' action='<?php echo $direccion ?> ' >
+              <form  name='formulario' id='formulario' method='Post' action='muro.php' >
              <input type="hidden" id="codigo" name="codigo" class="form-control" value='<?php echo $codigo ?> '>
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
           
               <div class="card-body table-responsive p-0" style="height: 300px;">
-                <table  class="table table-bordered table-striped" name="table">
+              <table  class="table table-head-fixed text-nowrap" name="table">
                   <tbody>
                          <?php
                          $permitir="";
@@ -209,7 +210,7 @@ if($accion=='filtro1')
                           if ($permitir=='ACTIVO') 
                           {
                              //Usuario ADMINISTRADOR
-                          $sql="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre,ti.tk_descripcion as descrip,ti.t_fechaini as fecha,
+                          $sql="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre,ti.titulo as descrip,ti.t_fechaini as fecha,
                           ti.tic_estado as estado FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
                           inner join bd_local.tbl_categoria as ca inner join 
                            bd_local.categorias_user as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id
@@ -219,7 +220,7 @@ if($accion=='filtro1')
                          else 
                          {
                         // USUARIO BASE SIN PERMISOS
-                         $sql="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre ,ti.tk_descripcion as descrip,ti.t_fechaini as fecha,ti.tic_estado as estado
+                         $sql="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre ,ti.titulo as descrip,ti.t_fechaini as fecha,ti.tic_estado as estado
                          FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
                           inner join bd_local.tbl_categoria as ca  inner join bd_local.categorias_user
                            as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id and ti.cate_id=cu.id_categoria 
@@ -244,11 +245,11 @@ if($accion=='filtro1')
                              <td>".$row["fecha"]."</td>
                                <td class='project-actions text-right'>
                      
-                          <a class='btn btn-danger btn-sm' onclick='return cargar1(\"".$row["ids"]."\")' >
+                          <a class='btn btn-danger btn-sm' onclick='return cambiar(\"".'0'."\",\"".$row["ids"]."\")' >
                              FINALIZAR
                           </a>
-                  
-                          <a class='btn btn-primary btn-sm' onclick='return cargar(\"".$row["ids"]."\")' >
+                         
+                          <a class=' btn btn-primary btn-sm'  onclick='return cambiar(\"".'1'."\",\"".$row["ids"]."\")' >
                         VER CHAT
                           </a>
 
@@ -277,33 +278,7 @@ if($accion=='filtro1')
             <div class="card-footer p-0">
               <div class="mailbox-controls">
                 <!-- Check all button -->
-                <button type="button" class="btn btn-default btn-sm checkbox-toggle">
-                  <i class="far fa-square"></i>
-                </button>
-                <div class="btn-group">
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="far fa-trash-alt"></i>
-                  </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-reply"></i>
-                  </button>
-                  <button type="button" class="btn btn-default btn-sm">
-                    <i class="fas fa-share"></i>
-                  </button>
-                </div>
-                <!-- /.btn-group -->
-                <button type="button" class="btn btn-default btn-sm">
-                  <i class="fas fa-sync-alt"></i>
-                </button>
-                <div class="float-right">
-                  1-50/200
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-default btn-sm">
-                      <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button type="button" class="btn btn-default btn-sm">
-                      <i class="fas fa-chevron-right"></i>
-                    </button>
+               
                   </div>
                   <!-- /.btn-group -->
                 </div>
@@ -373,6 +348,91 @@ if($accion=='filtro1')
       }
     })
   })
+</script>
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+
+    //Datemask dd/mm/yyyy
+    $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
+    //Datemask2 mm/dd/yyyy
+    $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+    //Money Euro
+    $('[data-mask]').inputmask()
+
+    //Date range picker
+    $('#reservationdate').datetimepicker({
+        format: 'L'
+    });
+    //Date range picker
+    $('#reservation').daterangepicker()
+    //Date range picker with time picker
+    $('#reservationtime').daterangepicker({
+      timePicker: true,
+      timePickerIncrement: 30,
+      locale: {
+        format: 'MM/DD/YYYY hh:mm A'
+      }
+    })
+    //Date range as a button
+    $('#daterange-btn').daterangepicker(
+      {
+        ranges   : {
+          'Today'       : [moment(), moment()],
+          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        },
+        startDate: moment().subtract(29, 'days'),
+        endDate  : moment()
+      },
+      function (start, end) {
+        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
+      }
+    )
+
+    //Timepicker
+    $('#timepicker').datetimepicker({
+      format: 'LT'
+    })
+
+    //Bootstrap Duallistbox
+    $('.duallistbox').bootstrapDualListbox()
+
+    //Colorpicker
+    $('.my-colorpicker1').colorpicker()
+    //color picker with addon
+    $('.my-colorpicker2').colorpicker()
+
+    $('.my-colorpicker2').on('colorpickerChange', function(event) {
+      $('.my-colorpicker2 .fa-square').css('color', event.color.toString());
+    });
+
+    $("input[data-bootstrap-switch]").each(function(){
+      $(this).bootstrapSwitch('state', $(this).prop('checked'));
+    });
+
+  })
+  // BS-Stepper Init
+  document.addEventListener('DOMContentLoaded', function () {
+    window.stepper = new Stepper(document.querySelector('.bs-stepper'))
+  });
+
+
+  document.querySelector("#actions .start").onclick = function() {
+    myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+  };
+  document.querySelector("#actions .cancel").onclick = function() {
+    myDropzone.removeAllFiles(true);
+  };
 </script>
 </body>
 </html>
