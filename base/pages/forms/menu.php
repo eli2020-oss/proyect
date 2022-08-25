@@ -21,6 +21,7 @@ and au.us_id=us.id and au.us_id='".$login."';";
       }
 $_SESSION['name']=$nombre;
 $_SESSION['avatar']=$avatar;
+
 ?>
 
 <div class="wrapper">

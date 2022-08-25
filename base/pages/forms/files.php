@@ -1,5 +1,5 @@
 <?php
- include("../Conexion.php");
+ include("Conexion.php");
  $emisor=$_COOKIE["id"];
  $cc=isset($_POST["cmbuser"]);
  $titulo=$_POST["titulo"];
@@ -68,7 +68,7 @@ $descripcion=$_POST["textarea"];
                     $permitidos= array("image/jpng","image/png","application/pdf");
                     $limite_kb = 200;
                     if(in_array($_FILES["archivo"]["type"],$permitidos) && $_FILES["archivo"]["size"]<= $limite_kb * 124){
-                       $ruta = '../files/'.$fechanew."-".$cambio."_".$_COOKIE["id"].'/';
+                       $ruta = 'files/'.$fechanew."-".$cambio."_".$_COOKIE["id"].'/';
                        $archivo =$ruta.$_FILES["archivo"]["name"];
                        if(!file_exists($ruta))
                        {
@@ -99,7 +99,7 @@ $descripcion=$_POST["textarea"];
              $sql2="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
              `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DL-".$contador."', concat(CURDATE()+0,'-".$cambio."'), 
              '".$_COOKIE["id"]."', '".$man."', '".$descripcion."', concat(now()),
-              'ACTIVO', '', '".$ruta."');";
+              'ACTIVO', '".$_COOKIE['id']."', '".$ruta."');";
                $result=mysqli_query($conexion,$sql2);
              echo $sql2;
                  $sql1=" UPDATE `bd_local`.`transacciones` SET `contador_transacciones` = '".$cambio."' WHERE (`codigo` = '0');";

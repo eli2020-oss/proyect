@@ -20,8 +20,8 @@ if($estado=='0')
 }
 else if($estado=='1')
 {
-   echo 'ingreso a chat  de atencion de tickets';
- //  echo "<script>window.location.href='muro.php'</script>";
-  include('control_muro.php');
+  $_SESSION["ticket"]=$idticket;
+  echo ''.$_SESSION["ticket"];
+  //echo "<script>alert(Primero'".$_SESSION["ticket"]."');</script>";
 }
 ?>

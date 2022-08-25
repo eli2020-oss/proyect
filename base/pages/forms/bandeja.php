@@ -5,7 +5,7 @@ include('menu.php');
 $estado='ACTIVO';
 $accion=isset($_POST["accion"])?$_POST["accion"]:"";
 $codigo=isset($_POST["codigo"])?$_POST["codigo"]:""; 
-$direccion=isset($_POST["direccion"])?$_POST["direccion"]:""; 
+//$direccion=isset($_POST["direccion"])?$_POST["direccion"]:""; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -61,8 +61,16 @@ $direccion=isset($_POST["direccion"])?$_POST["direccion"]:"";
 				data: {ida:id,estado:e},
 				success: function(data)
 				{
+          if(e=='1')
+          {
+           // alert(data);
+           document.getElementById("codigo").value=id;
+           document.getElementById("formulario").submit();
+            //location.href ="muro.php";
+          }
 					//$("#tabla").append(data);
           //alert(data);
+
 				},
 				error: function(error)
 				{
@@ -81,7 +89,7 @@ if($accion=='filtro2')
 if($accion=='filtro1')
 {$estado="ACTIVO";}
 ?>
-<body 
+<body >
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -179,8 +187,8 @@ if($accion=='filtro1')
                 </div>
                 <!-- /.float-right -->
               </div> 
-                <input type="hidden" id="direccion" name="direccion" class="form-control" value='<?php echo $direccion ?> '>
-              <form  name='formulario' id='formulario' method='Post' action='muro.php' >
+            
+              <form  name='formulario' id='formulario' method='POST' action='muro.php' >
              <input type="hidden" id="codigo" name="codigo" class="form-control" value='<?php echo $codigo ?> '>
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
           
@@ -214,7 +222,7 @@ if($accion=='filtro1')
                           ti.tic_estado as estado FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
                           inner join bd_local.tbl_categoria as ca inner join 
                            bd_local.categorias_user as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id
-                           and ti.cate_id=cu.id_categoria and ti.us_id='".$id."' and ti.tic_estado='".$estado."' ";
+                           and ti.cate_id=cu.id_categoria and ti.us_id='".$id."' and ti.tic_estado='".$estado."' ORDER BY ti.t_fechaini desc";
                         // echo $sql;
                          }
                          else 
@@ -224,8 +232,8 @@ if($accion=='filtro1')
                          FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
                           inner join bd_local.tbl_categoria as ca  inner join bd_local.categorias_user
                            as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id and ti.cate_id=cu.id_categoria 
-                           and us.id='".$_COOKIE['id']."' and ti.tic_estado='".$estado."' ";
-                         //   echo $sql;
+                           and us.id='".$_COOKIE['id']."' and ti.tic_estado='".$estado."' ORDER BY ti.t_fechaini desc";
+                           //echo $sql;
                          }
                           $result=mysqli_query($conexion,$sql);
                           $data="";

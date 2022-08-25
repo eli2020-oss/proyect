@@ -1,11 +1,22 @@
 <?php
 session_start();
 include('menu.php');
- // $_SESSION["login"];
+$codigo=isset($_POST["codigo"])?$_POST["codigo"]:""; 
+$user="";
+$estado="";
+//  echo "<script>alert('".$codigo."');</script>";
       include("Conexion.php"); 
-    $accion=isset($_POST["accion"])?$_POST["accion"]:"";
+   $accion=isset($_POST["accion"])?$_POST["accion"]:"";
      $contador=0;
-  ?>
+     $sql="SELECT concat(f_name,' ',l_name) as nombre FROM bd_local.tbl_user where id='".$_COOKIE["id"]."';";                       
+     $result=mysqli_query($conexion,$sql);
+         while($row=mysqli_fetch_assoc($result)){ $user=$row['nombre'];}
+        // echo "<script>alert('".$user."');</script>"; 
+        $sql="SELECT tic_estado FROM bd_local.tbl_ticketsc where tickes_id='".$codigo."';";                       
+        $result=mysqli_query($conexion,$sql);
+            while($row=mysqli_fetch_assoc($result)){ $estado=$row['tic_estado'];}
+         // echo "<script>alert('".$estado."');</script>"; 
+    ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -21,53 +32,31 @@ include('menu.php');
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
 <script type="text/javascript">
-     
-    window.onload = localStorage.getItem("info");
-   
-   //alert( localStorage.info );
-    //document.getElementById("codigo").value=localStorage.info;
-  
+      function cambiar()
+		  {
+       alert('hola');
+        //alert(e);
+      //  id.value=document.getElementById("codigo");
+       $.ajax({
+				type: 'POST',
+				url: "core/control_muro.php",
+				data: {ida:id},
+				success: function(data)
+				{
+         
+					//$("#tabla").append(data);
+          alert(data);
+
+				},
+				error: function(error)
+				{
+					alert("Error");
+				}
+			});
+			return false;
+		}   
 </script>
-<script type="text/javascript">
-   function ENVIAR()
-  {
-    //alert("llega");
-        if(document.getElementById("accion").value=="")
-          {
-          // alert('emtra');
-            document.getElementById("accion").value="guardar";
-           
-          }
-          document.getElementById("formulario").submit();
-        
-       return   
-      
-  }
-  
-</script>
-<?php
 
-$variablephp = "<script> document.write(localStorage.info) </script>";
-//echo "variablephp = $variablephp";
-
-
-   if($accion=="guardar")
-     {
-      $sql2="SELECT de.tickes_id FROM bd_local.tbl_detalle as de 
-                  inner join bd_local.tbl_ticketsc as ti where ti.tickes_id=de.tickes_id"; 
-                  // echo "SQL ".$sql2;
-                $result=mysqli_query($conexion,$sql2);
-                          while($row=mysqli_fetch_assoc($result))
-                          {
-
-                            $contador++;
-                          } 
-                          $contador=$contador+1; 
-   //  echo "<script>alert('ingresa correctamente a la Informacion');</script>";
-    // sql="";
-                      
-     }
-?>
 <body class="hold-transition sidebar-mini">
  <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -79,7 +68,7 @@ $variablephp = "<script> document.write(localStorage.info) </script>";
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li class="breadcrumb-item"><a href="inicio.php">Inicio</a></li>
               <li class="breadcrumb-item active">Chat</li>
             </ol>
           </div>
@@ -94,74 +83,75 @@ $variablephp = "<script> document.write(localStorage.info) </script>";
         <!-- Timelime example  -->
         <?php 
          //echo "<script>alert('".$_POST['codigo']."');</script>";
-       
-         $descrip="";
-                          $correo="";
+                          $descrip="";
+                          $quien_es="";
                           $fecha="";
-                          $origen="";
-                          $salida="";
-   
-$accion=isset($_POST["accion"])?$_POST["accion"]:"";
- 
-         
-          
+                          $carpeta="";
+                          $sql=" select de.tickes_id, de.d_descrip as descri, de.fecha as fecha , de.respuesta as quien, 
+                          de.archivo as arc, concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_detalle as de inner join bd_local.tbl_user as u
+                          inner join bd_local.tbl_ticketsc as ti where ti.tickes_id=de.tickes_id and u.id=de.respuesta and de.tickes_id='".$codigo."'";
 
- $sql="SELECT de.tickes_id, de.d_descrip as descri, ti.o_us ou, ti.us_id as ud, en.em_correo as correo, de.fecha as fecha FROM bd_local.tbl_detalle as de inner join bd_local.tbl_ticketsc as ti inner join bd_local.tbl_emple as en inner join bd_local.tbl_user as us where ti.tickes_id=de.tickes_id and ti.o_us=de.o_user and ti.us_id=de.d_user and us.em_id=en.em_id and ti.us_id=us.us_id and de.tickes_id='".isset($variablephp)."'";
-
-                          echo "SENTENCIA DE SQL ".$sql;
+                        //  echo "SENTENCIA DE SQL ".$sql;
                           $result=mysqli_query($conexion,$sql);
                           while($row=mysqli_fetch_assoc($result))
                           {
                             
-                          echo "<script>alert('hola');</script>";
+                         // echo "<script>alert('hola');</script>";
                           $descrip=$row['descri']."";
-                          $correo=$row['correo']."";
                           $fecha=$row['fecha']."";
-                          $origen=$row['ou']."";
-                          $salida=$row['ud']."";
-                          
+                          $carpeta=$row['arc']."";
+                           if($row['quien']==$_COOKIE['id'])
+                           {
+                            $quien_es= 'YO';
+                           }
+                           else
+                           {
+                            $quien_es=$row['nombre'];
+                           }
+                            
  ?>
         <div class="row">
-          <div class="col-md-12">
+         <div class="col-md-12">
             <!-- The time line -->
-            <div class="timeline">
-              <!-- timeline time label -->
-              
-              <!-- /.timeline-label -->
-              <!-- timeline item -->
+            <div class="timeline">  
               <div>
-                <i class="fas fa-envelope bg-blue"></i>
-                <div class="timeline-item">
-                  <span class="time"><i class="fas fa-clock"></i><?php echo $fecha; ?>
-                   </span>
-                  <h3 class="timeline-header"><?php echo $correo;  ?></h3>
+               <i class="fas fa-envelope bg-blue"></i>
+               <div class="timeline-item">
+                        <span class="time"><i class="fas fa-clock"></i><?php echo $fecha; ?> </span>
+                        <h3 class="timeline-header"><?php echo $quien_es; ?></h3>
 
-                  <div class="timeline-body">
-                   <?php echo $descrip; ?>
-                  </div>
-                  
+                        <div class="timeline-body"><?php echo $descrip; ?></div>
+                        <div>
+                          <?php 
+                         
+                           $listar=null;
+                           $directorio=opendir($carpeta);
+                          // echo $directorio."";
+                           if($carpeta=='')
+                           {}
+                           else{
+                           while($elemento= readdir($directorio))
+                           {
+                           // echo "hola 1";
+                            if($elemento !='.' && $elemento !='..')
+                            {
+                              $direc=$carpeta.''.$elemento;
+                             // echo is_dir($direc)."";
+                             echo "<a class='cal-md-6' href='$direc' target='_blank'> $elemento</a><br>";
+                             
+                            }
+                           }
+                           }
+                          ?> 
+                        </div>
+                      </div>
                 </div>
+                <?php 
+                          }
+                ?>
+                  <div class="timeline-footer">
+                  <a class="btn btn-danger btn-sm" >AGREGAR IMG</a>
               </div>
-             <?php } 
-               if($accion=="guardar")
-     {
-      
-        //echo "<script>alert('Guardar');</script>";
-       $sql2="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, `d_descrip`, `fecha`, `estado`, `enviado`) VALUES ('DLL-".$contador."', '".isset($codi)."', '".$origen."', '".$salida."', '".$_POST['message']."', now(), 'ACTIVO', '".$_SESSION['login']."');";
-         // echo " el sql".$sql;
-           $result=mysqli_query($conexion,$sql2);
-
-     }
-              ?>
-             <div class="timeline-footer">
-                    <a class="btn btn-danger btn-sm" >AGREGAR IMG</a>
-                  </div>
-              <!-- END timeline item -->
-              <!-- timeline time label -->
-             
-              <!-- /.timeline-label -->
-             
-             
             </div>
           </div>
           <!-- /.col -->
@@ -169,7 +159,7 @@ $accion=isset($_POST["accion"])?$_POST["accion"]:"";
       </div>
       <!-- /.timeline -->
  
-
+      
                  
                   <!-- /.card-body -->
                   <div class="card-footer">
@@ -178,7 +168,7 @@ $accion=isset($_POST["accion"])?$_POST["accion"]:"";
                       <div class="input-group">
                         <input type="text" name="message" id="message" placeholder="hola gracias ...." class="form-control">
                         <span class="input-group-append">
-                           <button type="button" class="btn btn-warning" id="btnguardar" onclick="return ENVIAR();">Enviar</button>
+                           <button type="button" class="btn btn-warning" id="btnguardar" onclick='return cambiar();'>Enviar</button>
                         </span>
                       </div>
                     </form>

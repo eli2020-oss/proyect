@@ -107,7 +107,7 @@ $accion="";
           <!-- /FINAL-->
           <div class="card-body">
             <!-- Inicio de formulario-->
-                <form class="form-horizontal" action="core/files.php" enctype="multipart/form-data" id="formulario" name="formulario" method="POST">
+                <form class="form-horizontal" action="files.php" enctype="multipart/form-data" id="formulario" name="formulario" method="POST">
                <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
               <div class="row">
               <label for="inputEmail3" class="col-sm-2 col-form-label" >Nombre: </label>
