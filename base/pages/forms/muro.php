@@ -30,32 +30,9 @@ $estado="";
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
   <!-- AdminLTE css -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <script src="js/jquery-1.10.2.min.js"></script>
 </head>
-<script type="text/javascript">
-      function cambiar()
-		  {
-       alert('hola');
-        //alert(e);
-      //  id.value=document.getElementById("codigo");
-       $.ajax({
-				type: 'POST',
-				url: "core/control_muro.php",
-				data: {ida:id},
-				success: function(data)
-				{
-         
-					//$("#tabla").append(data);
-          alert(data);
 
-				},
-				error: function(error)
-				{
-					alert("Error");
-				}
-			});
-			return false;
-		}   
-</script>
 
 <body class="hold-transition sidebar-mini">
  <div class="content-wrapper">
@@ -89,9 +66,10 @@ $estado="";
                           $carpeta="";
                           $sql=" select de.tickes_id, de.d_descrip as descri, de.fecha as fecha , de.respuesta as quien, 
                           de.archivo as arc, concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_detalle as de inner join bd_local.tbl_user as u
-                          inner join bd_local.tbl_ticketsc as ti where ti.tickes_id=de.tickes_id and u.id=de.respuesta and de.tickes_id='".$codigo."'";
+                          inner join bd_local.tbl_ticketsc as ti where ti.tickes_id=de.tickes_id and u.id=de.respuesta and de.tickes_id='".$codigo."' ORDER BY de.fecha ASC
+                          LIMIT 4";
 
-                        //  echo "SENTENCIA DE SQL ".$sql;
+                          //echo "SENTENCIA DE SQL ".$sql;
                           $result=mysqli_query($conexion,$sql);
                           while($row=mysqli_fetch_assoc($result))
                           {
@@ -151,7 +129,7 @@ $estado="";
                 ?>
                   <div class="timeline-footer">
                   <a class="btn btn-danger btn-sm" >AGREGAR IMG</a>
-              </div>
+                  </div>
             </div>
           </div>
           <!-- /.col -->
@@ -163,12 +141,37 @@ $estado="";
                  
                   <!-- /.card-body -->
                   <div class="card-footer">
-                   <form name='formulario' id='formulario' class="principal" action="muro.php" method="POST">
+                   <form name='chat' id='chat' method="POST">
+                    <?php 
+                    if($accion=="enviar")
+                    {
+                      //echo "<script>alert('.$codigo.');</script>"; 
+                      $sql2="SELECT de.tickes_id FROM bd_local.tbl_detalle as de 
+                      inner join bd_local.tbl_ticketsc as ti where ti.tickes_id=de.tickes_id"; 
+                      // echo "SQL ".$sql2;
+                      $contador=0;
+                    $result=mysqli_query($conexion,$sql2);
+                              while($row=mysqli_fetch_assoc($result))
+                              {
+    
+                                $contador++;
+                              } 
+                              $contador=$contador+1; 
+                      $sql="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
+                      `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$contador."', '".$codigo."', 
+                      '', '".$_COOKIE["id"]."', '".$_POST['message']."', concat(now()),
+                       'ACTIVO', '".$_COOKIE['id']."', '');";
+                      $result=mysqli_query($conexion,$sql);
+                    }
+                    ?>
                      <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
+                     
                       <div class="input-group">
+                      <input type="hidden" name="codigo" id="codigo" value="<?php echo $codigo; ?>">
                         <input type="text" name="message" id="message" placeholder="hola gracias ...." class="form-control">
                         <span class="input-group-append">
-                           <button type="button" class="btn btn-warning" id="btnguardar" onclick='return cambiar();'>Enviar</button>
+                           <button type="button" class="btn btn-warning" id="btnguardar" onClick='return cargar();'>Enviar</button>
+                      
                         </span>
                       </div>
                     </form>
@@ -206,5 +209,36 @@ $estado="";
 <script src="../../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../dist/js/demo.js"></script>
+<script type="text/javascript" src="js/funcion.js"></script>
+<script type="text/javascript">
+ function cargar()
+      {
+        alert("Entra");
+     //  localStorage.clear();
+         document.getElementById("accion").value="enviar";
+        // document.getElementById("codigo").value=codigo;
+          //var getInput =codigo;
+        // alert(codigo);
+         //localStorage.setItem("ab",getInput);
+            document.getElementById("chat").submit();
+    
+      } 
+      function regresar(){
+    $.ajax({
+        url:'core/control_muro.php',
+        type: 'post',
+        dataType:'json',
+        data:{
+            codigo:('#codigo').val(),
+            mensaje:$('#message').val()
+        }
+    }).done(
+        function(data){
+            alert('funciona');
+           $('#message').val('');
+        }
+    );
+  }
+</script>
 </body>
 </html>

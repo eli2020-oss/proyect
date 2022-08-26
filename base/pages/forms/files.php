@@ -57,7 +57,7 @@ $descripcion=$_POST["textarea"];
                             $contador++;
                           } 
                           $contador=$contador+1; 
-                echo "contador  ".$contador;
+               // echo "contador  ".$contador;
                  
                //
                   // echo "<script>alert('Informacion Guardada Satisfactoriamente');</script>";
@@ -94,14 +94,14 @@ $descripcion=$_POST["textarea"];
               `t_fechaini`, `tfechafinal`, `cc`, `tic_estado`) VALUES (concat(CURDATE()+0,'-".$cambio."'), '".$_COOKIE["id"]."', 
               '".$man."', '".$categoria."', '".$prioridad."', '".$titulo."', '".$descripcion."', 
               concat(now()) , '".$fechande."', '".$cc."', 'ACTIVO');";
-                echo "SQL ".$sql;
+               // echo "SQL ".$sql;
               $resultado=mysqli_query($conexion,$sql);
              $sql2="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
-             `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DL-".$contador."', concat(CURDATE()+0,'-".$cambio."'), 
+             `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$contador."', concat(CURDATE()+0,'-".$cambio."'), 
              '".$_COOKIE["id"]."', '".$man."', '".$descripcion."', concat(now()),
               'ACTIVO', '".$_COOKIE['id']."', '".$ruta."');";
                $result=mysqli_query($conexion,$sql2);
-             echo $sql2;
+             //echo $sql2;
                  $sql1=" UPDATE `bd_local`.`transacciones` SET `contador_transacciones` = '".$cambio."' WHERE (`codigo` = '0');";
                   $resultado=mysqli_query($conexion,$sql1);
                   // $accion="";
