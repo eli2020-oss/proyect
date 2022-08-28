@@ -93,57 +93,75 @@ $sql="SELECT count(*)as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE[
                   <!-- /.col -->
                   <div class="col-md-10">
                     <p class="text-center">
-                      <strong>Monitereo General de usuario</strong>
-                    </p>
-                     <?php
-                      $Porcentaje="";
-                      $activos="";
-                      $inactivos="";
-                      $porcentajeinac="";
+                    <?php
+                      $porc_mesa="";
+                      $porc_sin="";
+                      $porc_aten="";
+                      $porc_mesi="";
                       $total="";
-                      $sql="select  count(tic_estado)*100/(SELECT count(tic_estado) FROM bd_local.tbl_ticketsc  where us_id='".$_COOKIE["id"]."'  ) as porcentaje, 
-                      count(tic_estado) as activos,(SELECT count(tic_estado) FROM bd_local.tbl_ticketsc  where  us_id='".$_COOKIE["id"]."' ORDER BY ti.t_fechaini  BETWEEN date_add(NOW(), INTERVAL -30 DAY) AND now())  as total,
-                       MONTHNAME(t_fechaini) as Mes ,( SELECT count(tic_estado) FROM bd_local.tbl_ticketsc  where us_id='".$_COOKIE["id"]."' and tic_estado='FINALIZADO') as  inactivo,
-                       ( SELECT count(tic_estado)*100/(SELECT count(tic_estado) FROM bd_local.tbl_ticketsc  where us_id='".$_COOKIE["id"]."' )  FROM bd_local.tbl_ticketsc  where us_id='".$_COOKIE["id"]."' and tic_estado='FINALIZADO') as inaporcentaje 
-                       FROM  bd_local.tbl_user as u
-                       inner join bd_local.tbl_ticketsc as ti where ti.us_id='".$_COOKIE["id"]."' 
-                       and u.id=ti.us_id and tic_estado='ACTIVO' ORDER BY ti.t_fechaini  BETWEEN date_add(NOW(), INTERVAL -3 DAY) AND now()";
+                      $rango="";
+                      $mes="";
+                      $fuera="";
+                      $rango_si="";
+                      $rango_aten="";
+                      $atendidos_mes="";
+                      $sql="SELECT MONTHNAME(t_fechaini) as namemes,count(tic_estado) as delmes,
+                       (SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where t_fechaini between (NOW() - INTERVAL 2 day) and now() and us_id='US-zw260US-6' and tic_estado='ACTIVO') as rango_sin,
+                      (SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where t_fechaini between (NOW() - INTERVAL 2 day) and now() and us_id='US-zw260US-6' and tic_estado='FINALIZADO') as rango_aten,
+                    (SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where t_fechaini between (NOW() - INTERVAL 2 day) and now() and us_id='US-zw260US-6') as rango,
+                    (count(tic_estado) -(SELECT  count(tickes_id) FROM bd_local.tbl_ticketsc where t_fechaini between (NOW() - INTERVAL 2 day) and now() and us_id='".$_COOKIE['id']."' and tic_estado='ACTIVO')) as fuera
+                      , (SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where t_fechaini between (NOW() - INTERVAL 2 day) and now() and us_id='".$_COOKIE['id']."' and tic_estado='ACTIVO')/(SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where t_fechaini between (NOW() - INTERVAL 2 day) and now() and us_id='".$_COOKIE['id']."')*100 as porcen_sin
+                      ,(SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where t_fechaini between (NOW() - INTERVAL 2 day) and now() and us_id='".$_COOKIE['id']."' and tic_estado='FINALIZADO')/(SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where t_fechaini between (NOW() - INTERVAL 2 day) and now() and us_id='".$_COOKIE['id']."')*100 as porcen_atendidos
+                      ,(SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where  us_id='".$_COOKIE['id']."' and tic_estado='ACTIVO' and MONTH(t_fechaini) =MONTH(curdate()))/(SELECT count(tic_estado) FROM bd_local.tbl_ticketsc  where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate())
+                      and us_id='".$_COOKIE['id']."')*100 as porcen_sin_mes
+                      ,(SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where  us_id='".$_COOKIE['id']."' and tic_estado='FINALIZADO' and MONTH(t_fechaini) =MONTH(curdate()))/(SELECT count(tic_estado) FROM bd_local.tbl_ticketsc  where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate())
+                      and us_id='".$_COOKIE['id']."')*100 as porcen_atendido_mes,
+                      (SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where  us_id='".$_COOKIE['id']."' and tic_estado='FINALIZADO' and MONTH(t_fechaini) =MONTH(curdate())) as atendido_mes
+                      FROM  bd_local.tbl_ticketsc where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate())
+                      and us_id='".$_COOKIE['id']."';";
                        //echo "sentencia ".$sql;
                        $result=mysqli_query($conexion,$sql);
                        while($row=mysqli_fetch_assoc($result))
                        {
                          
                    //   echo "<script>alert('hola');</script>";
-                       $porcentaje=$row['porcentaje']."";
-                       $activos=$row['activos']."";
-                       $inactivos=$row['inactivo']."";
-                      $porcentajeinac=$row['inaporcentaje']."";
-                      $total=$row["total"];
+                       $porc_mesa=$row['porcen_sin_mes']."";
+                       $porc_mesi=$row['porcen_atendido_mes']."";
+                       $porc_sin=$row['porcen_sin']."";
+                       $porc_aten=$row['porcen_atendidos']."";
+                       $mes=$row['namemes']."";
+                       $rango=$row['rango']."";
+                       $fuera=$row['fuera']."";
+                      $total=$row["delmes"];
+                      $rango_sin=$row['rango_sin']."";
+                      $rango_aten=$row['rango_aten']."";
+                      $atendidos_mes=$row['atendido_mes']."";
                        }
                    ?>
+                      <strong>Monitereo General de usuario <b><?php echo $mes; ?></b></strong>
+                    </p>
                     <div class="progress-group">
-                      Tickets sin atender en rango
-                      <span class="float-right"><b><?php echo $activos; ?></b>/<?php echo $total; ?></span>
+                      Tickets en rango
+                      <span class="float-right"><b><?php echo $rango_sin; ?></b>/<?php echo $rango; ?></span>
                       <div class="progress progress-sm">
-                        <div class="progress-bar bg-primary" style='width: <?php echo $porcentaje; ?>%'></div>
+                        <div class="progress-bar bg-primary" style='width: <?php echo $porc_sin; ?>%'></div>
                       </div>
                     </div>
                     <!-- /.progress-group -->
-
                     <div class="progress-group">
-                      Complete Purchase
-                      <span class="float-right"><b>310</b>/400</span>
+                      Tickets del mes 
+                      <span class="float-right"><b><?php echo $atendidos_mes; ?></b>/<?php echo $total ?></span>
                       <div class="progress progress-sm">
-                        <div class="progress-bar bg-danger" style="width: 75%"></div>
+                        <div class="progress-bar bg-danger" style="width: <?php echo $porc_mesi ?>%"></div>
                       </div>
                     </div>
 
                     <!-- /.progress-group -->
                     <div class="progress-group">
-                      <span class="progress-text">Finalizados</span>
-                      <span class="float-right"><b><b><?php echo $inactivos; ?></b>/<?php echo $total; ?></span>
+                      <span class="progress-text">Atendidos</span>
+                      <span class="float-right"><b><b><?php echo   $rango_aten; ?></b>/<?php echo $rango; ?></span>
                       <div class="progress progress-sm">
-                        <div class="progress-bar bg-success" style="width: <?php echo $porcentajeinac; ?>%"></div>
+                        <div class="progress-bar bg-success" style="width: <?php echo $porc_aten; ?>%"></div>
                       </div>
                     </div>
 
@@ -160,8 +178,8 @@ $sql="SELECT count(*)as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE[
                 <div class="row">
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
-                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> <?php echo $porcentajeinac; ?>%</span>
-                      <h5 class="description-header"><?php echo $inactivos; ?></h5>
+                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> <?php echo  $porc_aten; ?>%</span>
+                      <h5 class="description-header"><?php echo $rango_aten; ?></h5>
                       <span class="description-text">TOTAL FINALIZADO</span>
                     </div>
                     <!-- /.description-block -->
@@ -169,8 +187,8 @@ $sql="SELECT count(*)as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE[
                   <!-- /.col -->
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
-                      <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> <?php echo $porcentaje; ?>%</span>
-                      <h5 class="description-header"><?php echo $activos; ?></h5>
+                      <span class="description-percentage text-warning"><i class="fas fa-caret-left"></i> <?php echo  $porc_mesa; ?>%</span>
+                      <h5 class="description-header"><?php echo  $fuera; ?></h5>
                       <span class="description-text">TOTAL DE TICKETS SIN ATENDER</span>
                     </div>
                     <!-- /.description-block -->
@@ -178,18 +196,18 @@ $sql="SELECT count(*)as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE[
                   <!-- /.col -->
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
-                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> 100%</span>
-                      <h5 class="description-header"><?php echo $total; ?></h5>
-                      <span class="description-text">TOTAL</span>
+                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> <?php echo  $porc_mesi; ?>%</span>
+                      <h5 class="description-header"><?php echo $atendidos_mes; ?></h5>
+                      <span class="description-text">TOTAL DE TICKETS ATENDIDOS</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
                   <!-- /.col -->
                   <div class="col-sm-3 col-6">
                     <div class="description-block">
-                      <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 18%</span>
-                      <h5 class="description-header">1200</h5>
-                      <span class="description-text">GOAL COMPLETIONS</span>
+                      <span class="description-percentage text-danger"><i class="fas fa-caret-down"></i> 100%</span>
+                      <h5 class="description-header"><?php echo  $total; ?></h5>
+                      <span class="description-text">TOTAL</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
@@ -303,54 +321,7 @@ $sql="SELECT count(*)as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE[
           </div>
           <!-- /.col -->
 
-          <div class="col-md-4">
-            <!-- Info Boxes Style 2 -->
-            <div class="info-box mb-3 bg-warning">
-              <span class="info-box-icon"><i class="fas fa-tag"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">Inventory</span>
-                <span class="info-box-number">5,200</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-            <div class="info-box mb-3 bg-success">
-              <span class="info-box-icon"><i class="far fa-heart"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">Mentions</span>
-                <span class="info-box-number">92,050</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-            <div class="info-box mb-3 bg-danger">
-              <span class="info-box-icon"><i class="fas fa-cloud-download-alt"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">Downloads</span>
-                <span class="info-box-number">114,381</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-            <div class="info-box mb-3 bg-info">
-              <span class="info-box-icon"><i class="far fa-comment"></i></span>
-
-              <div class="info-box-content">
-                <span class="info-box-text">Direct Messages</span>
-                <span class="info-box-number">163,921</span>
-              </div>
-              <!-- /.info-box-content -->
-            </div>
-            <!-- /.info-box -->
-
-            <!-- /.card -->
-
-           
-            <!-- /.card -->
-          </div>
+         
           <!-- /.col -->
         </div>
         <!-- /.row -->
