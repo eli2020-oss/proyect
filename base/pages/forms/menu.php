@@ -178,13 +178,7 @@ $_SESSION['avatar']=$avatar;
               <li class="nav-item">
                 <a href="control_tickets.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
-                  <p>Control de tickets</p>
-                </a>
-              </li>
-              <li class="nav-item">
-                <a href="" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Control de estado</p>
+                  <p>Panel de control</p>
                 </a>
               </li>
             </ul>

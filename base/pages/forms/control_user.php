@@ -1,20 +1,19 @@
 <?php
 session_start();
 include('menu.php');
- // $_SESSION["login"];
-      include("Conexion.php"); 
-    $accion=isset($_POST["accion"])?$_POST["accion"]:"";
-     $repo=isset($_POST["repo"])?$_POST["repo"]:"";
+$login= $_COOKIE['id']."";
+include('Conexion.php');
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>REPORTES</title>
+  <title>ACCESOS | PERMISOS</title>
 
-  <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+   <!-- Google Font: Source Sans Pro -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
   <!-- daterange picker -->
@@ -34,24 +33,66 @@ include('menu.php');
   <link rel="stylesheet" href="../../plugins/bs-stepper/css/bs-stepper.min.css">
   <!-- dropzonejs -->
   <link rel="stylesheet" href="../../plugins/dropzone/min/dropzone.min.css">
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+  <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
-
+<script src="js/jquery-1.10.2.min.js"></script>
 <script type="text/javascript">
- function cargar1(tipo)
+ function cargar1(codigo)
       {
-        alert("hola");
+        // alert("Entra");
      //  localStorage.clear();
-         document.getElementById("accion").value="desabilitar";
-         document.getElementById("repo").value=tipo;
+     document.getElementById("accion").value="desabilitar";
+         document.getElementById("cc").value=codigo;
           //var getInput =codigo;
+         alert(codigo);
          //localStorage.setItem("ab",getInput);
-         //   document.getElementById("formulario").submit();
+            document.getElementById("formulario").submit();
       } 
- 
+   
+  
+function cambiar(e,id,user)
+		{
+      $.ajax({
+				type: 'POST',
+				url: "cambio_estado.php",
+				data: {ida:id,us:user,estado:e},
+				success: function(data)
+				{
+					//$("#tabla").append(data);
+          //alert(data);
+				},
+				error: function(error)
+				{
+					alert("Error");
+				}
+			});
+			return false;
+		}
+
+
+
+</script>
+<script type="text/javascript">
+ function cambio()
+      {
+       /// alert("Entra");
+   
+           document.getElementById("formulario").submit();
+      } 
+      
   
 </script>
+
 <body class="hold-transition sidebar-mini">
  <div class="content-wrapper">
    <section class="content-header">
@@ -63,11 +104,12 @@ include('menu.php');
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="inicio.php">Inicio</a></li>
-              <li class="breadcrumb-item active">Control de Reportes</li>
+              <li class="breadcrumb-item"><a href="control_tickets.php">Control de Reportes</a></li>
+              <li class="breadcrumb-item active">Control de Usuarios</li>
             </ol>
           </div>
         </div>
-      </div>
+      </div><!-- /.container-fluid -->
     </section>
 
 
@@ -76,156 +118,147 @@ include('menu.php');
       <div class="container-fluid">
         <!-- SELECT2 EXAMPLE -->
         <div class="card card-default">
-          <div class="card-header">
-            <h3 class="card-title">Panel</h3>
-          </div>
+        
           <!-- /.card-header -->
-           <form name='formulario' id='formulario' class="principal" action="reportes/rp_tickets.php" method="POST">
+           <form name='formulario' id='formulario' class="principal" action="control_user.php" method="POST">
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
-             <input type="hidden" name="repo" id="repo" value="<?php echo $repo; ?>">
-          <div class="card-body">
+             <input type="hidden" name="cc" id="cc" value="<?php echo $cc; ?>">
+             <input type="hidden" name="ca" id="ca" value="<?php echo $ca; ?>">
+            
+          <div class="card">
+              <div class="card-header">
+                <h3 class="card-title">Permisos</h3>
+              </div>
+              <div class="card-body">
             <div class="row">
               <div class="col-md-6">
-               
+                <div class="form-group">
+                <label>Usuario</label>
+                  <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" onchange="return cambio();" >
+                 <?php 
+                    echo "<option value=''>[----SELECCIONE UN USUARIO----]</option>";
+                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
+                      inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
+                      $result=mysqli_query($conexion,$sql);
+                      while($row=mysqli_fetch_assoc($result)) 
+                      {
+                        $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
+                        echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
+                      }
+                    ?>
+                  </select>
+                  
+                </div>
                 <!-- /.form-group -->
               
                 <!-- /.form-group -->
-
-            </div>
               </div>
-              
               <!-- /.col -->
-              
-                   
-                <h5 class="mb-2 mt-4">Reporteria</h5>
-        <div class="row">
-          <div class="col-lg-3 col-6">
-            <!-- small card -->
-            <div class="small-box bg-info">
-              <div class="inner">
-                <h4>Reportes General</h4>
-
-                <p>datos del mes</p>
-              </div>
-              
-              <a href="reportes/rp_tickets.php" class="small-box-footer">
-                Generar <i class="fas fa-arrow-circle-right"></i>
-              </a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small card -->
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h4>Casos de exito<sup style="font-size: 20px"></sup></h4>
-
-                <p>Casos resueltos con exito</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="#" class="small-box-footer">
-                Generar <i class="fas fa-arrow-circle-right"></i>
-              </a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small card -->
-            <div class="small-box bg-warning">
-              <div class="inner">
-                <h4>Control de usuarios</h4>
-
-                <p>Actividades de usuarios</p>
-              </div>
-              <div class="icon">
-              </div>
-              <a href="control_user.php" class="small-box-footer">
-                Generar <i class="fas fa-arrow-circle-right"></i>
-              </a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small card -->
-            <div class="small-box bg-danger">
-              <div class="inner">
-                <h4>Recurencia</h4>
-
-                <p>Control de recurencia de incidentes</p>
-              </div>
-              <div class="icon">
+              <div class="col-md-2">
                
               </div>
-              <a href="#" class="small-box-footer">
-                Generar <i class="fas fa-arrow-circle-right"></i>
-              </a>
+              <!-- /.col -->
+              <div class="btn-group w-100">
+                      
             </div>
+            <!-- /.row -->
           </div>
-          <!-- ./col -->
-        </div>
-       
-                 <!-- /.row -->
- 
-          </div>
-
           <br>
-        
-       
-              <!-- /.card-header -->
-          
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                    <th>Reporte</th>
+                    <th>Estado</th>
+                    <th></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <?php 
+                  $vacio=(isset($_POST["cmbuser"])?$_POST["cmbuser"]:"");
+                 //echo $_POST['cmbuser'];
+                   if($vacio!="")
+                   { 
+                    $reporte="";
+                    $sql="SELECT 
+                    a.acc_id as accesso_id,
+                    a.acc_nombre as nacceso,
+                    ifnull(u.estado,'INACTIVO')as access
+                    FROM bd_local.tbl_acceso a
+                    left outer join bd_local.user_acceso u on u.us_id='".$_POST["cmbuser"]."' and u.acc_id=a.acc_id
+                    where a.acc_estado='ACTIVO'  and u.estado='ACTIVO'";
+                    echo $sql;
+                    $result=mysqli_query($conexion,$sql);
+                    while($row=mysqli_fetch_assoc($result))
+                    {
+                        if($row["accesso_id"]=="AC-5")
+                        {
+                           $reporte="ACTIVIDAD GENERAL DE USUARIO"; 
+                        }
+                      echo "
+                      <tr>
+                        <td>".$reporte."</td>
+                        <td>".$row['access']."</td>
+                        <td class='project-actions text-right'>
+                        <a class='btn btn-primary btn-sm'onclick='return cambiar(1,\"".$row["accesso_id"]."\",\"".$_POST["cmbuser"]."\")' >
+                          HABILITAR
+                        </a>
+                  
+
+                    </td>
+                      </tr>
+                      ";
+                   }
+                  }?>
+                  </tbody>
+                
+                </table>
+              </div>
+                  
               <!-- /.card-body -->
             </div>
-            </div>
-             
-            <!-- /.card -->
-             <br>
-          </div>
-        </div>
-        </div>
-      </form>
-        <!-- /.card -->
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
 
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
-  </aside>
-  <!-- /.control-sidebar -->
-</div>
 <!-- ./wrapper -->
 
-<!-- jQuery -->
 <script src="../../plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- Select2 -->
-<script src="../../plugins/select2/js/select2.full.min.js"></script>
-<!-- Bootstrap4 Duallistbox -->
-<script src="../../plugins/bootstrap4-duallistbox/jquery.bootstrap-duallistbox.min.js"></script>
-<!-- InputMask -->
-<script src="../../plugins/moment/moment.min.js"></script>
-<script src="../../plugins/inputmask/jquery.inputmask.min.js"></script>
-<!-- date-range-picker -->
-<script src="../../plugins/daterangepicker/daterangepicker.js"></script>
-<!-- bootstrap color picker -->
-<script src="../../plugins/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
-<!-- Tempusdominus Bootstrap 4 -->
-<script src="../../plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-<!-- Bootstrap Switch -->
-<script src="../../plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
-<!-- BS-Stepper -->
-<script src="../../plugins/bs-stepper/js/bs-stepper.min.js"></script>
-<!-- dropzonejs -->
-<script src="../../plugins/dropzone/min/dropzone.min.js"></script>
+<!-- DataTables  & Plugins -->
+<script src="../../plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="../../plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../../plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="../../plugins/jszip/jszip.min.js"></script>
+<script src="../../plugins/pdfmake/pdfmake.min.js"></script>
+<script src="../../plugins/pdfmake/vfs_fonts.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.print.min.js"></script>
+<script src="../../plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- AdminLTE App -->
 <script src="../../dist/js/adminlte.min.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="../../dist/js/demo.js"></script>
-<!-- Page specific script -->
+<!-- jQuery -->
+
+
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true, "lengthChange": false, "autoWidth": false,
+      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
+    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    $('#example2').DataTable({
+      "paging": true,
+      "lengthChange": false,
+      "searching": false,
+      "ordering": true,
+      "info": true,
+      "autoWidth": false,
+      "responsive": true,
+    });
+  });
+</script>
 <script>
   $(function () {
     //Initialize Select2 Elements
@@ -356,6 +389,5 @@ include('menu.php');
   };
   // DropzoneJS Demo Code End
 </script>
-
 </body>
 </html>
