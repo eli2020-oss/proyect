@@ -34,12 +34,7 @@ $estado="";
   <script src="js/jquery-1.10.2.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   <script>
-      /*function refrescar(){
-        alert("Refrescar");
-        document.getElementById("boton").click();
-    document.getElementById("boton").click();
-    
-  }*/
+
 
   </script>
 </head>

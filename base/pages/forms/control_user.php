@@ -3,14 +3,15 @@ session_start();
 include('menu.php');
 $login= $_COOKIE['id']."";
 include('Conexion.php');
-
+$cc=isset($_POST["cc"])?$_POST["cc"]:"";
+$ca=isset($_POST["ca"])?$_POST["ca"]:""; 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>ACCESOS | PERMISOS</title>
+  <title>REPORTES | USUARIO</title>
 
    <!-- Google Font: Source Sans Pro -->
    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -60,23 +61,13 @@ include('Conexion.php');
       } 
    
   
-function cambiar(e,id,user)
+function cambiar(id,user)
 		{
-      $.ajax({
-				type: 'POST',
-				url: "cambio_estado.php",
-				data: {ida:id,us:user,estado:e},
-				success: function(data)
-				{
-					//$("#tabla").append(data);
-          //alert(data);
-				},
-				error: function(error)
-				{
-					alert("Error");
-				}
-			});
-			return false;
+      alert(id);
+      alert(user);
+     document.getElementById("cc").value=id;
+     document.getElementById("ca").value=user;
+      document.getElementById("reporte").submit();
 		}
 
 
@@ -161,6 +152,7 @@ function cambiar(e,id,user)
               <div class="btn-group w-100">
                       
             </div>
+            
             <!-- /.row -->
           </div>
           <br>
@@ -186,34 +178,40 @@ function cambiar(e,id,user)
                     FROM bd_local.tbl_acceso a
                     left outer join bd_local.user_acceso u on u.us_id='".$_POST["cmbuser"]."' and u.acc_id=a.acc_id
                     where a.acc_estado='ACTIVO'  and u.estado='ACTIVO'";
-                    echo $sql;
+                   // echo $sql;
                     $result=mysqli_query($conexion,$sql);
                     while($row=mysqli_fetch_assoc($result))
                     {
                         if($row["accesso_id"]=="AC-5")
-                        {
-                           $reporte="ACTIVIDAD GENERAL DE USUARIO"; 
-                        }
+                        {$reporte="ACTIVIDAD GENERAL DE USUARIO"; }
+                         else if($row["accesso_id"]=="AC-6")
+                        {$reporte="REPORTE DE FRECUENCIA DE CREACION DE TICKETS"; }
+                         else if($row["accesso_id"]=="AC-2")
+                        {$reporte="TIEMPO DE ATENCION"; }
+                         else{$reporte=""; }
+                         if($reporte!="")
+                         {
                       echo "
                       <tr>
                         <td>".$reporte."</td>
                         <td>".$row['access']."</td>
                         <td class='project-actions text-right'>
-                        <a class='btn btn-primary btn-sm'onclick='return cambiar(1,\"".$row["accesso_id"]."\",\"".$_POST["cmbuser"]."\")' >
-                          HABILITAR
+                        <a class='btn btn-primary btn-sm'onclick='return cambiar(\"".$row["accesso_id"]."\",\"".$_POST["cmbuser"]."\")' >
+                          GENERAR
                         </a>
                   
 
                     </td>
                       </tr>
                       ";
-                   }
+                         }
+                    }
                   }?>
                   </tbody>
                 
                 </table>
               </div>
-                  
+                </form>     
               <!-- /.card-body -->
             </div>
 

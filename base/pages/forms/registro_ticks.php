@@ -1,7 +1,7 @@
 <?php
 session_start();
 include('menu.php');
-$login= $_SESSION["login"]."";
+include('Conexion.php');
   ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,25 +22,39 @@ $login= $_SESSION["login"]."";
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
 <script type="text/javascript">
-  function Validar()
-      {
-       
-         <?php
-      include("Conexion.php"); 
-    $accion=isset($_POST["accion"])?$_POST["accion"]:"";
-    $estado="ACTIVO";
-    $nombre="";
-    $consulta="SELECT em_nombre FROM bd_local.tbl_emple;";
-  $result=mysqli_query($conexion,$consulta);
-      while($row=mysqli_fetch_assoc($result))
-      {
-        $nombre=$row["em_nombre"]."";
-      }
+function cambiar(e,id,user)
+		{
+      $.ajax({
+				type: 'POST',
+				url: "cambio_estado.php",
+				data: {ida:id,us:user,estado:e},
+				success: function(data)
+				{
+					//$("#tabla").append(data);
+          //alert(data);
+				},
+				error: function(error)
+				{
+					alert("Error");
+				}
+			});
+			return false;
+		}
 
-    $sql="";
-    //echo "<script>alert('Informacion Modificada Satisfactoriamente');</script>";
-    ?>
-  </script>
+
+
+</script>
+<script type="text/javascript">
+ function cambio()
+      {
+       /// alert("Entra");
+   
+           document.getElementById("formulario").submit();
+      } 
+      
+  
+</script>
+
 <body class="hold-transition sidebar-mini">
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -71,63 +85,84 @@ $login= $_SESSION["login"]."";
                 <h3 class="card-title">Historial de tickes</h3>
               </div>
               <!-- /.card-header -->
+             
               <div class="card-body">
-                <table id="example2" class="table table-bordered table-hover">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                <form name='formulario' id='formulario' class="principal" action="registro_ticks.php" method="POST">
+                <label>Usuario</label>
+                  <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" onchange="return cambio();" >
+                 <?php 
+                    echo "<option value=''>[----SELECCIONE UN USUARIO----]</option>";
+                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
+                      inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
+                      $result=mysqli_query($conexion,$sql);
+                      while($row=mysqli_fetch_assoc($result)) 
+                      {
+                        $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
+                        echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
+                      }
+                    ?>
+                  </select>
+                  
+                </div>
+                <!-- /.form-group -->
+              
+                <!-- /.form-group -->
+              </div>
+              <!-- /.col -->
+              <div class="col-md-2">
+               
+              </div>
+              <!-- /.col -->
+              <div class="btn-group w-100">
+                      
+            </div>
+            <!-- /.row -->
+          </div>
+          <br>
+                <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>ID TICKETS</th>
-                    <th>HECHO POR</th>
-                    <th>DESCRIPCION</th>
-                    <th>FECHA DE CREACION DE TICKETS</th>
-                    <th>ESTADO</th>
+                    <th>Identificador</th>
+                    <th>Nombre</th>
+                    <th>Estado</th>
+                    <th></th>
                   </tr>
                   </thead>
                   <tbody>
-                    <?php
-                          $sql="SELECT ti.tickes_id as ids,em.em_nombre as nombre,ti.tk_descripcion as descrip,ti.t_fechaini as fecha,ti.tic_estado as estado
-                           FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
-                           inner join bd_local.tbl_emple as em inner join bd_local.tbl_categoria as ca  
-                           inner join bd_local.categorias_user as cu where ti.o_us=us.us_id and us.em_id=em.em_id 
-                           and ca.cate_id= ti.cate_id and ti.cate_id=cu.id_categoria and us.nuser='".$_SESSION['login']."'";
-                          $result=mysqli_query($conexion,$sql);
-                          while($row=mysqli_fetch_assoc($result))
-                          {
-                           echo "
+                  <?php 
+                  $vacio=(isset($_POST["cmbuser"])?$_POST["cmbuser"]:"");
+                 //echo $_POST['cmbuser'];
+                   if($vacio!="")
+                   { $sql="SELECT 
+                    a.acc_id as accesso_id,
+                    a.acc_nombre as nacceso,
+                    ifnull(u.estado,'INACTIVO')as access
+                    FROM bd_local.tbl_acceso a
+                    left outer join bd_local.user_acceso u on u.us_id='".$_POST["cmbuser"]."' and u.acc_id=a.acc_id
+                    where a.acc_estado='ACTIVO'";
+                    //echo $sql;
+                    $result=mysqli_query($conexion,$sql);
+                    while($row=mysqli_fetch_assoc($result))
+                    {
+                      echo "
                       <tr>
-                         <tr>
-                      <td>
-                          ".$row["ids"]."
-                      </td>
-                      <td>
-                          <a>
-                           " .$row["nombre"]."
-                          </a>
-                         
-                      </td>
-                      <td>
-                           " .$row["descrip"]."
-                      </td>
-                      <td>
-                        " .$row["fecha"]."
-                      </td>
-                      <td>
-                       ".$row["estado"]."
-                      </td>
+                        <td>".$row['accesso_id']."</td>
+                        <td>".$row['nacceso']."</td>
+                        <td>".$row['access']."</td>
+                      </tr>
                       ";
-                          }
-                  ?>
+                   }
+                  }?>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                      <th>ID TICKETS</th>
-                    <th>HECHO POR</th>
-                    <th>DESCRIPCION</th>
-                    <th>FECHA DE CREACION DE TICKETS</th>
-                    <th>ESTADO</th>
-                  </tr>
-                  </tfoot>
+                
                 </table>
               </div>
+                  
+              <!-- /.card-body -->
+            </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
@@ -141,7 +176,8 @@ $login= $_SESSION["login"]."";
     <!-- Control sidebar content goes here -->
   </aside>
   <!-- /.control-sidebar -->
-</div>
+
+                </form>
 <!-- ./wrapper -->
 
 <!-- jQuery -->
