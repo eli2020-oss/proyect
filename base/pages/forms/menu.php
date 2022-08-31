@@ -61,11 +61,11 @@ $_SESSION['avatar']=$avatar;
             <!-- Message End -->
           </a>
           <div class="dropdown-divider"></div>
-          <a href="#" class="dropdown-item dropdown-footer">Todo los mensajes</a>
+          <a href="bandeja.php" class="dropdown-item dropdown-footer">Todo los mensajes</a>
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link" data-widget="fullscreen" href="#" role="button">
+        <a class="nav-link" data-widget="fullscreen" href="" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>
@@ -77,8 +77,8 @@ $_SESSION['avatar']=$avatar;
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
     <a href="inicio.php" class="brand-link">
-      <!-- <img src="" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> -->
-      <span class="brand-text font-weight-light">Cooperativa Ceibena</span>
+      <img src="reportes/img/CEIBENA.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8"> 
+      <span class="brand-text font-weight-light">Cooperativa Ceibeña</span>
     </a>
 
     <!-- Sidebar -->
@@ -102,25 +102,7 @@ $_SESSION['avatar']=$avatar;
               if (isset($_SESSION["AC-1"])==true)
                { 
                 ?>
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-               Dashboard
-                <i class="right fas fa-angle-left">
-                </i>
-              </p>
-            </a>
-            <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="../charts/visual.php" class="nav-link">
-                  <i class="far fa-circle nav-icon"></i>
-                  <p>Dashboard</p>
-                </a>
-              </li>
-            </ul>
-          </li>
+          
            <?php  
            
            if (isset($_SESSION["AC-6"])==true)
@@ -185,7 +167,7 @@ $_SESSION['avatar']=$avatar;
           </li>
           <li class="nav-item">
             <a href="#" class="nav-link">
-              <i class="nav-icon fas fa-copy"></i>
+              <i class="nav-icon fas fa-columns"></i>
               <p>
                 Ajustes
                 <i class="fas fa-angle-left right"></i>
@@ -209,7 +191,7 @@ $_SESSION['avatar']=$avatar;
              ?>
                <li class="nav-item menu-open">
             <a href="#" class="nav-link active">
-              <i class="nav-icon fas fa-edit"></i>
+              <i class="nav-icon far fa-envelope"></i>
               <p>
                Tickes
                 <i class="fas fa-angle-left right"></i>

@@ -62,7 +62,8 @@ $descripcion=$_POST["textarea"];
                //
                   // echo "<script>alert('Informacion Guardada Satisfactoriamente');</script>";
                 if($_FILES["archivo"]["error"]>0){
-                    echo "error al cargar archivo";
+
+                    echo "no hay archivo";
                 }else 
                 {
                     $permitidos= array("image/jpng","image/png","application/pdf");
@@ -101,10 +102,11 @@ $descripcion=$_POST["textarea"];
              '".$_COOKIE["id"]."', '".$man."', '".$descripcion."', concat(now()),
               'ACTIVO', '".$_COOKIE['id']."', '".$ruta."');";
                $result=mysqli_query($conexion,$sql2);
-             //echo $sql2;
+            // echo $sql2;
                  $sql1=" UPDATE `bd_local`.`transacciones` SET `contador_transacciones` = '".$cambio."' WHERE (`codigo` = '0');";
                   $resultado=mysqli_query($conexion,$sql1);
                   // $accion="";
+                  header("Location:inicio.php");
  }
   
 ?>

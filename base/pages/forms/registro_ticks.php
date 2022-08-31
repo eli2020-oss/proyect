@@ -67,7 +67,7 @@ function cambiar(e,id,user)
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
+              <li class="breadcrumb-item"><a href="inicio.php">Inicio</a></li>
               <li class="breadcrumb-item active">Registro de tickes</li>
             </ol>
           </div>
@@ -126,9 +126,9 @@ function cambiar(e,id,user)
                   <thead>
                   <tr>
                     <th>Identificador</th>
-                    <th>Nombre</th>
-                    <th>Estado</th>
-                    <th></th>
+                    <th>Titulo</th>
+                    <th>Fecha de finalizacion</th>
+                    <th>Accion</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -136,22 +136,27 @@ function cambiar(e,id,user)
                   $vacio=(isset($_POST["cmbuser"])?$_POST["cmbuser"]:"");
                  //echo $_POST['cmbuser'];
                    if($vacio!="")
-                   { $sql="SELECT 
-                    a.acc_id as accesso_id,
-                    a.acc_nombre as nacceso,
-                    ifnull(u.estado,'INACTIVO')as access
-                    FROM bd_local.tbl_acceso a
-                    left outer join bd_local.user_acceso u on u.us_id='".$_POST["cmbuser"]."' and u.acc_id=a.acc_id
-                    where a.acc_estado='ACTIVO'";
+                   { 
+                    $sql="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre,
+                    ti.titulo as descrip,ti.tfechafinal as fecha, ti.tic_estado as estado 
+                    FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
+                    inner join bd_local.tbl_categoria as ca inner join bd_local.categorias_user as cu
+                     where  ti.o_us=us.id and ca.cate_id= ti.cate_id and ti.cate_id=cu.id_categoria and 
+                     ti.o_us='".$_POST["cmbuser"]."' and ti.tic_estado='FINALIZADO' ORDER BY ti.t_fechaini desc ";
                     //echo $sql;
                     $result=mysqli_query($conexion,$sql);
                     while($row=mysqli_fetch_assoc($result))
                     {
                       echo "
                       <tr>
-                        <td>".$row['accesso_id']."</td>
-                        <td>".$row['nacceso']."</td>
-                        <td>".$row['access']."</td>
+                        <td>".$row['ids']."</td>
+                        <td>".$row['descrip']."</td>
+                        <td>".$row['fecha']."</td>
+                        <td>
+                        <a class=' btn btn-primary btn-sm'  onclick='return cambiar(\"".'1'."\",\"".$row["ids"]."\")' >
+                        VER CHAT
+                          </a>
+                        </td>
                       </tr>
                       ";
                    }
@@ -218,6 +223,21 @@ function cambiar(e,id,user)
       "responsive": true,
     });
   });
+</script>
+<script>
+  $(function () {
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    //Initialize Select2 Elements
+    $('.select2bs4').select2({
+      theme: 'bootstrap4'
+    })
+
+  
+  });
+
+  
 </script>
 </body>
 </html>

@@ -101,8 +101,8 @@ include('menu.php');
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Inicio</a></li>
-              <li class="breadcrumb-item active">tareas</li>
+              <li class="breadcrumb-item"><a href="inicio.php">Inicio</a></li>
+              <li class="breadcrumb-item active">Tareas</li>
             </ol>
           </div>
         </div>

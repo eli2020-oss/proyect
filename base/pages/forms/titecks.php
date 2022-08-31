@@ -139,8 +139,9 @@ $accion="";
                  <select class="form-control select2" id="cmbcategoria" name="cmbcategoria" style="width: 100%;">
                  <option selected="selected">[--SELECCIONE LO QUE SE LE INDICA--]</option>
                  <?php 
-                      $sql="SELECT cate_id as codigo ,t_categoria as nombre  FROM 
-                      tbl_categoria where cate_estado='ACTIVO'";
+                      $sql="SELECT id_categoria as codigo,t_descripcion as nombre
+                      FROM bd_local.categorias_user inner join bd_local.tbl_categoria where id_categoria=cate_id and cate_estado='ACTIVO'
+                      and estado='ACTIVO';";
                       $result=mysqli_query($conexion,$sql);
                       while($row=mysqli_fetch_assoc($result)) 
                       {

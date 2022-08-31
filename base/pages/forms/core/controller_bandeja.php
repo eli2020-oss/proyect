@@ -16,7 +16,8 @@ if($estado=='0')
           $detallec=$row["deta_id"];
 
     }*/
-    //echo $detallec;
+    //echo $detallec; 
+ //   header('Location: ../bandeja.php');
 }
 else if($estado=='1')
 {
