@@ -158,7 +158,7 @@ include('menu.php');
               <div class="icon">
                
               </div>
-              <a href="#" class="small-box-footer">
+              <a href="reportes/reporte_recurencia.php" class="small-box-footer">
                 Generar <i class="fas fa-arrow-circle-right"></i>
               </a>
             </div>

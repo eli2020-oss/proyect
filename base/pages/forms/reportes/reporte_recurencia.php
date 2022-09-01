@@ -2,25 +2,28 @@
 require('fpdf184/fpdf.php');
 include('../Conexion.php');
 $mes="";
-$tiecketstotales="";
-$sin_atender="";
-$atendidos="";
-$total_sin="";
-$total_atendido="";
-$sql="SELECT MONTHNAME(t.t_fechaini) as namemes,count(t.tic_estado) as delmes,(count(tic_estado) -(SELECT  count(tickes_id) FROM bd_local.tbl_ticketsc where t_fechaini between (NOW() - INTERVAL 2 day) and now()  and tic_estado='ACTIVO')) as fuera
-    ,(SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where tic_estado='ACTIVO' and MONTH(t_fechaini) =MONTH(curdate()))/(SELECT count(tic_estado) FROM bd_local.tbl_ticketsc  where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()))*100 as porcen_sin_mes
-    ,(SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where  tic_estado='FINALIZADO' and MONTH(t_fechaini) =MONTH(curdate()))/(SELECT count(tic_estado) FROM bd_local.tbl_ticketsc  where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()))*100 as porcen_atendido_mes,
-     (SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where tic_estado='FINALIZADO' and MONTH(t_fechaini) =MONTH(curdate())) as atendido_mes
-     FROM  bd_local.tbl_ticketsc as t inner join bd_local.tbl_user as u where YEAR(t.t_fechaini) =YEAR(curdate()) and MONTH(t.t_fechaini) =MONTH(curdate())
-     and t.us_id=u.id;";
+$nombre="";
+$filial="";
+$completos="";
+$sql="SELECT MONTHNAME(c.t_fechaini) as namemes, (SELECT  nombre FROM bd_local.tbl_filial 
+inner join bd_local.tbl_ticketsc where id_filial=tk_filial group by id_filial ORDER BY id_filial DESC LIMIT 1) as nombre,
+(SELECT Count(tk_filial) FROM bd_local.tbl_filial 
+inner join bd_local.tbl_ticketsc where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()) 
+and id_filial=tk_filial group by id_filial ORDER BY id_filial DESC LIMIT 1) as filial,
+(SELECT count(tic_estado) FROM bd_local.tbl_ticketsc as c
+inner join bd_local.tbl_categoria as ca inner join bd_local.tbl_filial
+ where YEAR(c.t_fechaini) =YEAR(curdate()) and MONTH(c.t_fechaini) =MONTH(curdate()) and ca.cate_id=c.cate_id and id_filial=tk_filial and tic_estado='FINALIZADO' ) as completos
+FROM bd_local.tbl_ticketsc as c
+inner join bd_local.tbl_categoria as ca inner join bd_local.tbl_filial
+ where YEAR(c.t_fechaini) =YEAR(curdate()) and MONTH(c.t_fechaini) =MONTH(curdate()) 
+ and ca.cate_id=c.cate_id and id_filial=tk_filial group by id_filial  LIMIT 1";
       $result=mysqli_query($conexion,$sql);
       while($row=mysqli_fetch_assoc($result))
          {
             $mes=$row["namemes"]."";
-            $tiecketstotales=$row["delmes"]."";
-            $total_atendido=$row["atendido_mes"]."";
-            $sin_atender=$row["porcen_sin_mes"]."";
-            $atendidos=$row["porcen_atendido_mes"]."";
+            $nombre=$row["nombre"]."";
+            $filial=$row["filial"]."";
+            $completos=$row["completos"]."";
          }
 class PDF extends FPDF
 {
@@ -31,7 +34,7 @@ function Header()
         $this->SetFont('Times','',20);
         $this->Image('img/CEIBENA.png',140,10,50);
         $this->setXY(50,25);
-        $this->Cell(50,8,"REPORTE DE DATOS GENERALES MES",0,0,'C',0);//r para derecha, l para izquierda 
+        $this->Cell(50,8,"REPORTE DE INCIDENCIAS",0,0,'C',0);//r para derecha, l para izquierda 
         $this->Ln(40);
 }
 
@@ -188,47 +191,46 @@ $pdf->setXY(130,33);
 $pdf->Cell(10,8,$mes,0,0,'R',0);
 $pdf->Ln(25);
 $pdf->SetX(15);
-$pdf->SetFont('Helvetica', 'B', 15);
-$pdf->Cell(10,8,'N',1,0,'C',0);
-$pdf->Cell(40,8,'Codigo',1,0,'C',0);
- $pdf->Cell(40,8,'Creado',1,0,'C',0);
-$pdf->Cell(40,8,'Fecha',1,0,'C',0);
+$pdf->SetFont('Helvetica', 'B', 12);
+$pdf->Cell(7,8,'N',1,0,'C',0);
+$pdf->Cell(25,8,'Codigo',1,0,'C',0);
+ $pdf->Cell(30,8,'titulo',1,0,'C',0);
+$pdf->Cell(30,8,'Tipo',1,0,'C',0);
+$pdf->Cell(40,8,'Filial',1,0,'C',0);
 $pdf->Cell(40,8,'Estado',1,1,'C',0);
 $pdf->SetFillColor(255,255,255);//color de fondo
 $pdf->SetDrawColor(65,61,61);//color de linea 
-$pdf->SetFont('Arial', '', 12);
-$pdf->SetWidths(array(10, 40, 40, 40,40));
+$pdf->SetFont('Arial', '', 10);
+$pdf->SetWidths(array(7, 25, 30, 30,40,40));
 //$pdf->Ln(25);
 // $pdf->setXY(30,60);
 $i=1;
-$sql="SELECT  ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre,ti.titulo as titulo,ti.t_fechaini as fecha,
-ti.tic_estado as estado, us_id
- FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
-inner join bd_local.tbl_categoria as ca inner join 
- bd_local.categorias_user as cu where  ti.o_us=us.id  and ca.cate_id= ti.cate_id
- and ti.cate_id=cu.id_categoria and YEAR(ti.t_fechaini) =YEAR(curdate()) and MONTH(ti.t_fechaini) =MONTH(curdate())";
+$sql="SELECT c.tickes_id as codigo,t_categoria as categoria,titulo,nombre as filial,tk_area as area
+,tk_nivel as nivel,tic_estado as estado FROM bd_local.tbl_detalle 
+inner join bd_local.tbl_ticketsc as c
+inner join bd_local.tbl_categoria as ca inner join bd_local.tbl_filial
+ where YEAR(c.t_fechaini) =YEAR(curdate()) and MONTH(c.t_fechaini) =MONTH(curdate()) 
+ and ca.cate_id=c.cate_id and id_filial=tk_filial group by c.tickes_id ";
   $result=mysqli_query($conexion,$sql);
   while($row=mysqli_fetch_assoc($result))
      {
         $i++;
-        $pdf->Row(array($i,$row["ids"],$row['nombre'],utf8_decode($row["fecha"]),$row["estado"]),15);
+        $pdf->Row(array($i,$row["codigo"],utf8_decode($row["titulo"]),$row["categoria"],$row['filial'],$row["estado"]),15);
      }
      $pdf->setX(15);
      $pdf->SetFont('Times','',15);
-     $pdf->Cell(40,8,'Datos Generales',0,1,'C',0);
+     $pdf->Cell(40,8,'Filial con mas recurencia',0,1,'C',0);
      $pdf->setX(15);
      $pdf->SetFont('Helvetica', 'B', 14);
-      $pdf->Cell(40,8,'Tickets creados',1,0,'C',0);
-      $pdf->Cell(40,8,'Resueltos %',1,0,'C',1);// el uno hace que rellene el color 
-       $pdf->Cell(40,8,'Sin Resolver %',1,0,'C',0);
+      $pdf->Cell(40,8,'Nombre',1,0,'C',0);
+      $pdf->Cell(40,8,'N. Casos',1,0,'C',1);
       $pdf->Cell(40,8,'Finalizados',1,1,'C',0);
       $pdf->SetFont('Arial', '', 12);
       $pdf->SetWidths(array(40, 40, 40,40));
       $pdf->setX(15);
-      $pdf->Cell(40,8, $tiecketstotales,1,0,'C',0);
-      $pdf->Cell(40,8,$atendidos,1,0,'C',1);// el uno hace que rellene el color 
-       $pdf->Cell(40,8,$sin_atender,1,0,'C',0);
-      $pdf->Cell(40,8,$total_atendido,1,1,'C',0);
+      $pdf->Cell(40,8, $nombre,1,0,'C',0);
+      $pdf->Cell(40,8,$filial,1,0,'C',1);// el uno hace que rellene el color 
+       $pdf->Cell(40,8,$completos,1,1,'C',0);
 // for($i=1;$i<=50;$i++)
 //  {
 //     //$pdf->setX(15);

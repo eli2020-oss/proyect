@@ -92,9 +92,9 @@ $descripcion=$_POST["textarea"];
                 }
               $sql="INSERT INTO `bd_local`.`tbl_ticketsc` 
               (`tickes_id`, `o_us`, `us_id`, `cate_id`, `tk_nivel`, `titulo`, `tk_descripcion`, 
-              `t_fechaini`, `tfechafinal`, `cc`, `tic_estado`) VALUES (concat(CURDATE()+0,'-".$cambio."'), '".$_COOKIE["id"]."', 
+              `t_fechaini`, `tfechafinal`, `cc`,`tk_filial`,`tk_area`, `tic_estado`) VALUES (concat(CURDATE()+0,'-".$cambio."'), '".$_COOKIE["id"]."', 
               '".$man."', '".$categoria."', '".$prioridad."', '".$titulo."', '".$descripcion."', 
-              concat(now()) , '".$fechande."', '".$cc."', 'ACTIVO');";
+              concat(now()) , '".$fechande."', '".$cc."','".$filial."','". $area."', 'ACTIVO');";
                // echo "SQL ".$sql;
               $resultado=mysqli_query($conexion,$sql);
              $sql2="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
