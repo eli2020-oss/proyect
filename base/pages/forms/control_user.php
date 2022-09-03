@@ -63,11 +63,10 @@ $ca=isset($_POST["ca"])?$_POST["ca"]:"";
   
 function cambiar(id,user)
 		{
-      alert(id);
-      alert(user);
      document.getElementById("cc").value=id;
      document.getElementById("ca").value=user;
-      document.getElementById("reporte").submit();
+     document.getElementById("rep").value=1;
+    document.getElementById("formulario").submit();
 		}
 
 
@@ -85,6 +84,20 @@ function cambiar(id,user)
 </script>
 
 <body class="hold-transition sidebar-mini">
+  <?php 
+   $rep=isset($_POST["rep"])?$_POST["rep"]:"";
+   if($rep=="1")
+   {
+   // $_SESSION
+   //echo "<script>alert('".$_POST['ca']."');</script>";
+    $v1=base64_encode($_POST["cc"]);
+    $v2=base64_encode($_POST["ca"]);
+ //   ;
+// echo "<script>alert('".$_POST['cc']."');</script>";
+    echo "<script>window.open('reportes/reporteu_control.php?var1=$v1&var2=$v2','_blank');</script>";
+
+   }
+  ?>
  <div class="content-wrapper">
    <section class="content-header">
       <div class="container-fluid">
@@ -112,6 +125,7 @@ function cambiar(id,user)
         
           <!-- /.card-header -->
            <form name='formulario' id='formulario' class="principal" action="control_user.php" method="POST">
+           <input type="hidden" name="rep" id="rep" value="">
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
              <input type="hidden" name="cc" id="cc" value="<?php echo $cc; ?>">
              <input type="hidden" name="ca" id="ca" value="<?php echo $ca; ?>">

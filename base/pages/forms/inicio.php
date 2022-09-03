@@ -295,7 +295,7 @@ $sql="SELECT count(*)as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE[
                    }
                   ?>
                     <tr>
-                      <td><a href="pages/examples/invoice.html"><?php echo $id; ?></a></td>
+                      <td><a href="bandeja.php"><?php echo $id; ?></a></td>
                       <td><?php echo $descripcion; ?></td>
                       <td><span class='<?php echo $color; ?>'><?php echo $estado; ?></span></td>
                       <td>
