@@ -2,6 +2,7 @@
 session_start();
 include('menu.php');
 include('Conexion.php');
+$cc=isset($_POST["cc"])?$_POST["cc"]:"";
   ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,27 +23,13 @@ include('Conexion.php');
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 </head>
 <script type="text/javascript">
-function cambiar(e,id,user)
+function cambiar(id)
 		{
-      $.ajax({
-				type: 'POST',
-				url: "cambio_estado.php",
-				data: {ida:id,us:user,estado:e},
-				success: function(data)
-				{
-					//$("#tabla").append(data);
-          //alert(data);
-				},
-				error: function(error)
-				{
-					alert("Error");
-				}
-			});
-			return false;
+     // alert(id);
+     document.getElementById("cc").value=id;
+     document.getElementById("rep").value=1;
+    document.getElementById("formulario").submit();
 		}
-
-
-
 </script>
 <script type="text/javascript">
  function cambio()
@@ -56,6 +43,19 @@ function cambiar(e,id,user)
 </script>
 
 <body class="hold-transition sidebar-mini">
+  <?php 
+   $rep=isset($_POST["rep"])?$_POST["rep"]:"";
+   if($rep=="1")
+   {
+   // $_SESSION
+   //echo "<script>alert('".$_POST['ca']."');</script>";
+    $v1=base64_encode($_POST["cc"]);
+ //   ;
+// echo "<script>alert('".$_POST['cc']."');</script>";
+    echo "<script>window.open('reportes/reporte_chat.php?var1=$v1','_blank');</script>";
+
+   }
+  ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -91,6 +91,8 @@ function cambiar(e,id,user)
               <div class="col-md-6">
                 <div class="form-group">
                 <form name='formulario' id='formulario' class="principal" action="registro_ticks.php" method="POST">
+                <input type="hidden" name="rep" id="rep" value="">
+                <input type="hidden" name="cc" id="cc" value="<?php echo $cc; ?>">
                 <label>Usuario</label>
                   <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" onchange="return cambio();" >
                  <?php 
@@ -153,7 +155,7 @@ function cambiar(e,id,user)
                         <td>".$row['descrip']."</td>
                         <td>".$row['fecha']."</td>
                         <td>
-                        <a class=' btn btn-primary btn-sm'  onclick='return cambiar(\"".'1'."\",\"".$row["ids"]."\")' >
+                        <a class=' btn btn-primary btn-sm'  onclick='return cambiar(\"".$row["ids"]."\")' >
                         VER CHAT
                           </a>
                         </td>

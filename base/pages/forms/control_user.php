@@ -198,8 +198,8 @@ function cambiar(id,user)
                     {
                         if($row["accesso_id"]=="AC-5")
                         {$reporte="ACTIVIDAD GENERAL DE USUARIO"; }
-                         else if($row["accesso_id"]=="AC-6")
-                        {$reporte="REPORTE DE FRECUENCIA DE CREACION DE TICKETS"; }
+                        //  else if($row["accesso_id"]=="AC-6")
+                        // {$reporte="REPORTE DE FRECUENCIA DE CREACION DE TICKETS"; }
                          else if($row["accesso_id"]=="AC-2")
                         {$reporte="TIEMPO DE ATENCION"; }
                          else{$reporte=""; }

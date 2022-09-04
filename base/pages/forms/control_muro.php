@@ -21,7 +21,7 @@ $codigo=$_SESSION['ticketid'];
                   where ti.tickes_id=de.tickes_id and u.id=de.respuesta and de.tickes_id='".$codigo."' ORDER BY de.fecha DESC LIMIT 4)t 
                   order by fecha asc";
 
-                 // echo "SENTENCIA DE SQL ".$sql;
+                 //echo "SENTENCIA DE SQL ".$sql;
                   $result=mysqli_query($conexion,$sql);
                   while($row=mysqli_fetch_assoc($result))
                   {

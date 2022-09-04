@@ -5,67 +5,41 @@ include("../Conexion.php");
 //$cc=isset($_POST["cc"])?$_POST["cc"]:""; 
 //echo "<script>alert('".$cc."');</script>";
 $v1=base64_decode($_GET["var1"]);
-$v2=base64_decode($_GET["var2"]);
 //echo "<script>alert('".$v1."');</script>";
 //echo "<script>alert('".$v2."');</script>";
 $mes="";
-$cantidad="";
+$nombre="";
 $finalizados="";
 $activos="";
-$variable="";
-$encabezado="";
-$sql="no modifica ";
-if($v1=="AC-5")
-     {
+$filial="";
+$sql="";
+$asunto="";
+$categoria="";
+
     //   echo "<script>alert('ACTIVIDAD GENERAL DE USUARIO".$v1."');</script>";
-       $sql=" SELECT (  select   count(tickes_id) as cant_creados  from bd_local.tbl_ticketsc where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate())
-       and o_us='".$v2."' ) as cant_creados,(select count(tickes_id) from bd_local.tbl_ticketsc where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate())
-     and   tic_estado='FINALIZADO'  and o_us='".$v2."'    ) as finalizados,  
-     (select count(tickes_id) from bd_local.tbl_ticketsc where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate())
-     and   tic_estado='ACTIVO'  and o_us='".$v2."') as activo, MONTHNAME(t_fechaini) as namemes
-     FROM bd_local.tbl_ticketsc inner join bd_local.tbl_user as u where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()) 
-      and o_us='".$v2."' and o_us=id limit 1";
-      $variable="N. casos";
-      $encabezado="Informacion general de creacion de tickets";
-     }
- else if($v1=="AC-6")
-       {
-    //   echo "<script>alert('REPORTE DE FRECUENCIA DE CREACION DE TICKETS".$v1."');</script>";
-       $sql="";
-        }
- else if($v1=="AC-2")
-  {
-   //echo "<script>alert('TIEMPO DE ATENCION".$v1."');</script>";
-   $sql=" SELECT (select  count(tickes_id) as cant_creados  from bd_local.tbl_ticketsc where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()) and us_id='".$v2."') as cant_creados,
-   (select SUM(DATEDIFF(tfechafinal,t_fechaini))  from bd_local.tbl_ticketsc where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate())
- and us_id='".$v2."')/( select count(DATEDIFF(tfechafinal,t_fechaini))  from bd_local.tbl_ticketsc where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()) and us_id='".$v2."')
- as promedio 
-  ,(select count(tickes_id) from bd_local.tbl_ticketsc where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate())
- and   tic_estado='FINALIZADO'  and us_id='".$v2."') as finalizados,  
- (select count(tickes_id) from bd_local.tbl_ticketsc where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate())
- and   tic_estado='ACTIVO'  and us_id='".$v2."') as activo, MONTHNAME(t_fechaini) as namemes
- FROM bd_local.tbl_ticketsc inner join bd_local.tbl_user where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()) 
-  and us_id='".$v2."' and o_us=id limit 1;";
-   $variable="Promedio Dias";
-   $encabezado="Datos de eficiencia del usuario";
-   }
-       //echo $mes;
-        
-       $result=mysqli_query($conexion,$sql);
-      while($row=mysqli_fetch_assoc($result))
-          {
-            //echo "<script>alert('ACTIVIDAD GENERAL DE USUARIO".$v1."');</script>";
-             $mes=$row["namemes"]."";
-              $finalizados=$row["finalizados"]."";
-              if($v1=="AC-2")
-              {
-              $activos=$row["promedio"]."";}
-              if($v1=="AC-5")
-              {
-              $activos=$row["activo"]."";}
-              
-             $cantidad=$row["cant_creados"]."";
-        }
+      $sql="SELECT  c.tickes_id, concat(f_name,' ') as nombreu ,titulo,tk_descripcion,t_fechaini as inicio,tfechafinal as final
+      ,nombre, t_categoria as nombre_cate, MONTHNAME(c.t_fechaini) as namemes
+      FROM bd_local.tbl_ticketsc as c inner join bd_local.tbl_categoria as ca 
+      inner join bd_local.tbl_filial inner join bd_local.tbl_user where  c.tickes_id='".$v1."' and  ca.cate_id=c.cate_id
+      and  o_us=id limit 1;";
+    //   $variable="N. casos";
+    //   $encabezado="Informacion general de creacion de tickets";
+     
+       // $mes=$sql;
+    //  echo "<script>alert('".$sql."');</script>";
+       // echo $sql;
+    $result=mysqli_query($conexion,$sql);
+     while($row=mysqli_fetch_assoc($result))
+        {
+        // echo "<script>alert('ACTIVIDAD GENERAL DE USUARIO".$v1."');</script>";
+        $nombre=$row["nombreu"].""; 
+        $mes=$row["namemes"]."";
+        $finalizados=$row["final"]."";
+          $filial=$row["nombre"]."";
+          $asunto=$row["titulo"]."";
+          $activos=$row["inicio"]."";
+          $categoria=$row["nombre_cate"]."";
+       }
 class PDF extends FPDF
 {
     
@@ -75,7 +49,7 @@ function Header()
         $this->SetFont('Times','',20);
         $this->Image('img/CEIBENA.png',140,10,50);
         $this->setXY(50,25);
-        $this->Cell(50,8,"REPORTE DE FUNCION DE USUARIO",0,0,'C',0);//r para derecha, l para izquierda 
+        $this->Cell(100,8,"HISTORIAL DE TICKET",0,0,'C',0);//r para derecha, l para izquierda 
         $this->Ln(40);
 }
 
@@ -231,21 +205,23 @@ $pdf->setXY(50,15);
 $pdf->Ln(40);
 $pdf->setXY(130,33);
 $pdf->Cell(10,8,$mes,0,0,'R',0);
-$pdf->Ln(25);
+$pdf->Ln(30);
 $pdf->SetX(30);
 $pdf->SetFont('Times','',15);
-$pdf->Cell(40,8,$encabezado,0,1,'C',0);
+$pdf->Cell(100,8,'Datos generales de ticket '.$nombre.'/'.$v1.'/'.$filial,0,1,'C',0);
 $pdf->setX(15);
 $pdf->SetFont('Helvetica', 'B', 14);
- $pdf->Cell(40,8,'Cantidad ',1,0,'C',0);
- $pdf->Cell(40,8,$variable,1,0,'C',0);
- $pdf->Cell(40,8,'Finalizados',1,1,'C',0);
+ $pdf->Cell(50,8,'Asunto',1,0,'C',0);
+ $pdf->Cell(40,8,'Fecha I',1,0,'C',0);
+ $pdf->Cell(40,8,'Fecha F',1,0,'C',0);
+ $pdf->Cell(40,8,'Categoria',1,1,'C',0);
  $pdf->SetFont('Arial', '', 12);
- $pdf->SetWidths(array(40, 40, 40,40));
+ $pdf->SetWidths(array(30,30, 40, 25,25,25,25));
  $pdf->setX(15);
-$pdf->Cell(40,8, $cantidad,1,0,'C',0);
- $pdf->Cell(40,8,$activos,1,0,'C',0);// el uno hace que rellene el color 
- $pdf->Cell(40,8,$finalizados,1,1,'C',0);
+$pdf->Cell(50,8, $asunto,1,0,'C',0);
+$pdf->Cell(40,8,$activos,1,0,'C',0);// el uno hace que rellene el color 
+$pdf->Cell(40,8,$finalizados,1,0,'C',0);
+$pdf->Cell(40,8,$categoria,1,0,'C',0);
  $pdf->SetX(15);
  $pdf->setXY(50,100);
  $pdf->SetFont('Times','',15);
@@ -257,47 +233,23 @@ $pdf->Cell(40,8, $cantidad,1,0,'C',0);
 $pdf->setX(15);
 
  $pdf->SetFont('Helvetica', 'B', 12);
-$pdf->Cell(7,8,'N',1,0,'C',0);
-$pdf->Cell(25,8,'Codigo',1,0,'C',0);
-$pdf->Cell(30,8,'titulo',1,0,'C',0);
-$pdf->Cell(25,8,'Tipo',1,0,'C',0);
-$pdf->Cell(30,8,'Filial',1,0,'C',0);
-$pdf->Cell(30,8,'Resuelto en',1,0,'C',0);
-$pdf->Cell(30,8,'Estado',1,1,'C',0);
+$pdf->Cell(100,8,'Mensaje',1,0,'C',0);
+$pdf->Cell(40,8,'Fecha',1,1,'C',0);
 $pdf->SetFillColor(255,255,255);//color de fondo
 $pdf->SetDrawColor(65,61,61);//color de linea 
 $pdf->SetFont('Arial', '', 10);
-$pdf->SetWidths(array(7, 25, 30, 25,30,30,30));
-$i=1;
-if($v1=="AC-5")
-     {
-       // echo "<script>alert('ACTIVIDAD GENERAL DE USUARIO".$v1."');</script>";
-       $sql="
-       select  tickes_id as codigo, DATEDIFF(tfechafinal,t_fechaini) as fecha,tic_estado as estado,titulo,nombre as filial,tk_area as area,t_categoria as categoria
-       from bd_local.tbl_ticketsc as t inner join bd_local.tbl_user inner join bd_local.tbl_filial inner join 
-       bd_local.tbl_categoria as c where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate())
-       and o_us='".$v2."' and o_us=id and tk_filial=id_filial and t.cate_id=c.cate_id";
-     }
- else if($v1=="AC-6")
-       {
-       // echo "<script>alert('REPORTE DE FRECUENCIA DE CREACION DE TICKETS".$v1."');</script>";
-       $sql="";
-        }
- else if($v1=="AC-2")
-  {
+$pdf->SetWidths(array(100,40));
+
+
    // echo "<script>alert('TIEMPO DE ATENCION".$v1."');</script>";
-   $sql=" select  tickes_id as codigo, DATEDIFF(tfechafinal,t_fechaini) as fecha,titulo,
-   nombre as filial,tk_area,t_categoria as categoria,tic_estado as estado
-   from bd_local.tbl_ticketsc as t inner join bd_local.tbl_user inner join bd_local.tbl_filial inner join 
-   bd_local.tbl_categoria as c where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate())
-  and o_us=id and tk_filial=id_filial and t.cate_id=c.cate_id and tic_estado='FINALIZADO'";
-   }
-   $i="";
+  $sql="SELECT d_descrip as mensaje,fecha FROM bd_local.tbl_detalle where tickes_id='".$v1."';";
+
+   $i=1;
  $result=mysqli_query($conexion,$sql);
-   while($row=mysqli_fetch_assoc($result))
+  while($row=mysqli_fetch_assoc($result))
       {
        $i++;
-                $pdf->Row(array($i,$row["codigo"],utf8_decode($row["titulo"]),$row["categoria"],$row['filial'],$row["fecha"],$row["estado"]),15);
+               $pdf->Row(array(utf8_decode($row["mensaje"]),$row["fecha"]),15);
       }
    
 // for($i=1;$i<=50;$i++)
