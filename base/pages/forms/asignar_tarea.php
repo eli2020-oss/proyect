@@ -53,15 +53,15 @@ include('menu.php');
 
 <?php
  $contador=0;
- $sql2="SELECT id FROM bd_local.categorias_user;"; 
+ $sql2="SELECT count(id) as conta FROM bd_local.categorias_user;"; 
                   // echo "SQL ".$sql2;
                 $result=mysqli_query($conexion,$sql2);
                           while($row=mysqli_fetch_assoc($result))
                           {
-                            $contador++;
+                            $contador=$row['conta'];
                           } 
-                          $contador=$contador+1; 
-                        //  echo "<script>alert('".$contador."');</script>";
+                          $contador++; 
+                        // echo "<script>alert('".$contador."');</script>";
                if ($accion=="agregar") 
                {
                             //Echo "<script>alert('NO deberia entrar');</script>";
@@ -78,7 +78,7 @@ include('menu.php');
                         
                             $sql1="SELECT cate_id as cate,t_categoria as des FROM bd_local.tbl_categoria  where cate_id='".$_POST["cmbtareas"]."'"; 
                             //  echo $sql1;
-                            $log=$_SESSION['login']."";
+                          //  $log=$_SESSION['login']."";
                           $resultado=mysqli_query($conexion,$sql1);
                           while($row=mysqli_fetch_assoc($resultado))
                           {
@@ -113,7 +113,7 @@ include('menu.php');
                         }else if($existir==false)
                         {
                             $sql="INSERT INTO `bd_local`.`categorias_user` (`id`, `id_user`, `id_categoria`, `t_descripcion`, `estado`) VALUES ('CU-".$contador."', '".$_POST['cmbuser']."', '".$_POST['cmbtareas']."', '".$t_categoria."', '".$final."');";
-                            //   echo " el sql    ".$sql;
+                             //  echo " el sql    ".$sql;
                                  $result=mysqli_query($conexion,$sql);
                                 
                         }

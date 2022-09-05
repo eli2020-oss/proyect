@@ -102,7 +102,7 @@ $_SESSION['avatar']=$avatar;
               if (isset($_SESSION["AC-1"])==true)
                { 
                 ?>
-          
+               
            <?php  
            
            if (isset($_SESSION["AC-6"])==true)

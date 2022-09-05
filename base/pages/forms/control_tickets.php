@@ -114,22 +114,7 @@ include('menu.php');
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-3 col-6">
-            <!-- small card -->
-            <div class="small-box bg-success">
-              <div class="inner">
-                <h4>Casos de exito<sup style="font-size: 20px"></sup></h4>
-
-                <p>Casos resueltos con exito</p>
-              </div>
-              <div class="icon">
-                <i class="ion ion-stats-bars"></i>
-              </div>
-              <a href="#" class="small-box-footer">
-                Generar <i class="fas fa-arrow-circle-right"></i>
-              </a>
-            </div>
-          </div>
+         
           <!-- ./col -->
           <div class="col-lg-3 col-6">
             <!-- small card -->

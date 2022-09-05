@@ -1,7 +1,7 @@
 <?php 
 require_once('config.php');
 require_once('core/controller.Class.php');
-
+include('Conexion.php');
  ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,12 +37,26 @@ require_once('core/controller.Class.php');
       }
       else
       {
-         header('Location: inicio.php');
+        $resultado="";
+        $sql="SELECT em_estado FROM bd_local.tbl_detalle_emple where id='".$_COOKIE['id']."'";
+        $result=mysqli_query($conexion,$sql);
+        while($row=mysqli_fetch_assoc($result))
+        {
+          $resultado=$row["em_estado"];
+        }
+        //echo "<script>alert('".$resultado."');</script>";
+        if($resultado=='ACTIVO')
+        {
+         header('Location: inicio.php');}
+         else{
+          echo "La cuenta esta inactiva";
+         }
       }
     }
     else
     {
-      echo "error";
+      //echo "error";
+     // header('Location: new_pass.php');
     }
   }else
   {

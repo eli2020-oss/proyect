@@ -62,6 +62,7 @@ include('Conexion.php');
   
 function cambiar(e,id,user)
 		{
+      //alert(id);
       $.ajax({
 				type: 'POST',
 				url: "cambio_estado.php",
