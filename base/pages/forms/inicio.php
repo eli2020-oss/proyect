@@ -20,6 +20,15 @@ $sql="SELECT count(*)as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE[
                     $result=mysqli_query($conexion,$sql);
                     header("location: cambio_pass.php");
                    }
+$sql="SELECT count(c.id) as con FROM bd_local.categorias_user as c 
+inner join bd_local.tbl_user as u where c.id_user='".$_COOKIE["id"]."'";
+//echo $sql;
+$con="";
+ $result=mysqli_query($conexion,$sql);
+ while($row=mysqli_fetch_assoc($result))
+    {
+     $con=$row["con"];
+    }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,6 +76,12 @@ $sql="SELECT count(*)as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE[
         <!-- /.row -->
 
         <div class="row">
+          <?php
+           if($con!=0)
+           {
+           
+           
+          ?>
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
@@ -214,6 +229,39 @@ $sql="SELECT count(*)as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE[
                 </div>
                 <!-- /.row -->
               </div>
+              <?php
+           }else if($con==0)
+           {
+            ?>
+               <div class="col-md-12">
+            <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Control de tickets</h3>
+
+          <div class="card-tools">
+            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+              <i class="fas fa-minus"></i>
+            </button>
+            <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        </div>
+        <div class="card-body">
+          Envia tu solicitudes de apoyo tecnico!
+        </div>
+           </div>
+        <!-- /.card-body -->
+        <div class="card-footer">
+          
+        </div>
+        <!-- /.card-footer-->
+      </div>
+            <?php
+           }
+           
+           
+          ?>    
               <!-- /.card-footer -->
             </div>
             <!-- /.card -->

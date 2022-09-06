@@ -5,7 +5,7 @@ $nombre="";
 $login= $_COOKIE["id"]."";
 $avatar='';
 $sql="SELECT  concat(us.f_name,' ',us.l_name) as nombre,
- au.acc_id as acid, ac.acc_nombre, ac.acc_id as acceso,avatar
+ au.acc_id as acid, ac.acc_nombre, ac.acc_id as acceso,avatar,estado,acc_estado
 FROM  bd_local.tbl_user as us 
 inner join bd_local.user_acceso as au 
 inner join  bd_local.tbl_acceso as ac where au.acc_id=ac.acc_id 
@@ -17,6 +17,7 @@ and au.us_id=us.id and au.us_id='".$login."';";
         $nombre=$row["nombre"]."";
        $avatar=$row['avatar'];
       $_SESSION[$row["acceso"]]=isset($row["acid"])?$row["acid"]:"";
+     // $_SESSION[$row["acc_estado"]]=isset($row["estado"])?$row["estado"]:"";
         
       }
 $_SESSION['name']=$nombre;
@@ -99,13 +100,26 @@ $_SESSION['avatar']=$avatar;
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
                <?php 
-              if (isset($_SESSION["AC-1"])==true)
+               $estado="";
+               $sql="SELECT estado
+               FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
+               where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-1';";
+              $result=mysqli_query($conexion,$sql);
+              while($row=mysqli_fetch_assoc($result))
+              { $estado=$row["estado"]; }
+              if (isset($_SESSION["AC-1"])==true and isset($estado)=='ACTIVO' )
                { 
                 ?>
                
            <?php  
-           
-           if (isset($_SESSION["AC-6"])==true)
+            $estado="";
+            $sql="SELECT estado
+            FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
+            where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-6';";
+           $result=mysqli_query($conexion,$sql);
+           while($row=mysqli_fetch_assoc($result))
+           { $estado=$row["estado"]; }
+           if (isset($_SESSION["AC-6"])==true and $estado=='ACTIVO')
             { ?>
              <li class="nav-item">
             <a href="user_mp.php" class="nav-link">
@@ -144,7 +158,15 @@ $_SESSION['avatar']=$avatar;
           </li>
           <?php } 
           }
-            if (isset($_SESSION["AC-3"])==true)
+          $estado="";
+          $sql="SELECT estado
+          FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
+          where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-3';";
+         $result=mysqli_query($conexion,$sql);
+         while($row=mysqli_fetch_assoc($result))
+         { $estado=$row["estado"]; }
+        // echo $sql;
+            if (isset($_SESSION["AC-3"])==true and $estado=='ACTIVO')
              {
               ?>
           <li class="nav-item">
@@ -165,6 +187,18 @@ $_SESSION['avatar']=$avatar;
               </li>
             </ul>
           </li>
+          <?php 
+          $estado="";
+          $sql="SELECT estado
+          FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
+          where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-2';";
+         $result=mysqli_query($conexion,$sql);
+         while($row=mysqli_fetch_assoc($result))
+         { $estado=$row["estado"]; }
+        // echo $sql;
+            if (isset($_SESSION["AC-2"])==true and $estado=='ACTIVO')
+             {
+          ?>
           <li class="nav-item">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-columns"></i>
@@ -185,8 +219,16 @@ $_SESSION['avatar']=$avatar;
             </ul>
           </li>
          <?php 
+             }
         } 
-            if (isset($_SESSION["AC-5"])==true)
+        $estado="";
+        $sql="SELECT estado
+        FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
+        where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-5';";
+       $result=mysqli_query($conexion,$sql);
+       while($row=mysqli_fetch_assoc($result))
+       { $estado=$row["estado"]; }
+            if (isset($_SESSION["AC-5"])==true and $estado=='ACTIVO')
              {
              ?>
                <li class="nav-item menu-open">
@@ -211,6 +253,17 @@ $_SESSION['avatar']=$avatar;
                   <p>Crear Tickes</p>
                 </a>
               </li>
+              <?php 
+              $sql="SELECT estado
+              FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
+              where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-2';";
+             $result=mysqli_query($conexion,$sql);
+             while($row=mysqli_fetch_assoc($result))
+             { $estado=$row["estado"]; }
+            // echo $sql;
+                if (isset($_SESSION["AC-2"])==true and $estado=='ACTIVO')
+                 {
+              ?>
               <li class="nav-item">
                 <a href="registro_ticks.php" class="nav-link active">
                   <i class="far fa-circle nav-icon"></i>
@@ -220,8 +273,16 @@ $_SESSION['avatar']=$avatar;
             </ul>
           </li>
           <?php 
+                 }
           }
-            if (isset($_SESSION["AC-8"])==true)
+          $estado="";
+          $sql="SELECT estado
+          FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
+          where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-8';";
+         $result=mysqli_query($conexion,$sql);
+         while($row=mysqli_fetch_assoc($result))
+         { $estado=$row["estado"]; }
+            if (isset($_SESSION["AC-8"])==true and $estado=='ACTIVO')
             {
              ?>
          <li class="nav-header">OTROS</li>

@@ -18,8 +18,8 @@ $codigo=$_SESSION['ticketid'];
                   $sql="select * from( select de.tickes_id, de.d_descrip as descri, de.fecha as fecha , de.respuesta as quien, de.archivo as arc, 
                   concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_detalle as de inner join bd_local.tbl_user as u
                   inner join bd_local.tbl_ticketsc as ti 
-                  where ti.tickes_id=de.tickes_id and u.id=de.respuesta and de.tickes_id='".$codigo."' ORDER BY de.fecha DESC LIMIT 4)t 
-                  order by fecha asc";
+                  where ti.tickes_id=de.tickes_id and u.id=de.respuesta and de.tickes_id='".$codigo."' ORDER BY de.fecha DESC )t 
+                  order by fecha asc LIMIT 4";
 
                  //echo "SENTENCIA DE SQL ".$sql;
                   $result=mysqli_query($conexion,$sql);
