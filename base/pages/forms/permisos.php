@@ -38,7 +38,7 @@ include('Conexion.php');
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
-  <!-- DataTables -->
+=
   <link rel="stylesheet" href="../../plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="../../plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="../../plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
@@ -69,8 +69,10 @@ function cambiar(e,id,user)
 				data: {ida:id,us:user,estado:e},
 				success: function(data)
 				{
-					//$("#tabla").append(data);
+				//	$("#example1").append(data);
           //alert(data);
+         // document.getElementById("formulario").submit();
+
 				},
 				error: function(error)
 				{

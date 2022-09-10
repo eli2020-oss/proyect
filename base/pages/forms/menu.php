@@ -215,7 +215,6 @@ $_SESSION['avatar']=$avatar;
                   <p>Control de Filiales</p>
                 </a>
               </li>
-              
             </ul>
           </li>
          <?php 

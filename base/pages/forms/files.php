@@ -46,7 +46,7 @@ $descripcion=$_POST["textarea"];
                  {
                    $man=$row['mante']."";
                  }
-                 $sql2="SELECT de.tickes_id FROM bd_local.tbl_detalle as de 
+                 $sql2="SELECT count(de.tickes_id) as contador FROM bd_local.tbl_detalle as de 
                   inner join bd_local.tbl_ticketsc as ti where ti.tickes_id=de.tickes_id"; 
                   // echo "SQL ".$sql2;
                   $contador=0;
@@ -54,20 +54,20 @@ $descripcion=$_POST["textarea"];
                           while($row=mysqli_fetch_assoc($result))
                           {
 
-                            $contador++;
+                            $contador=$row['contador'];
                           } 
-                          $contador=$contador+1; 
-               // echo "contador  ".$contador;
-                 
-               //
-                  // echo "<script>alert('Informacion Guardada Satisfactoriamente');</script>";
+                         
+               // echo "pRIMERO  ".$contador;
+               $contador=$contador+3; 
+             //  echo "sEGUNDO   ".$contador;
+                  // echo "<script>alert('".$contador."');</script>";
                 if($_FILES["archivo"]["error"]>0){
 
-                    echo "no hay archivo";
+                 //   echo "no hay archivo";
                 }else 
                 {
                     $permitidos= array("image/jpng","image/png","application/pdf");
-                    $limite_kb = 200;
+                    $limite_kb = 10000;
                     if(in_array($_FILES["archivo"]["type"],$permitidos) && $_FILES["archivo"]["size"]<= $limite_kb * 124){
                        $ruta = 'files/'.$fechanew."-".$cambio."_".$_COOKIE["id"].'/';
                        $archivo =$ruta.$_FILES["archivo"]["name"];
@@ -96,17 +96,17 @@ $descripcion=$_POST["textarea"];
               '".$man."', '".$categoria."', '".$prioridad."', '".$titulo."', '".$descripcion."', 
               concat(now()) , '".$fechande."', '".$cc."','".$filial."','". $area."', 'ACTIVO');";
                // echo "SQL ".$sql;
-              $resultado=mysqli_query($conexion,$sql);
+             $resultado=mysqli_query($conexion,$sql);
              $sql2="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
              `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$contador."', concat(CURDATE()+0,'-".$cambio."'), 
              '".$_COOKIE["id"]."', '".$man."', '".$descripcion."', concat(now()),
               'ACTIVO', '".$_COOKIE['id']."', '".$ruta."');";
                $result=mysqli_query($conexion,$sql2);
-            // echo $sql2;
+               echo $sql2;
                  $sql1=" UPDATE `bd_local`.`transacciones` SET `contador_transacciones` = '".$cambio."' WHERE (`codigo` = '0');";
                   $resultado=mysqli_query($conexion,$sql1);
                   // $accion="";
-                  header("Location:inicio.php");
+                 header("Location:inicio.php");
  }
   
 ?>

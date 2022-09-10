@@ -4,7 +4,7 @@ include('menu.php');
 $login= $_COOKIE['id']."";
 include('Conexion.php');
 $c=0;
-$sql="SELECT count(*)as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE["id"]."';";
+$sql="SELECT count(*) as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE["id"]."';";
                  $result=mysqli_query($conexion,$sql);
                 while($row=mysqli_fetch_assoc($result))
                    {
@@ -12,10 +12,10 @@ $sql="SELECT count(*)as c  FROM bd_local.tbl_detalle_emple where id='".$_COOKIE[
                    }
                    if($c==0)
                    {
-                   // echo "<script>alert('insert');</script>";
+                   //echo "<script>alert('insert');</script>";
                     $sql="INSERT INTO `bd_local`.`tbl_detalle_emple` (`id`, `em_estado`) VALUES ('".$login."', 'ACTIVO');                   ";
-                    echo " el sql    ".$sql;
-                      $result=mysqli_query($conexion,$sql);
+                   // echo " el sql    ".$sql;
+                     $result=mysqli_query($conexion,$sql);
                     $sql="INSERT INTO `bd_local`.`user_acceso` (`us_id`, `acc_id`, `estado`) VALUES ('".$login."', 'AC-5', 'ACTIVO');                    ";
                     $result=mysqli_query($conexion,$sql);
                     header("location: cambio_pass.php");

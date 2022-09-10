@@ -33,10 +33,7 @@ $estado="";
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
   <script src="js/jquery-1.10.2.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script>
 
-
-  </script>
 </head>
 
 

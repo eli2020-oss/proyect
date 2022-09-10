@@ -38,25 +38,38 @@ include('Conexion.php');
       else
       {
         $resultado="";
+        $creado="";
         $sql="SELECT em_estado FROM bd_local.tbl_detalle_emple where id='".$_COOKIE['id']."'";
         $result=mysqli_query($conexion,$sql);
         while($row=mysqli_fetch_assoc($result))
         {
           $resultado=$row["em_estado"];
         }
+        $sql="SELECT count(id) as cre FROM bd_local.tbl_user where id='".$_COOKIE['id']."'";
+        $result=mysqli_query($conexion,$sql);
+        while($row=mysqli_fetch_assoc($result))
+        {
+          $creado=$row["cre"];
+        }
         //echo "<script>alert('".$resultado."');</script>";
         if($resultado=='ACTIVO')
         {
          header('Location: inicio.php');}
          else{
-          echo "La cuenta esta inactiva";
+          if($creado!=0)
+          {
+            header('Location: inicio.php');
+          }
+          else
+          {
+          echo "La cuenta esta inactiva";}
          }
       }
     }
     else
     {
       //echo "error";
-     // header('Location: new_pass.php');
+    header('Location: logout.php');
     }
   }else
   {
