@@ -98,10 +98,12 @@ function CheckPageBreak($h, $setX) {
         //volvemos a definir el  encabezado cuando se crea una nueva pagina
         $this->SetFont('Helvetica', 'B', 15);
         $this->Cell(10,8,'N',1,0,'C',0);
-        $this->Cell(40,8,'Numero 1',1,0,'C',0);
-        $this->Cell(40,8,'Numero 2',1,0,'C',0);
-        $this->Cell(40,8,'Numero 3',1,0,'C',0);
-        $this->Cell(40,8,'total',1,1,'C',0);
+        $this->Cell(40,8,'Codigo',1,0,'C',0);
+         $this->Cell(40,8,'Creado',1,0,'C',0);
+        $this->Cell(40,8,'Fecha',1,0,'C',0);
+        $this->Cell(40,8,'Estado',1,1,'C',0);
+        $this->SetFillColor(255,255,255);//color de fondo
+        $this->SetDrawColor(65,61,61);//color de linea 
         $this->SetFont('Arial', '', 12);
 
     }

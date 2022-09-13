@@ -81,7 +81,7 @@ $estado="";
     
                                 $contador=$row['c'];
                               } 
-                              $cod=$contador+1; 
+                              $cod=$contador+3; 
                       $sql="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
                       `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$cod."', '".$codigo."', 
                       '', '".$_COOKIE["id"]."', '".$_POST['message']."', concat(now()),

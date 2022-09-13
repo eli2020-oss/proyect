@@ -193,9 +193,9 @@ $con="";
                 <div class="row">
                   <div class="col-sm-3 col-6">
                     <div class="description-block border-right">
-                      <span class="description-percentage text-success"><i class="fas fa-caret-up"></i> <?php echo  $porc_aten; ?>%</span>
-                      <h5 class="description-header"><?php echo $rango_aten; ?></h5>
-                      <span class="description-text">TOTAL FINALIZADO</span>
+                     
+                      <span class="description-text">VISTA DE ESTADO DE TICKES</span>
+                      <span class="description-text">ACTUALMENTE</span>
                     </div>
                     <!-- /.description-block -->
                   </div>
