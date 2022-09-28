@@ -69,7 +69,7 @@ $estado="";
                     <?php 
                     if($accion=="enviar")
                     {
-                      //echo "<script>alert('.$codigo.');</script>"; 
+                      //echo "<script>alert('.$codigo.');</script>"
                       $sql2="SELECT count(de.tickes_id) as c FROM bd_local.tbl_detalle as de 
                       inner join bd_local.tbl_ticketsc as ti where ti.tickes_id=de.tickes_id"; 
                       // echo "SQL ".$sql2;

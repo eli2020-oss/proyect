@@ -66,13 +66,13 @@ $estado='ACTIVO';
                           }
                           if ($permitir=='ACTIVO') 
                           {
-                             //Usuario ADMINISTRADOR
+                             //Usuario ADMINISTRADOR 
                           $sql="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre,ti.titulo as descrip,ti.t_fechaini as fecha,
                           ti.tic_estado as estado FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
                           inner join bd_local.tbl_categoria as ca inner join 
                            bd_local.categorias_user as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id
                            and ti.cate_id=cu.id_categoria and ti.us_id='".$id."' and ti.tic_estado='".$estado."' ORDER BY ti.t_fechaini desc";
-                         //echo $sql;
+                         echo "administrador". $sql;
                          }
                          else 
                          {
@@ -84,6 +84,7 @@ $estado='ACTIVO';
                            as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id and ti.cate_id=cu.id_categoria 
                            and us.id='".$_COOKIE['id']."' and ti.tic_estado='".$estado."' ORDER BY ti.t_fechaini desc";
                            //echo $sql;
+                           echo "sin permisos".$sql;
                          }
                           $result=mysqli_query($conexion,$sql);
                           $data="";
