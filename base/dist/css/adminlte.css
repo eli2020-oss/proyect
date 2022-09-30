@@ -32919,4 +32919,12 @@ a.text-muted:hover {
 .dark-mode .link-dark {
   color: #ced4da;
 }
+.contenedor::-webkit-scrollbar {
+	width: 7px;
+}
+
+.contenedor::-webkit-scrollbar-thumb {
+	background: #ff9d00;
+	border-radius: 5px;
+}
 /*# sourceMappingURL=adminlte.css.map */

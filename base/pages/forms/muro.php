@@ -31,9 +31,10 @@ $estado="";
   <link rel="stylesheet" href="../../plugins/fontawesome-free/css/all.min.css">
   <!-- AdminLTE css -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="../../dist/css/estilo.css">
   <script src="js/jquery-1.10.2.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-
+  
 </head>
 
 
@@ -60,7 +61,9 @@ $estado="";
     <section class="content">
         <!-- Inicio de contenedor -->
         <div id="box">
+        <div class="contenedor">   
         <h2>Click button to load new content inside DIV box</h2>
+</div>
         </div>
       <!-- /.final del contenedor -->
                   <!-- /.card -->
@@ -75,7 +78,7 @@ $estado="";
                       // echo "SQL ".$sql2;
                       $contador=0;
                       $cod=0;
-                    $result=mysqli_query($conexion,$sql2);
+                        $result=mysqli_query($conexion,$sql2);
                               while($row=mysqli_fetch_assoc($result))
                               {
     
@@ -138,11 +141,17 @@ $estado="";
 
  function cargar()
       {
-      //  alert("Entra");
-     //  localStorage.clear();
+        if(document.getElementById("message").value=="")
+        {
+         // alert("vacio");
+          document.getElementById("message").focus();
+        }
+        else
+        {
          document.getElementById("accion").value="enviar";
-        // document.getElementById("codigo").value=codigo;
+       
             document.getElementById("chat").submit();
+        }
     
       } 
   $(document).ready(function(){
