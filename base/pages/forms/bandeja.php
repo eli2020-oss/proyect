@@ -6,6 +6,7 @@ $estado='ACTIVO';
 $accion=isset($_POST["accion"])?$_POST["accion"]:"";
 $codigo=isset($_POST["codigo"])?$_POST["codigo"]:""; 
 //$direccion=isset($_POST["direccion"])?$_POST["direccion"]:""; 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,32 +23,15 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
   <link rel="stylesheet" href="../../plugins/icheck-bootstrap/icheck-bootstrap.min.css">
   <!-- Theme style -->
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
-<script type="text/javascript">
-    function cargar(codigo)
-      {
-        //alert('codigo'.codigo);
-        //document.getElementById("accion").value="llenar";
-        document.getElementById("codigo").value=codigo;
-        document.getElementById("accion").value="dd";
-           document.getElementById("direccion").value="read-inbox.php";
-          // alert("".document.getElementById("direccion"));
-          <?php
-          if($accion=="dd")
-          {
-          $direccion="read-inbox.php";
-           }
-          ?>
-        document.getElementById("formulario").submit();
 
-      }   
-</script>
 <script type="text/javascript">
     function cargar1()
       {
-      //alert('codigo'.codigo);
- 
-       //document.getElementById("formulario").submit();
-         
+    // 
+    document.getElementById("accion").value="lleno";
+   // alert( document.getElementById("accion"));
+    document.getElementById("formulario").submit();
+  //  $("#box").load("control_bandeja.php");
       }   
 </script>
 <script type="text/javascript">
@@ -87,12 +71,7 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
 
 </head>
 <body class="hold-transition sidebar-mini">
-<?php
-if($accion=='filtro2')
-{$estado="FINALIZADO";}
-if($accion=='filtro1')
-{$estado="ACTIVO";}
-?>
+
 <body >
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -152,11 +131,21 @@ if($accion=='filtro1')
                   FINALIZADO
                   </a>
                 </li>
+               
                 <?php
                }
               ?>
               </ul>
+              <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                  <a href="" class="nav-link" onClick ="return cargar1(); ">
+                    <i class="far fa-circle text-danger"></i>
+                MIS TICKES
+                  </a>
+                </li>
+              </ul>
             </div>
+           
             <!-- /.card-body -->
           </div>
           <!-- /.card -->
@@ -187,6 +176,17 @@ if($accion=='filtro1')
               <form  name='formulario' id='formulario' method='POST' action='muro.php' >
              <input type="hidden" id="codigo" name="codigo" class="form-control" value='<?php echo $codigo ?> '>
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
+            <?php
+            $accion=isset($_POST["accion"])?$_POST["accion"]:"";
+              //echo "<script>alert('".$accion."');</script>";
+if($accion=='1')
+{
+
+  $_SESSION["mis"]=$accion;
+   
+}
+
+?>
             <div id="box">
               <div class="card-body table-responsive p-0" style="height: 300px;">
          

@@ -68,15 +68,16 @@ $fechaan="";
                   'ACTIVO');
                ";
                 // echo "SQL ".$sql;
-              $resultado=mysqli_query($conexion,$sql);
-              $sql2="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
-              `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$contador."', concat(CURDATE()+0,'-".$cambio."'), 
-              '".$_COOKIE["id"]."', '".$man."', '".$descripcion."', concat(now()),
-               'ACTIVO', '".$_COOKIE['id']."', '".$ruta."');";
-                $result=mysqli_query($conexion,$sql2);
-              //  echo $sql2;
+            
+            
+               // echo $sql;
                   $sql1=" UPDATE `bd_local`.`transacciones` SET `contador_transacciones` = '".$cambio."' WHERE (`codigo` = '0');";
                    $resultado=mysqli_query($conexion,$sql1);
+                   $sql="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
+                   `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-88', concat(CURDATE()+0,'-".$cambio."'), 
+                   '".$emisor."', '".$man."', '".$descripcion."', concat(now()),
+                    'ACTIVO', '".$emisor."', '".$ruta."');";
+                     $result=mysqli_query($conexion,$sql);
 
               mysqli_query($conexion,$consulta) or die(mysqli_error());
               mysqli_close($conexion);

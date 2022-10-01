@@ -22,27 +22,18 @@ $consulta=" SELECT us.id as identi,estado,email FROM bd_local.categorias_user as
                           }
                           //$permitir='ACTIVO';
                          // $id='US-zw260US-6';
-                          if ($permitir=='ACTIVO') 
-                          {
-                             //Usuario ADMINISTRADOR 
-                             $consulta="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre,ti.titulo as descrip, fnc_fecha(ti.t_fechaini) as fecha,
-                          ti.tic_estado as estado FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
-                          inner join bd_local.tbl_categoria as ca inner join 
-                           bd_local.categorias_user as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id
-                           and ti.cate_id=cu.id_categoria and ti.us_id='".$id."' and ti.tic_estado='ACTIVO' ORDER BY ti.t_fechaini desc";
-                         //echo $sql;
-                         }
-                         else 
-                         {
-                          $verboton=false;
-                        // USUARIO BASE SIN PERMISOS
-                        $consulta="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre ,ti.titulo as descrip,ti.tic_estado as estado
-                         , fnc_fecha(ti.t_fechaini) as fecha FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
-                          inner join bd_local.tbl_categoria as ca  inner join bd_local.categorias_user
-                           as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id and ti.cate_id=cu.id_categoria 
-                           and us.id='".$id."' and ti.tic_estado='ACTIVO' ORDER BY ti.t_fechaini desc";
-                           //echo $sql;
-                         }
+                         $consulta="select
+                         ti.tickes_id as ids,
+                         concat(u.f_name,' ',u.l_name) nombre,
+                         fnc_fecha(t_fechaini) as fecha,
+                         ti.titulo as titulo,ti.tic_estado as estado
+                         from
+                         bd_local.tbl_ticketsc ti
+                         inner join bd_local.tbl_user u on u.id=ti.o_us
+                         inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
+                         inner join bd_local.tbl_user usat on usat.id=ti.us_id 
+                         inner join bd_local.categorias_user catu on catu.id_categoria=ti.cate_id  and ti.o_us='".$id."' 
+                         and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO' ";
 // $consulta ="SELECT * FROM bd_local.tbl_user where email=$email ";
 //echo $consulta."";
 $resultado= $conexion -> query($consulta);

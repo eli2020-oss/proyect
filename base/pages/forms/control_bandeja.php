@@ -1,8 +1,7 @@
 <?php 
 session_start();
 include("Conexion.php");
-//$codigo=$_SESSION['ticketid'];
-//echo "<script>alert('".$codigo."');</script>";
+
 $estado='ACTIVO';
 ?> 
 <!DOCTYPE html>
@@ -67,24 +66,38 @@ $estado='ACTIVO';
                           if ($permitir=='ACTIVO') 
                           {
                              //Usuario ADMINISTRADOR 
-                          $sql="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre,ti.titulo as descrip,ti.t_fechaini as fecha,
-                          ti.tic_estado as estado FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
-                          inner join bd_local.tbl_categoria as ca inner join 
-                           bd_local.categorias_user as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id
-                           and ti.cate_id=cu.id_categoria and ti.us_id='".$id."' and ti.tic_estado='".$estado."' ORDER BY ti.t_fechaini desc";
-                         echo "administrador". $sql;
+                          $sql="select
+                          ti.tickes_id as ids,
+                          concat(u.f_name,' ',u.l_name) nombre,
+                          fnc_fecha(t_fechaini) as fecha,
+                          ti.titulo as titulo,ti.tic_estado as estado
+                          from
+                          bd_local.tbl_ticketsc ti
+                          inner join bd_local.tbl_user u on u.id=ti.o_us
+                          inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
+                          inner join bd_local.tbl_user usat on usat.id=ti.us_id 
+                          inner join bd_local.categorias_user catu on catu.id_categoria=ti.cate_id 
+                          and catu.id_user='".$id."' and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO'";
+                        // echo "administrador". $_SESSION["mis"];
                          }
                          else 
                          {
                           $verboton=false;
                         // USUARIO BASE SIN PERMISOS
-                         $sql="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre ,ti.titulo as descrip,ti.t_fechaini as fecha,ti.tic_estado as estado
-                         FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
-                          inner join bd_local.tbl_categoria as ca  inner join bd_local.categorias_user
-                           as cu where ti.o_us=us.id  and ca.cate_id= ti.cate_id and ti.cate_id=cu.id_categoria 
-                           and us.id='".$_COOKIE['id']."' and ti.tic_estado='".$estado."' ORDER BY ti.t_fechaini desc";
+                         $sql="select
+                         ti.tickes_id as ids,
+                         concat(u.f_name,' ',u.l_name) nombre,
+                         fnc_fecha(t_fechaini) as fecha,
+                         ti.titulo as titulo,ti.tic_estado as estado
+                         from
+                         bd_local.tbl_ticketsc ti
+                         inner join bd_local.tbl_user u on u.id=ti.o_us
+                         inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
+                         inner join bd_local.tbl_user usat on usat.id=ti.us_id 
+                         inner join bd_local.categorias_user catu on catu.id_categoria=ti.cate_id  and ti.o_us='".$_COOKIE["id"]."' 
+                         and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO' ";
                            //echo $sql;
-                           echo "sin permisos".$sql;
+                           //echo "sin permisos".$sql;
                          }
                           $result=mysqli_query($conexion,$sql);
                           $data="";
@@ -103,7 +116,7 @@ $estado='ACTIVO';
                         //VISTA DE USUARIO ADMINISTRADOR 
                            echo "
                             <td>".$row["nombre"]."</td>
-                            <td>".$row["descrip"]."</td>
+                            <td>".$row["titulo"]."</td>
                              <td>".$row["fecha"]."</td>
                                <td class='project-actions text-right'>
                          
@@ -132,7 +145,7 @@ $estado='ACTIVO';
                            <?php
                            echo "
                            <td>".$row["nombre"]."</td>
-                           <td>".$row["descrip"]."</td>
+                           <td>".$row["titulo"]."</td>
                             <td>".$row["fecha"]."</td>
                               <td class='project-actions text-right'>
                         
