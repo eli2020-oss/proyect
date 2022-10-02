@@ -87,6 +87,22 @@ function cambiar(id)
               <!-- /.card-header -->
              
               <div class="card-body">
+                <?php 
+                $ctando="";
+                 $sql="
+                 select count(ua.acc_id) as con
+                 from
+                 bd_local.tbl_acceso a
+                 inner join bd_local.user_acceso ua on a.acc_id=ua.acc_id
+                 inner join bd_local.tbl_user us on us.id=ua.us_id  and us.id='".$_COOKIE["id"]."' and
+                  ua.acc_id='AC-6' and ua.estado='ACTIVO' ";
+                 $result=mysqli_query($conexion,$sql);
+                 while($row=mysqli_fetch_assoc($result))
+                 {
+                   $ctando=$row["con"];
+                   //echo "<script>alert('".$ctando."');</script>";
+                 }
+                ?>
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
@@ -97,8 +113,21 @@ function cambiar(id)
                   <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" onchange="return cambio();" >
                  <?php 
                     echo "<option value=''>[----SELECCIONE UN USUARIO----]</option>";
+                    //echo "<script>alert('antes del if".$ctando."');</script>";
+                     if($ctando==0)
+                     {
+                      //echo "<script>alert('1".$ctando."');</script>";
+                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre 
+                      FROM bd_local.tbl_user u 
+                      inner join  bd_local.tbl_detalle_emple e on u.id=e.id 
+                      inner join bd_local.user_acceso ua on u.id=ua.us_id and  u.id='".$_COOKIE["id"]."'
+                      and e.em_estado='ACTIVO' limit 1";
+                     }
+                     else{
+                      //echo "<script>alert('2".$$ctando."');</script>";
                       $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
                       inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
+                      }
                       $result=mysqli_query($conexion,$sql);
                       while($row=mysqli_fetch_assoc($result)) 
                       {

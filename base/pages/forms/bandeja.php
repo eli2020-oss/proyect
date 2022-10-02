@@ -111,7 +111,7 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
             <div class="card-body p-0">
               <?php
               $permiso=false;
-               $consulta="SELECT count(us_id)  as permitir FROM bd_local.user_acceso where us_id='".$_COOKIE['id']."' and estado='ACTIVO' and acc_id='AC-6' ;";
+               $consulta="SELECT count(us_id)  as permitir FROM bd_local.user_acceso where us_id='".$_COOKIE['id']."' and estado='ACTIVO' and acc_id='AC-2' ;";
               //  echo $consulta;
                   $result=mysqli_query($conexion,$consulta);
                   while($row=mysqli_fetch_assoc($result))

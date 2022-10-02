@@ -17,8 +17,9 @@ $codigo=$_SESSION['ticketid'];
                   $quien_es="";
                   $fecha="";
                   $carpeta="";
+                  $avatar="";
                   $sql="select * from( select de.tickes_id, de.d_descrip as descri, fnc_fecha(de.fecha) as fecha, de.respuesta as quien, de.archivo as arc, 
-                  concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_detalle as de inner join bd_local.tbl_user as u
+                  concat(u.f_name,' ',u.l_name) as nombre , u.avatar as avatar FROM bd_local.tbl_detalle as de inner join bd_local.tbl_user as u
                   inner join bd_local.tbl_ticketsc as ti 
                   where ti.tickes_id=de.tickes_id and u.id=de.respuesta and de.tickes_id='".$codigo."' ORDER BY de.fecha DESC )t 
                   order by fecha asc ";
@@ -29,6 +30,7 @@ $codigo=$_SESSION['ticketid'];
                   {
                     
                  // echo "<script>alert('hola');</script>";
+                 $avatar=$row['avatar'];
                   $descrip=$row['descri']."";
                   $fecha=$row['fecha']."";
                   $carpeta=$row['arc']."";
@@ -75,7 +77,7 @@ $codigo=$_SESSION['ticketid'];
                       <span class="direct-chat-timestamp float-right"><?php echo $fecha; ?></span>
                     </div>
                     <!-- /.direct-chat-infos -->
-                    <img class="direct-chat-img" src="../dist/img/user1-128x128.jpg" alt="Message User Image">
+                    <img class="direct-chat-img" src='<?php echo $avatar ?>' alt="Message User Image">
                     <!-- /.direct-chat-img -->
                     <div class="direct-chat-text">
                     <?php echo $descrip; ?>
@@ -97,7 +99,7 @@ $codigo=$_SESSION['ticketid'];
                       <span class="direct-chat-timestamp float-left"><?php echo $fecha; ?></span>
                     </div>
                     <!-- /.direct-chat-infos -->
-                    <img class="direct-chat-img" src="../dist/img/user3-128x128.jpg" alt="Message User Image">
+                    <img class="direct-chat-img" src='<?php echo $avatar ?>' alt="Message User Image">
                     <!-- /.direct-chat-img -->
                     <div class="direct-chat-text">
                     <?php echo $descrip; ?>

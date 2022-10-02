@@ -140,8 +140,10 @@ $accion="";
                  <option selected="selected">[--SELECCIONE LO QUE SE LE INDICA--]</option>
                  <?php 
                       $sql="SELECT id_categoria as codigo,t_descripcion as nombre
-                      FROM bd_local.categorias_user inner join bd_local.tbl_categoria where id_categoria=cate_id and cate_estado='ACTIVO'
-                      and estado='ACTIVO';";
+                      FROM bd_local.tbl_categoria as c 
+                      inner join bd_local.categorias_user cu on c.cate_id=cu.id_categoria  and cu.id_user!='".$_COOKIE["id"]."'
+                      where id_categoria=cate_id and cate_estado='ACTIVO'
+                     and estado='ACTIVO';";
                       $result=mysqli_query($conexion,$sql);
                       while($row=mysqli_fetch_assoc($result)) 
                       {

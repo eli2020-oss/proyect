@@ -64,15 +64,45 @@ $estado="";
         <div class="row">
           <div class="col-12">
         
-
+             <?php 
+             $origen="";
+             $titulo="";
+             $inicial="";
+             $categoria="";
+             $fechain="";
+             $latitud="";
+             $longitud="";
+             $sql="select
+             ti.tickes_id as ids,
+             concat(u.f_name,' ',u.l_name) nombre,
+             fnc_fecha(t_fechaini) as fecha,
+             ti.titulo as titulo,ti.tk_descripcion as inicial,ct.t_categoria as cate, ti.latitud as latitud,ti.longitud as longitud
+             from
+             bd_local.tbl_ticketsc ti
+             inner join bd_local.tbl_user u on u.id=ti.o_us
+             inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
+             inner join bd_local.tbl_user usat on usat.id=ti.us_id  and ti.tickes_id='".$_SESSION["ticketid"]."' and ti.tic_estado='ACTIVO'
+             ";
+             $result=mysqli_query($conexion,$sql);
+             while($row=mysqli_fetch_assoc($result))
+             {
+              $origen=$row["nombre"];
+              $fechain=$row["fecha"];
+              $titulo=$row["titulo"];
+              $categoria=$row["cate"];
+              $inicial=$row["inicial"];
+              $latitud=$row["latitud"];
+              $longitud=$row["longitud"];
+             }
+             ?>
             <!-- Main content -->
             <div class="invoice p-3 mb-3">
               <!-- title row -->
               <div class="row">
                 <div class="col-12">
                   <h4>
-                    <i class="fas fa-globe"></i> AdminLTE, Inc.
-                    <small class="float-right">Date: 2/10/2014</small>
+                    <i class="fas fa-globe"></i>   <?php echo $titulo; ?>
+                    <small class="float-right">Fecha: <?php echo $fechain; ?></small>
                   </h4>
                 </div>
                 <!-- /.col -->
@@ -80,35 +110,36 @@ $estado="";
               <!-- info row -->
               <div class="row invoice-info">
                 <div class="col-sm-4 invoice-col">
-                  From
+                  De:
                   <address>
-                    <strong>Admin, Inc.</strong><br>
-                    795 Folsom Ave, Suite 600<br>
-                    San Francisco, CA 94107<br>
-                    Phone: (804) 123-5432<br>
-                    Email: info@almasaeedstudio.com
+                    <strong><?php echo $origen; ?>.</strong><br>
+                    <?php echo $inicial; ?>
                   </address>
                 </div>
                 <!-- /.col -->
                 <div class="col-sm-4 invoice-col">
-                  To
+                  Para:
                   <address>
-                    <strong>John Doe</strong><br>
-                    795 Folsom Ave, Suite 600<br>
-                    San Francisco, CA 94107<br>
-                    Phone: (555) 539-1037<br>
-                    Email: john.doe@example.com
+                    <strong><?php echo $user; ?></strong><br>
+                    <?php echo $categoria; ?>
                   </address>
                 </div>
                 <!-- /.col -->
+                <?php 
+                if($longitud=="")
+                {
+
+                }
+                else{
+                ?>
                 <div class="col-sm-4 invoice-col">
-                  <b>Invoice #007612</b><br>
-                  <br>
-                  <b>Order ID:</b> 4F3S8J<br>
-                  <b>Payment Due:</b> 2/22/2014<br>
-                  <b>Account:</b> 968-34567
+                  Creado desde aplicacion movil:
+                  <address>
+                    <strong>  <a href="map.php" class="d-block">Ubicacion</a></strong><br>
+                  </address>
                 </div>
                 <!-- /.col -->
+                <?php } ?>
               </div>
              
             </div>
