@@ -3,6 +3,8 @@ session_start();
 include('menu.php');
 $codigo=isset($_POST["codigo"])?$_POST["codigo"]:""; 
 $_SESSION["ticketid"]=$codigo;
+$cc=isset($_POST["cc"])?$_POST["cc"]:"";
+$ca=isset($_POST["ca"])?$_POST["ca"]:"";
 $user="";
 $estado="";
  // echo "<script>alert('".$_SESSION['ticketid']."');</script>";
@@ -36,9 +38,35 @@ $estado="";
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
   
 </head>
-
+<script type="text/javascript">
+    function cargar1(logitud,latitud)
+      {
+    // 
+   // document.getElementById("accion").value="lleno";
+   //alert( 'llega');
+   document.getElementById("rep").value=1;
+   document.getElementById("cc").value=latitud;
+     document.getElementById("ca").value=logitud;
+    
+    document.getElementById("chat").submit();
+      }   
+</script>
 
 <body class="hold-transition sidebar-mini">
+<?php 
+   $rep=isset($_POST["rep"])?$_POST["rep"]:"";
+   if($rep=="1")
+   {
+   // $_SESSION
+   //echo "<script>alert('".$_POST['ca']."');</script>";
+    $v1=base64_encode($_POST["ca"]);
+    $v2=base64_encode($_POST['cc']);
+ //   ;
+// echo "<script>alert('".$_POST['cc']."');</script>";
+    echo "<script>window.open('map.php?var1=$v1&var2=$v2','_blank');</script>";
+
+   }
+  ?>
  <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
@@ -135,7 +163,7 @@ $estado="";
                 <div class="col-sm-4 invoice-col">
                   Creado desde aplicacion movil:
                   <address>
-                    <strong>  <a href="map.php" class="d-block">Ubicacion</a></strong><br>
+                    <strong>  <a  class="d-block" onClick ="return cargar1('<?php echo $longitud;?>','<?php echo $latitud;?>'); ">Ubicacion</a></strong><br>
                   </address>
                 </div>
                 <!-- /.col -->
@@ -182,6 +210,9 @@ $estado="";
                      
                       <div class="input-group">
                       <input type="hidden" name="codigo" id="codigo" value="<?php echo $codigo; ?>">
+                      <input type="hidden" name="cc" id="cc" value="<?php echo $cc; ?>">
+                      <input type="hidden" name="ca" id="ca" value="<?php echo $ca; ?>">
+                      <input type="hidden" name="rep" id="rep" value="">
                         <input type="text" name="message" id="message" placeholder="hola gracias ...." class="form-control">
                         <span class="input-group-append">
                            <button type="button" class="btn btn-warning" id="btnguardar" onClick='return cargar();'>Enviar</button>

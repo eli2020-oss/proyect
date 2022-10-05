@@ -1,15 +1,26 @@
 <?php 
 include ("conexion.php");
-$emisor=$_POST["id"];
-//$cc=isset($_POST["cmbuser"]);
-$titulo=$_POST["titulo"];
-$categoria=$_POST["categoria"];
-//$prioridad=$_POST['cmbprioridad'];
+ $emisor=$_POST["id"];
+// //$cc=isset($_POST["cmbuser"]);
+ $titulo=$_POST["titulo"];
+ $categoria=$_POST["categoria"];
+// //$prioridad=$_POST['cmbprioridad'];
 $filial=$_POST["filial"];
-//$area=$_POST["cmbarea"];
+// //$area=$_POST["cmbarea"];
 $descripcion=$_POST["mensaje"];
 $latitud=$_POST["latitud"];
-$longitud=$_POST["longitud"];
+ $longitud=$_POST["longitud"];
+
+// $emisor='US-BAyA6';
+// //$cc=isset($_POST["cmbuser"]);
+// $titulo='Prueba editar';
+// $categoria='C-0001';
+// //$prioridad=$_POST['cmbprioridad'];
+// $filial='3';
+// //$area=$_POST["cmbarea"];
+// $descripcion='prueba detalle';
+// $latitud='11111';
+// $longitud='222222';
 
 $fechaan="";
  $fechanew="";
@@ -40,7 +51,7 @@ $fechaan="";
  
               //CATEGORIA Y ASIGNACION DE USUARIO DE ATENCION DE TICKET
                $sqlc="SELECT u.id as mante FROM bd_local.categorias_user as cu inner join bd_local.tbl_user as u inner join
-               bd_local.tbl_categoria as c where cu.id_user=u.id and cu.id_categoria=c.cate_id and cu.id_categoria='".$categoria."'"; 
+               bd_local.tbl_categoria as c where cu.id_user=u.id and cu.id_categoria=c.cate_id and cu.id_categoria='".$categoria."'  AND cu.estado='ACTIVO'"; 
        //    echo "SQL ".$sqlc;
            $resultado=mysqli_query($conexion,$sqlc);
            while($row=mysqli_fetch_assoc($resultado))
@@ -49,7 +60,7 @@ $fechaan="";
                  }
                  $sql2="SELECT count(de.tickes_id) as contador FROM bd_local.tbl_detalle as de 
                   inner join bd_local.tbl_ticketsc as ti where ti.tickes_id=de.tickes_id"; 
-                  // echo "SQL ".$sql2;
+                  // echo "SQL ".$man;
                   $contador=0;
                 $result=mysqli_query($conexion,$sql2);
                           while($row=mysqli_fetch_assoc($result))
@@ -67,20 +78,24 @@ $fechaan="";
                  concat(now()), '".$fechande."', 'NO ASIGNADO', '".$filial."', 'NO DEFINIDA', '".$latitud."', '".$longitud."', 
                   'ACTIVO');
                ";
-                // echo "SQL ".$sql;
             
+                //echo "SQL ".$consulta;
+                mysqli_query($conexion,$consulta) or die(mysqli_error($conexion));
+              
             
                // echo $sql;
                   $sql1=" UPDATE `bd_local`.`transacciones` SET `contador_transacciones` = '".$cambio."' WHERE (`codigo` = '0');";
                    $resultado=mysqli_query($conexion,$sql1);
+
                    $sql="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
-                   `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-'".$contador.", concat(CURDATE()+0,'-".$cambio."'), 
+                   `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$contador."', concat(CURDATE()+0,'-".$cambio."'), 
                    '".$emisor."', '".$man."', '".$descripcion."', concat(now()),
                     'ACTIVO', '".$emisor."', '".$ruta."');";
+                    echo $sql;
                      $result=mysqli_query($conexion,$sql);
+                     mysqli_close($conexion);
 
-              mysqli_query($conexion,$consulta) or die(mysqli_error());
-              mysqli_close($conexion);
+           
           
               
 ?>

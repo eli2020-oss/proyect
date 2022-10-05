@@ -1,5 +1,6 @@
 <?php
 include('conexion.php');
+
 $consulta ="SELECT id_categoria,t_descripcion,cate_estado
 FROM bd_local.categorias_user inner join bd_local.tbl_categoria where id_categoria=cate_id and cate_estado='ACTIVO'
 and estado='ACTIVO'; ";

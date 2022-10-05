@@ -5,7 +5,7 @@ include("Conexion.php");
 //$idticket=$_POST["ida"];
 //$v1=isset($_GET["var1"])?$_GET["var1"]:"";
 //echo "<script>alert('".$v1."');</script>";
-//echo $v1;
+//echo "Parar";
 $accion=isset($_POST["accion"])?$_POST["accion"]:"";
 $estado='ACTIVO';
 ?> 
@@ -97,27 +97,7 @@ $estado='ACTIVO';
                                 }
                                
                           }
-                          if ($permitir=='ACTIVO') 
-                          {
-                             //Usuario ADMINISTRADOR
-                           
-                          $sql="select
-                          ti.tickes_id as ids,
-                          concat(u.f_name,' ',u.l_name) nombre,
-                          fnc_fecha(t_fechaini) as fecha,
-                          ti.titulo as titulo,ti.tic_estado as estado
-                          from
-                          bd_local.tbl_ticketsc ti
-                          inner join bd_local.tbl_user u on u.id=ti.o_us
-                          inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
-                          inner join bd_local.tbl_user usat on usat.id=ti.us_id 
-                          inner join bd_local.categorias_user catu on catu.id_categoria=ti.cate_id 
-                          and catu.id_user='".$id."' and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO'";
-                            
-                        // echo "administrador". $_SESSION["mis"];
-                         }
-                         else 
-                         {
+                         
                           $verboton=false;
                         // USUARIO BASE SIN PERMISOS
                          $sql="select
@@ -134,7 +114,7 @@ $estado='ACTIVO';
                          and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO' ";
                            //echo $sql;
                            //echo "sin permisos".$sql;
-                         }
+                         
                           $result=mysqli_query($conexion,$sql);
                           $data="";
                           while($row=mysqli_fetch_assoc($result))

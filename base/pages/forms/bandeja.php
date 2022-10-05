@@ -25,54 +25,24 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
   <link rel="stylesheet" href="../../dist/css/adminlte.min.css">
 
 <script type="text/javascript">
-    function cargar1()
-      {
-    // 
-    document.getElementById("accion").value="lleno";
-   // alert( document.getElementById("accion"));
-    document.getElementById("formulario").submit();
-  //  $("#box").load("control_bandeja.php");
-      }   
-</script>
-<script type="text/javascript">
-      function cambiar(e,id)
+   function enviados()
 		  {
-       // alert(id);
-        //alert(e);
-       $.ajax({
-				type: 'POST',
-				url: "core/controller_bandeja.php",
-				data: {ida:id,estado:e},
-				success: function(data)
-				{
-          if(e=='1')
-          {
-           // alert(data);
-           document.getElementById("codigo").value=id;
-           document.getElementById("formulario").submit();
-            //location.href ="muro.php";
-          }
-          else
-          {
-            
-          }
-					//$("#tabla").append(data);
-          //alert(data);
-
-				},
-				error: function(error)
-				{
-					alert("Error");
-				}
-			});
-			return false;
-		}   
+     
+        $("#box").load("sent.php");
+     return false;
+    }
+    function recibidos()
+    {
+      $("#box").load("control_bandeja.php");
+      return false;
+    }
 </script>
 
 </head>
 <body class="hold-transition sidebar-mini">
-
-<body >
+ <?php 
+ //echo "<script> alert(".$accion.");</script>";
+ ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -125,6 +95,12 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
                {
               ?>
               <ul class="nav nav-pills flex-column">
+              <li class="nav-item">
+                  <a href="" class="nav-link" onClick="return recibidos();">
+                    <i class="fas fa-inbox"></i>
+                 RECIBIDOS
+                  </a>
+                </li>
                 <li class="nav-item">
                   <a href="registro_ticks.php" class="nav-link">
                     <i class="far fa-circle text-danger"></i>
@@ -135,15 +111,14 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
                 <?php
                }
               ?>
-              </ul>
-              <ul class="nav nav-pills flex-column">
-                <li class="nav-item">
-                  <a href="" class="nav-link" onClick ="return cargar1(); ">
-                    <i class="far fa-circle text-danger"></i>
-                MIS TICKES
+               <li class="nav-item">
+                  <a href="" class="nav-link" onClick="return enviados();">
+                    <i class="far fa-envelope"></i>
+                 ENVIADOS
                   </a>
                 </li>
               </ul>
+             
             </div>
            
             <!-- /.card-body -->
@@ -176,17 +151,9 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
               <form  name='formulario' id='formulario' method='POST' action='muro.php' >
              <input type="hidden" id="codigo" name="codigo" class="form-control" value='<?php echo $codigo ?> '>
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
-            <?php
-            $accion=isset($_POST["accion"])?$_POST["accion"]:"";
-              //echo "<script>alert('".$accion."');</script>";
-if($accion=='1')
-{
+          
+    
 
-  $_SESSION["mis"]=$accion;
-   
-}
-
-?>
             <div id="box">
               <div class="card-body table-responsive p-0" style="height: 300px;">
          
@@ -225,9 +192,7 @@ if($accion=='1')
   </aside>
   <!-- /.control-sidebar -->
 </div>
-<!-- ./wrapper -->
 
-<!-- jQuery -->
 <script src="../../plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="../../plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -248,13 +213,14 @@ if($accion=='1')
             document.getElementById("chat").submit();
     
       } 
-  $(document).ready(function(){
-    document.getElementById("boton").click();
-    $("boton").click(function(){
-        $("#box").load("control_bandeja.php");
-    });
-});
+//   $(document).ready(function(){
+//     document.getElementById("boton").click();
+//     $("boton").click(function(){
+//         $("#box").load("control_bandeja.php");
+//     });
+// });
 $(document).ready(function(){
+        //alert("recarga");
         $("#box").load("control_bandeja.php");
 });
 

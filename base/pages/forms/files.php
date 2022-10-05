@@ -23,24 +23,28 @@ $descripcion=$_POST["textarea"];
           $fechanew=$row["compa"]."";
           $contadord=$row["contador_transacciones"].""; 
        }
+       echo "Consulta 1 ".$consulta;
  if ($fechaan!=$fechanew) 
  {
         //Renovar contador de tickets
         $sql=" UPDATE `bd_local`.`transacciones` SET `fecha` = CURDATE(), `contador_transacciones` = '0' WHERE (`codigo` = '0');";
          $resultado=mysqli_query($conexion,$sql);  
+       //  echo "         renovoar contador de tockets ".$sql; 
  }
  else
  {
          $cambio;
-        for ($i = 0; $i <= $contadord; $i++) {
-        $cambio=$i+1;
-        }
+        // for ($i = 0; $i <= $contadord; $i++) {
+        // $cambio=$i+1;
+        // }
+        $cambio=$contadord+1;
+        ///echo "Cambio      ".$cambio;
        $fechande='0-0-0 0:0:0';
  
               //CATEGORIA Y ASIGNACION DE USUARIO DE ATENCION DE TICKET
                $sqlc="SELECT u.id as mante FROM bd_local.categorias_user as cu inner join bd_local.tbl_user as u inner join
                bd_local.tbl_categoria as c where cu.id_user=u.id and cu.id_categoria=c.cate_id and cu.id_categoria='".$categoria."'"; 
-       //    echo "SQL ".$sqlc;
+          // echo "CATEGORIA Y ASIGNACION DE USUARIO DE ATENCION DE TICKET  ".$sqlc;
            $resultado=mysqli_query($conexion,$sqlc);
            while($row=mysqli_fetch_assoc($resultado))
                  {
@@ -48,7 +52,8 @@ $descripcion=$_POST["textarea"];
                  }
                  $sql2="SELECT count(de.tickes_id) as contador FROM bd_local.tbl_detalle as de 
                   inner join bd_local.tbl_ticketsc as ti where ti.tickes_id=de.tickes_id"; 
-                  // echo "SQL ".$sql2;
+                  // echo "SQL donde esta man ".$sql2;
+                  // echo "man ".$man;
                   $contador=0;
                 $result=mysqli_query($conexion,$sql2);
                           while($row=mysqli_fetch_assoc($result))
@@ -57,9 +62,9 @@ $descripcion=$_POST["textarea"];
                             $contador=$row['contador'];
                           } 
                          
-               // echo "pRIMERO  ".$contador;
+                //echo "pRIMERO  ".$contador;
                $contador=$contador+3; 
-             //  echo "sEGUNDO   ".$contador;
+              echo "sEGUNDO   ".$contador;
                   // echo "<script>alert('".$contador."');</script>";
                 if($_FILES["archivo"]["error"]>0){
 
@@ -95,18 +100,18 @@ $descripcion=$_POST["textarea"];
               `t_fechaini`, `tfechafinal`, `cc`,`tk_filial`,`tk_area`, `tic_estado`) VALUES (concat(CURDATE()+0,'-".$cambio."'), '".$_COOKIE["id"]."', 
               '".$man."', '".$categoria."', '".$prioridad."', '".$titulo."', '".$descripcion."', 
               concat(now()) , '".$fechande."', '".$cc."','".$filial."','". $area."', 'ACTIVO');";
-               // echo "SQL ".$sql;
+               // echo "Insertar ticket ".$sql;
              $resultado=mysqli_query($conexion,$sql);
              $sql2="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
              `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$contador."', concat(CURDATE()+0,'-".$cambio."'), 
              '".$_COOKIE["id"]."', '".$man."', '".$descripcion."', concat(now()),
               'ACTIVO', '".$_COOKIE['id']."', '".$ruta."');";
                $result=mysqli_query($conexion,$sql2);
-               echo $sql2;
+              // echo "Insertar detalle ".$sql2;
                  $sql1=" UPDATE `bd_local`.`transacciones` SET `contador_transacciones` = '".$cambio."' WHERE (`codigo` = '0');";
                   $resultado=mysqli_query($conexion,$sql1);
-                  // $accion="";
-                 header("Location:inicio.php");
+                //  echo "uptualizacion de transaccion ".$sql2;
+              header("Location:inicio.php");
  }
   
 ?>
