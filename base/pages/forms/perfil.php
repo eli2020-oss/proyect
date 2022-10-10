@@ -66,7 +66,7 @@ $login= $_COOKIE["id"]."";
             <!-- /.card -->
 
             <!-- Sobre mi en espera -->
-              <!-- <div class="card card-primary">
+               <div class="card card-primary">
               <div class="card-header">
                 <h3 class="card-title">Sobre Mi</h3>
               </div>
@@ -103,7 +103,7 @@ $login= $_COOKIE["id"]."";
                 <a href="#"><i class="fas fa-pencil-alt mr-1"></i></a>
               </div>
               
-            </div>   -->
+            </div>  
            
           </div>
         

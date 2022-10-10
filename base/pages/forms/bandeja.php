@@ -28,12 +28,27 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
    function enviados()
 		  {
      
-        $("#box").load("sent.php");
+        $("#box").load("filtros_inbox/sent.php");
      return false;
     }
     function recibidos()
     {
       $("#box").load("control_bandeja.php");
+      return false;
+    }
+    function emergencia()
+    {
+      $("#box").load("filtros_inbox/emergencia.php");
+      return false;
+    }
+    function media()
+    {
+      $("#box").load("filtros_inbox/media.php");
+      return false;
+    }
+    function normal()
+    {
+      $("#box").load("filtros_inbox/normal.php");
       return false;
     }
 </script>
@@ -70,7 +85,7 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
              <div class="card">
              
           <div class="card-header">
-              <h3 class="card-title">Filtro</h3>
+              <h3 class="card-title">Filtros</h3>
 
               <div class="card-tools">
                 <button type="button" class="btn btn-tool" data-card-widget="collapse">
@@ -117,10 +132,26 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
                  ENVIADOS
                   </a>
                 </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link" onClick="return emergencia();">
+                    <i class="far fa-circle text-danger"></i>
+                  EMEGERCIA
+                  </a>
+                  <li class="nav-item">
+                  <a href="#" class="nav-link" onClick="return media();">
+                    <i class="far fa-circle text-warning" ></i> MEDIO
+                  </a></li>
+                  <li class="nav-item">
+                  <a href="#" class="nav-link" onClick="return normal();">
+                    <i class="far fa-circle text-primary"></i>
+                   NORMAL
+                  </a>
+                </li>
               </ul>
              
             </div>
            
+          
             <!-- /.card-body -->
           </div>
           <!-- /.card -->

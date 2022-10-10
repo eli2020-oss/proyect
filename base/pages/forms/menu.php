@@ -215,6 +215,12 @@ $_SESSION['avatar']=$avatar;
                   <p>Control de Filiales</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="reasignacion.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Control de Tickets</p>
+                </a>
+              </li>
             </ul>
           </li>
          <?php 

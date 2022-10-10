@@ -1,12 +1,7 @@
 <?php 
 session_start();
-include("Conexion.php");
-//$estado=$_POST["estado"];
-//$idticket=$_POST["ida"];
-//$v1=isset($_GET["var1"])?$_GET["var1"]:"";
-//echo "<script>alert('".$v1."');</script>";
-//echo $v1;
-$accion=isset($_POST["accion"])?$_POST["accion"]:"";
+include("../Conexion.php");
+
 $estado='ACTIVO';
 ?> 
 <!DOCTYPE html>
@@ -62,7 +57,6 @@ $estado='ACTIVO';
 ?>
 <div class="container-fluid">
  
-           
 <table  class="table table-head-fixed text-nowrap" name="table">
                   <tbody>
                          <?php
@@ -101,7 +95,7 @@ $estado='ACTIVO';
                           inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
                           inner join bd_local.tbl_user usat on usat.id=ti.us_id 
                           inner join bd_local.categorias_user catu on catu.id_categoria=ti.cate_id 
-                          and catu.id_user='".$id."' and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO'";
+                          and catu.id_user='".$id."' and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO' and ti.tk_nivel='NORMAL'";
                             
                         // echo "administrador". $_SESSION["mis"];
                          }
@@ -120,7 +114,7 @@ $estado='ACTIVO';
                          inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
                          inner join bd_local.tbl_user usat on usat.id=ti.us_id 
                          inner join bd_local.categorias_user catu on catu.id_categoria=ti.cate_id  and ti.o_us='".$_COOKIE["id"]."' 
-                         and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO' ";
+                         and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO'  and ti.tk_nivel='NORMAL'";
                            //echo $sql;
                            //echo "sin permisos".$sql;
                          }

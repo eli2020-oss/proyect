@@ -1,6 +1,6 @@
 <?php 
 session_start();
-include("Conexion.php");
+include("../Conexion.php");
 //$estado=$_POST["estado"];
 //$idticket=$_POST["ida"];
 //$v1=isset($_GET["var1"])?$_GET["var1"]:"";
