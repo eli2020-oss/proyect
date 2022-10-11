@@ -2,13 +2,33 @@
 session_start();
 include('menu.php');
 $accion="";
+$v1=base64_decode($_GET["var1"]);
+//;
+$id="";
+$titulo="";
+$descripcion="";
+$categoria="";
+$nivel="";
+$sql="SELECT ti.tickes_id as id,o_us,titulo,tk_descripcion,cate_id,tk_nivel FROM bd_local.tbl_ticketsc ti 
+where ti.tickes_id='".$v1."'";
+  $result=mysqli_query($conexion,$sql);
+                    
+  while($row=mysqli_fetch_assoc($result)) 
+  {
+    $id=$row["id"];
+    $titulo=$row["titulo"];
+    $descripcion=$row["tk_descripcion"];
+    $categoria=$row["cate_id"];
+    $nivel=$row["tk_nivel"];
+  }
+//  echo "<script>alert('".$descripcion."');</script>"
   ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>NUEVO TICKES</title>
+  <title>REASIGNAR TICKES</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -41,31 +61,17 @@ $accion="";
  function Validar()
       {
        // alert("Entra");
-       if(document.getElementById("cmbcategoria").value=="[--SELECCIONE LO QUE SE LE INDICA--]")
+       if(document.getElementById("cmbuser").value=="")
         {
           alert("Seleccione el tipo de problema que presenta");
-          document.getElementById("cmbcategoria").focus();
+          document.getElementById("cmbuser").focus();
         }
         else if(document.getElementById("cmbprioridad").value=="[--SELECCIONE LO QUE SE LE INDICA--]")
         {
           alert("Seleccione el nivel de prioridad de el ticket");
           document.getElementById("cmbprioridad").focus();
         } 
-        else if(document.getElementById("cmbfilial").value=="[--SELECCIONE LO QUE SE LE INDICA--]")
-        {
-          alert("Selecccione la filial a la que pertenece");
-          document.getElementById("cmbfilial").focus();
-        } 
-        else if(document.getElementById("cmbarea").value=="[--SELECCIONE LO QUE SE LE INDICA--]")
-        {
-          alert("Selecccione la filial a la que pertenece");
-          document.getElementById("cmbarea").focus();
-        }
-        else if(document.getElementById("textarea").value=="[--SELECCIONE LO QUE SE LE INDICA--]")
-        {
-          alert("Selecccione la filial a la que pertenece");
-          document.getElementById("textarea").focus();
-        }
+        
         else 
         {
           document.getElementById("formulario").submit();
@@ -83,7 +89,7 @@ $accion="";
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>CREAR TICKES</h1>
+            <h1>REASIGNAR TICKET</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -107,24 +113,24 @@ $accion="";
           <!-- /FINAL-->
           <div class="card-body">
             <!-- Inicio de formulario-->
-                <form class="form-horizontal" action="files.php" enctype="multipart/form-data" id="formulario" name="formulario" method="POST">
+                <form class="form-horizontal" action="save_reasignar.php" enctype="multipart/form-data" id="formulario" name="formulario" method="POST">
                <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
               <div class="row">
-              <label for="inputEmail3" class="col-sm-2 col-form-label" >Nombre: </label>
-               <input class="form-control" type="text" name="txtnombre" id="txtnombre" disabled="disabled" value="<?php echo $nombre; ?>">
-               <div class="form-group">
-                        <label>Descripcion del problema</label>
-                        <textarea class="form-control" id="textarea" name="textarea" rows="3" ></textarea>
-                      </div>
-                      
+              <label for="inputEmail3" class="col-sm-2 col-form-label" >ID: </label>
+               <input class="form-control" type="text" name="txtid" id="txtid" disabled="disabled" value="<?php echo $id; ?>">
+        
                <br>
               
-                  <label> CC: </label>
+                  <label> Nuevo usuario de atencion: </label>
                   <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" >
-                 
+                  <option></option>
                  <?php 
-                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
-                      inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
+                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre
+                      FROM bd_local.tbl_user u 
+                      inner join bd_local.categorias_user cu 
+                      inner join bd_local.tbl_categoria c on c.cate_id=cu.id_categoria
+                     inner join  bd_local.tbl_detalle_emple  e on  u.id=cu.id_user 
+                     where  e.em_estado='ACTIVO' and cu.estado='ACTIVO' and c.cate_id='".$categoria."' group by cu.id;";
                       $result=mysqli_query($conexion,$sql);
                     
                       while($row=mysqli_fetch_assoc($result)) 
@@ -136,17 +142,20 @@ $accion="";
                   </select>
                 
                <label for="inputEmail3" class="col-sm-2 col-form-label" >Titulo:</label>
-               <input class="form-control" type="text" name="titulo" id="titulo" value="">
+               <input class="form-control" type="text" name="titulo" id="titulo" disabled="disabled" value="<?php echo $titulo; ?>">
                <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="form-group">
-                  
+                  <div class="form-group">
+                        <label>Descripcion del problema</label>
+                        <textarea class="form-control" id="textarea" name="textarea" rows="3" disabled="disabled" value="" ><?php echo $descripcion; ?></textarea>
+                      </div> 
                 </div>
                 <!-- /.form-group -->
                 <div class="form-group">
                   <label>NIVEL DE PRIORIDAD:</label>
                   <select class="form-control select2" id="cmbprioridad" name="cmbprioridad" style="width: 100%;">
-                  <option selected="selected">[--SELECCIONE LO QUE SE LE INDICA--]</option>
+                  <option selected="selected" >[--SELECCIONE LO QUE SE LE INDICA--]</option>
                     <option>EMERGENCIA</option>
                     <option>MEDIO</option>
                     <option>NORMAL</option>

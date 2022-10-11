@@ -23,7 +23,7 @@ $descripcion=$_POST["textarea"];
           $fechanew=$row["compa"]."";
           $contadord=$row["contador_transacciones"].""; 
        }
-       echo "Consulta 1 ".$consulta;
+     //  echo "Consulta 1 ".$consulta;
  if ($fechaan!=$fechanew) 
  {
         //Renovar contador de tickets
@@ -43,11 +43,13 @@ $descripcion=$_POST["textarea"];
  
               //CATEGORIA Y ASIGNACION DE USUARIO DE ATENCION DE TICKET
                $sqlc="SELECT u.id as mante FROM bd_local.categorias_user as cu inner join bd_local.tbl_user as u inner join
-               bd_local.tbl_categoria as c where cu.id_user=u.id and cu.id_categoria=c.cate_id and cu.id_categoria='".$categoria."'"; 
+               bd_local.tbl_categoria as c where cu.id_user=u.id and cu.id_categoria=c.cate_id and cu.id_categoria='".$categoria."'  ORDER BY RAND() limit 1"; 
           // echo "CATEGORIA Y ASIGNACION DE USUARIO DE ATENCION DE TICKET  ".$sqlc;
+          
            $resultado=mysqli_query($conexion,$sqlc);
            while($row=mysqli_fetch_assoc($resultado))
                  {
+
                    $man=$row['mante']."";
                  }
                  $sql2="SELECT count(de.tickes_id) as contador FROM bd_local.tbl_detalle as de 
@@ -64,7 +66,7 @@ $descripcion=$_POST["textarea"];
                          
                 //echo "pRIMERO  ".$contador;
                $contador=$contador+3; 
-              echo "sEGUNDO   ".$contador;
+          //    echo "sEGUNDO   ".$contador;
                   // echo "<script>alert('".$contador."');</script>";
                 if($_FILES["archivo"]["error"]>0){
 

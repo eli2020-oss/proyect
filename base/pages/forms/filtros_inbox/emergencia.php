@@ -98,7 +98,7 @@ $estado='ACTIVO';
                           inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
                           inner join bd_local.tbl_user usat on usat.id=ti.us_id 
                           inner join bd_local.categorias_user catu on catu.id_categoria=ti.cate_id 
-                          and catu.id_user='".$id."' and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO' and ti.tk_nivel='EMERGENCIA'";
+                          and ti.us_id='".$id."' and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO' and ti.tk_nivel='EMERGENCIA' group by ti.tickes_id";
                             
                         // echo "administrador". $_SESSION["mis"];
                          }

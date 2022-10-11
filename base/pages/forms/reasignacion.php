@@ -153,7 +153,7 @@ function cambiar(id)
                     FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
                     inner join bd_local.tbl_categoria as ca inner join bd_local.categorias_user as cu
                      where  ti.o_us=us.id and ca.cate_id= ti.cate_id and ti.cate_id=cu.id_categoria and 
-                     ti.o_us='".$_POST["cmbuser"]."' and ti.tic_estado='FINALIZADO' ORDER BY ti.t_fechaini desc ";
+                     ti.us_id='".$_POST["cmbuser"]."' and ti.tic_estado='ACTIVO' ORDER BY ti.t_fechaini desc ";
                     //echo $sql;
                     $result=mysqli_query($conexion,$sql);
                     while($row=mysqli_fetch_assoc($result))
