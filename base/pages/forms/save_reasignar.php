@@ -1,21 +1,32 @@
 <?php
  include("Conexion.php");
- $emisor=$_COOKIE["id"];
- $cc=isset($_POST["cmbuser"]);
- //$titulo=$_POST["titulo"];
- $prioridad=$_POST['cmbprioridad'];
-//$descripcion=$_POST["textarea"];
+ 
+ $cc=$_POST["cmbuser"];
 
-echo $emisor." ".$cc." ".$prioridad;
+ $prioridad=$_POST['cmbprioridad'];
+ $descripcion=$_POST["accion"];
+ $id=$_POST["id"];
+//echo "ID ticket ".$id." ".$cc." ".$prioridad." ".$descripcion;
+$fechaan="";
+$fechanew="";
+$contadord;
+$orig="";
+$consulta="SELECT concat(CURDATE()) as compa FROM   bd_local.transacciones inner join bd_local.tbl_user";
+ $resultado=mysqli_query($conexion,$consulta);
+  while($row=mysqli_fetch_assoc($resultado))
+      {
+    
+         $fechanew=$row["compa"]."";
+      }
 if($_FILES["archivo"]["error"]>0){
 
- echo "no hay archivo";
+echo "no hay archivo";
    }else 
    {
        $permitidos= array("image/jpng","image/png","application/pdf");
        $limite_kb = 10000;
        if(in_array($_FILES["archivo"]["type"],$permitidos) && $_FILES["archivo"]["size"]<= $limite_kb * 124){
-          $ruta = 'files/'.$fechanew."-".$cambio."_".$_COOKIE["id"].'/';
+          $ruta = 'files/'.$fechanew."-".$id."_".$cc.'/';
           $archivo =$ruta.$_FILES["archivo"]["name"];
           if(!file_exists($ruta))
           {
@@ -36,8 +47,20 @@ if($_FILES["archivo"]["error"]>0){
        echo "Archivo no permitido p excede el size";
        }
    }
-   $sql="UPDATE `bd_local`.`tbl_ticketsc` SET `us_id` = 'cambio', `tk_nivel` = 'cambio' 
+   $sql="UPDATE `bd_local`.`tbl_ticketsc` SET `us_id` = '".$cc."', `tk_nivel` = '".$prioridad."' 
    
-   WHERE (`tickes_id` = '20221011-1');
+   WHERE (`tickes_id` = '".$id."');
    ";
+   $resultado=mysqli_query($conexion,$sql);
+   $iddetalle="";
+   $sql="SELECT MAX(deta_id),deta_id FROM bd_local.tbl_detalle where tickes_id='".$id."'";
+   $result=mysqli_query($conexion,$sql);
+   while($row=mysqli_fetch_assoc($result))
+   {
+      $iddetalle=$row["deta_id"];
+   }
+ //  echo $iddetalle;
+   $sql="UPDATE `bd_local`.`tbl_detalle` SET `archivo` = '".$ruta."' WHERE (`deta_id` = '".$iddetalle."');";
+   $resultado=mysqli_query($conexion,$sql);
+   header("Location:inicio.php");
 ?>

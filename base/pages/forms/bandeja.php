@@ -94,6 +94,7 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
               </div>
             </div>
             <div class="card-body p-0">
+            <ul class="nav nav-pills flex-column">
               <?php
               $permiso=false;
                $consulta="SELECT count(us_id)  as permitir FROM bd_local.user_acceso where us_id='".$_COOKIE['id']."' and estado='ACTIVO' and acc_id='AC-2' ;";
@@ -109,7 +110,7 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
                if($permiso==true)
                {
               ?>
-              <ul class="nav nav-pills flex-column">
+            
               <li class="nav-item">
                   <a href="" class="nav-link" onClick="return recibidos();">
                     <i class="fas fa-inbox"></i>

@@ -216,7 +216,7 @@ $estado="";
                         <input type="text" name="message" id="message" placeholder="hola gracias ...." class="form-control">
                         <span class="input-group-append">
                            <button type="button" class="btn btn-warning" id="btnguardar" onClick='return cargar();'>Enviar</button>
-                          
+                           <!-- <input multiple type="file" class="form-control" id="archivo" name="archivo" >    -->
                         </span>
                       </div>
                     </form>

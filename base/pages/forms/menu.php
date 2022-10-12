@@ -216,11 +216,27 @@ $_SESSION['avatar']=$avatar;
                 </a>
               </li>
               <li class="nav-item">
+                <a href="control_accesos.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Control de Accesos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="control_tarea.php" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Control de Tareas</p>
+                </a>
+              </li>
+              <?php  if (isset($_SESSION["AC-7"])==true and $estado=='ACTIVO')
+             {?>
+              <li class="nav-item">
                 <a href="reasignacion.php" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Control de Tickets</p>
                 </a>
               </li>
+              <?php 
+              }?>
             </ul>
           </li>
          <?php 

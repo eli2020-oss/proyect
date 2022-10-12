@@ -4,6 +4,8 @@ include('menu.php');
 $accion="";
 $v1=base64_decode($_GET["var1"]);
 //;
+$accion=isset($_POST["accion"])?$_POST["accion"]:"";
+$prueba=isset($_POST["id"])?$_POST["id"]:"";
 $id="";
 $titulo="";
 $descripcion="";
@@ -22,6 +24,8 @@ where ti.tickes_id='".$v1."'";
     $nivel=$row["tk_nivel"];
   }
 //  echo "<script>alert('".$descripcion."');</script>"
+$accion=$descripcion;
+$prueba=$id;
   ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -115,9 +119,10 @@ where ti.tickes_id='".$v1."'";
             <!-- Inicio de formulario-->
                 <form class="form-horizontal" action="save_reasignar.php" enctype="multipart/form-data" id="formulario" name="formulario" method="POST">
                <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
+               <input type="hidden" name="id" id="id" value="<?php echo $id; ?>">
               <div class="row">
               <label for="inputEmail3" class="col-sm-2 col-form-label" >ID: </label>
-               <input class="form-control" type="text" name="txtid" id="txtid" disabled="disabled" value="<?php echo $id; ?>">
+               <input class="form-control" type="text"  name="txtnombre" id="txtnombre" disabled="disabled" value="<?php echo $id; ?>">
         
                <br>
               
@@ -136,7 +141,12 @@ where ti.tickes_id='".$v1."'";
                       while($row=mysqli_fetch_assoc($result)) 
                       {
                         $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
-                        echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
+                        if($_COOKIE['id']==$row['codigo'])
+                        {}
+                        else
+                        {
+                          echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
+                        }
                       }
                     ?>
                   </select>
@@ -148,7 +158,7 @@ where ti.tickes_id='".$v1."'";
                 <div class="form-group">
                   <div class="form-group">
                         <label>Descripcion del problema</label>
-                        <textarea class="form-control" id="textarea" name="textarea" rows="3" disabled="disabled" value="" ><?php echo $descripcion; ?></textarea>
+                        <textarea class="form-control" id="textarea" name="textarea" rows="3" disabled="disabled"  ><?php echo $descripcion; ?></textarea>
                       </div> 
                 </div>
                 <!-- /.form-group -->
@@ -182,7 +192,7 @@ where ti.tickes_id='".$v1."'";
                   <div class="col-lg-6">
                     <div class="col-md-4 col-md-offset-4">
                     <input multiple type="file" class="form-control" id="archivo" name="archivo" >   
-                    <button type="submit" class="btn btn-danger" id="btnEnviar" onclick="return Validar();">Enviar</button>
+                    <button type="submit" class="btn btn-danger" id="btnEnviar" onclick="return Validar();">Reasignar</button>
                  
                   </div>
                 </div>
