@@ -50,7 +50,7 @@ include('menu.php');
 <script type="text/javascript">
  function cargar1(codigo)
       {
-    alert("Entra1");
+ //   alert("Entra1");
      //  localStorage.clear();
          document.getElementById("accion").value="desabilitar";
          document.getElementById("cc").value=codigo;
@@ -65,7 +65,7 @@ include('menu.php');
 <script type="text/javascript">
  function cargar2(codigo)
       {
-        alert("Entra 2");
+       // alert("Entra 2");
          document.getElementById("accion").value="habilitar";
          document.getElementById("cc").value=codigo;
          

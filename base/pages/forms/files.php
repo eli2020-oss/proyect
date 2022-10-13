@@ -1,7 +1,7 @@
 <?php
  include("Conexion.php");
  $emisor=$_COOKIE["id"];
- $cc=isset($_POST["cmbuser"]);
+// $cc=isset($_POST["cmbuser"]);
  $titulo=$_POST["titulo"];
  $categoria=$_POST["cmbcategoria"];
  $prioridad=$_POST['cmbprioridad'];
@@ -101,7 +101,7 @@ $descripcion=$_POST["textarea"];
               (`tickes_id`, `o_us`, `us_id`, `cate_id`, `tk_nivel`, `titulo`, `tk_descripcion`, 
               `t_fechaini`, `tfechafinal`, `cc`,`tk_filial`,`tk_area`, `tic_estado`) VALUES (concat(CURDATE()+0,'-".$cambio."'), '".$_COOKIE["id"]."', 
               '".$man."', '".$categoria."', '".$prioridad."', '".$titulo."', '".$descripcion."', 
-              concat(now()) , '".$fechande."', '".$cc."','".$filial."','". $area."', 'ACTIVO');";
+              concat(now()) , '".$fechande."', '','".$filial."','". $area."', 'ACTIVO');";
                // echo "Insertar ticket ".$sql;
              $resultado=mysqli_query($conexion,$sql);
              $sql2="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 

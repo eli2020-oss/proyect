@@ -114,21 +114,21 @@ $accion="";
                <input class="form-control" type="text" name="txtnombre" id="txtnombre" disabled="disabled" value="<?php echo $nombre; ?>">
                <br>
 
-                  <label> CC: </label>
+                  <!-- <label> CC: </label>
                   <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" >
                   <option></option>
-                 <?php 
-                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
-                      inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
-                      $result=mysqli_query($conexion,$sql);
+                <?php 
+                      // $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
+                      // inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
+                      // $result=mysqli_query($conexion,$sql);
                     
-                      while($row=mysqli_fetch_assoc($result)) 
-                      {
-                        $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
-                        echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
-                      }
-                    ?>
-                  </select>
+                      // while($row=mysqli_fetch_assoc($result)) 
+                      // {
+                      //   $opcion=($row["nombre"]==$cmbtarifas?"selected=selected":"");
+                      //   echo "<option value='".$row['codigo']."' ".$opcion.">".$row['nombre']."</option>";
+                      // }
+                    ?> 
+                  </select> -->
                 </div>
                <label for="inputEmail3" class="col-sm-2 col-form-label" >Titulo:</label>
                <input class="form-control" type="text" name="titulo" id="titulo" value="">
@@ -139,7 +139,7 @@ $accion="";
                  <select class="form-control select2" id="cmbcategoria" name="cmbcategoria" style="width: 100%;">
                  <option selected="selected">[--SELECCIONE LO QUE SE LE INDICA--]</option>
                  <?php 
-                      $sql="SELECT id_categoria as codigo,t_descripcion as nombre
+                      $sql="SELECT  DISTINCT id_categoria as codigo,t_descripcion as nombre
                       FROM bd_local.tbl_categoria as c 
                       inner join bd_local.categorias_user cu on c.cate_id=cu.id_categoria  and cu.id_user!='".$_COOKIE["id"]."'
                       where id_categoria=cate_id and cate_estado='ACTIVO'
@@ -216,7 +216,7 @@ $accion="";
                   <div class="col-lg-6">
                     <div class="col-md-4 col-md-offset-4">
                     <input multiple type="file" class="form-control" id="archivo" name="archivo" >   
-                    <button type="submit" class="btn btn-danger" id="btnEnviar" onclick="return Validar();">Enviar</button>
+                    <button type="submit"  class="btn btn-success toastrDefaultSuccess" id="btnEnviar" onclick="return Validar();">Enviar</button>
                  
                   </div>
                 </div>
@@ -224,8 +224,7 @@ $accion="";
              </div>
               <!-- /.card-body -->
             </div>
-            <div class="input-group-prepend">
-                         </div>
+            
             <!-- /.card -->
           </div>
                          
@@ -236,13 +235,8 @@ $accion="";
 
   <!-- FINAL DEL FORMULARIO-->
     <!-- INFERIOR DE PIE DE FORMULARIO-->
-  <footer class="main-footer">
-    <div class="float-right d-none d-sm-block">
-      <b></b> 
-    </div>
-  </footer>
-  <aside class="control-sidebar control-sidebar-dark">
-  </aside>
+ 
+ 
 </div>
 
 

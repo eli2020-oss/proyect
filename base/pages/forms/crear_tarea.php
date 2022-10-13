@@ -10,7 +10,7 @@ include('menu.php');
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FILIAL | DEPARTAMENTO</title>
+  <title>TAREA | NUEVO</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -54,11 +54,7 @@ include('menu.php');
           alert("Ingrese nombre de la filial");
           document.getElementById("nombre").focus();
         }
-        else if(document.getElementById("direccion").value=="")
-        {
-          alert("Ingrese la direccion");
-          document.getElementById("direccion").focus();
-        } 
+        
         else
         {
           if(document.getElementById("accion").value=="")
@@ -76,12 +72,19 @@ include('menu.php');
 <?php 
              if($accion=="guardar")
              {
-              $sql="INSERT INTO `bd_local`.`tbl_filial` (`nombre`, `direccion_filial`, `estado`)
-              VALUES ('".$_POST['nombre']."', '".$_POST['direccion']."', '".$_POST['estado']."');";
+              $contar="";
+              $consulta="SELECT count(*) as conta FROM bd_local.tbl_categoria";
+                $resultado=mysqli_query($conexion,$consulta);
+                while($row=mysqli_fetch_assoc($resultado))
+                    {
+                      $contar=$row["conta"];
+                    }
+                  $contarl=$contar+1;
+              $sql="INSERT INTO `bd_local`.`tbl_categoria` (`cate_id`, `t_categoria`, `cate_estado`) 
+              VALUES ('C-000".$contarl."', '".$_POST["nombre"]."', '".$_POST["estado"]."');
+              ";
               //  echo "SQL ".$sql;
-          //    echo "<script>alert('".$_POST['nombre']."');</script>";
-           //   echo "<script>alert('".$_POST['direccion']."');</script>";
-           //   echo "<script>alert('".$_POST['estado']."');</script>";
+         
                   $resultado=mysqli_query($conexion,$sql);
                   $accion="";
                   //echo "<script>alert('Informacion Guardada Satisfactoriamente');</script>";
@@ -93,13 +96,13 @@ include('menu.php');
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Control de Filiales</h1>
+            <h1>Control de Creacion de tareas</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="inicio.php">Inicio</a></li>
-              <li class="breadcrumb-item active"><a href="control_filiales.php">Control de filiales</a></li>
-              <li class="breadcrumb-item active">Crear nueva filial</li>
+              <li class="breadcrumb-item active"><a href="control_tarea.php">Control de Creacion de tareas</a></li>
+              <li class="breadcrumb-item active">Crear nueva tarea</li>
             </ol>
           </div>
         </div>
@@ -113,10 +116,10 @@ include('menu.php');
         <!-- SELECT2 EXAMPLE -->
         <div class="card card-default">
           <div class="card-header">
-            <h3 class="card-title">Nueva filial</h3>
+            <h3 class="card-title">Nueva tarea</h3>
           </div>
           <!-- /.card-header -->
-           <form name='formulario' id='formulario' class="principal" action="crear_filial.php" method="POST">
+           <form name='formulario' id='formulario' class="principal" action="crear_tarea.php" method="POST">
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
 
         
@@ -127,13 +130,7 @@ include('menu.php');
               <label for="inputEmail3" class="col-sm-2 col-form-label" >Nombre:</label>
                <input class="form-control" type="text" name="nombre" id="nombre">
                <br>
-               <div class="col-sm-12">
-                      <!-- textarea -->
-                      <div class="form-group">
-                        <label>Direccion:</label>
-                        <textarea class="form-control" id="direccion" name="direccion" rows="2" ></textarea>
-                      </div>
-                    </div>
+             
                     <div class="form-group">
                   <label for="exampleSelectBorderWidth2">Estado:</label>
                   <select class="custom-select form-control-border border-width-2" id="estado" name="estado">

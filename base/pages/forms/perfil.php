@@ -72,37 +72,22 @@ $login= $_COOKIE["id"]."";
               </div>
               <div class="card-body">
                 <strong><i class="fas fa-book mr-1"></i>Correo electronico</strong>
-
+                <?php 
+                $email;
+                      $sql="SELECT email FROM bd_local.tbl_user where id='".$_COOKIE["id"]."';";
+                      $result=mysqli_query($conexion,$sql);
+                      while($row=mysqli_fetch_assoc($result)) 
+                      {
+                       $email=$row["email"];
+                      }
+                    ?>
                 <p class="text-muted">
-                  mi correo electronico 
+                  <?php echo $email; ?>
                 </p>
-                <a href="#"><i class="fas fa-pencil-alt mr-1" ></i></a>
-                <hr>
+                <!-- <a href="#"><i class="fas fa-pencil-alt mr-1" ></i></a>
+                <hr> -->
 
-                <strong><i class="fas fa-map-marker-alt mr-1"></i> Location</strong>
-
-                <p class="text-muted">Malibu, California</p>
-                <a href="#"><i class="fas fa-pencil-alt mr-1"></i></a>
-                <hr>
-
-                <strong><i class="fas fa-pencil-alt mr-1"></i> Skills</strong>
-
-                <p class="text-muted">
-                  <span class="tag tag-danger">UI Design</span>
-                  <span class="tag tag-success">Coding</span>
-                  <span class="tag tag-info">Javascript</span>
-                  <span class="tag tag-warning">PHP</span>
-                  <span class="tag tag-primary">Node.js</span>
-                </p>
-                <a href="#"><i class="fas fa-pencil-alt mr-1"></i></a>
-                <hr>
-
-                <strong><i class="far fa-file-alt mr-1"></i> Notes</strong>
-
-                <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
-                <a href="#"><i class="fas fa-pencil-alt mr-1"></i></a>
-              </div>
-              
+                
             </div>  
            
           </div>

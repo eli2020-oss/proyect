@@ -182,7 +182,7 @@ $estado="";
       <!-- /.final del contenedor -->
                   <!-- /.card -->
                   <div class="card-footer">
-                   <form name='chat' id='chat' method="POST">
+                   <form name='chat' id='chat' enctype="multipart/form-data" method="POST">
                     <?php 
                     if($accion=="enviar")
                     {
@@ -199,12 +199,45 @@ $estado="";
                                 $contador=$row['c'];
                               } 
                               $cod=$contador+3; 
-                      $sql="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
-                      `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$cod."', '".$codigo."', 
-                      '', '".$_COOKIE["id"]."', '".$_POST['message']."', concat(now()),
-                       'ACTIVO', '".$_COOKIE['id']."', '');";
-                      $result=mysqli_query($conexion,$sql);
-                    }
+                             $fechanew="121022";
+                              if($_FILES["archivo"]["error"]>0){
+
+                                //   echo "no hay archivo";
+                               }else 
+                               {
+                                   $permitidos= array("image/jpng","image/png","application/pdf");
+                                   $limite_kb = 10000;
+                                   if(in_array($_FILES["archivo"]["type"],$permitidos) && $_FILES["archivo"]["size"]<= $limite_kb * 124){
+                                      $ruta = 'files/'.$fechanew."-".$cod."_".$_COOKIE["id"].'/';
+                                      $archivo =$ruta.$_FILES["archivo"]["name"];
+                                      if(!file_exists($ruta))
+                                      {
+                                       mkdir($ruta);
+                                      }
+                                      if(!file_exists($archivo))
+                                      {
+                                       $resultado = @move_uploaded_file($_FILES["archivo"]["tmp_name"],$archivo);
+                                       if($resultado)
+                                       {
+                                          // echo "Archivo guardado";
+                                       }else{
+                                           echo "error al guardar archivo";
+                                       }
+                                      }
+                                   }
+                                   else
+                                   {
+                                   echo "Archivo no permitido p excede el size";
+                                   }
+                     
+                      
+                                  }
+                                  $sql="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
+                                  `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$cod."', '".$codigo."', 
+                                  '', '".$_COOKIE["id"]."', '".$_POST['message']."', concat(now()),
+                                   'ACTIVO', '".$_COOKIE['id']."', '".$ruta."');";
+                                  $result=mysqli_query($conexion,$sql);
+                                }
                     ?>
                      <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
                      
@@ -216,10 +249,10 @@ $estado="";
                         <input type="text" name="message" id="message" placeholder="hola gracias ...." class="form-control">
                         <span class="input-group-append">
                            <button type="button" class="btn btn-warning" id="btnguardar" onClick='return cargar();'>Enviar</button>
-                           <!-- <input multiple type="file" class="form-control" id="archivo" name="archivo" >    -->
+                            <input multiple type="file" class="form-control" id="archivo" name="archivo" >   
                         </span>
                       </div>
-                    </form>
+                 </form>
                   </div>
                   <!-- /.card-footer-->
                 </div>

@@ -10,7 +10,7 @@ include('menu.php');
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FILIAL | DEPARTAMENTO</title>
+  <title>ACCESOS | NUEVO</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -51,14 +51,9 @@ include('menu.php');
       {
         if(document.getElementById("nombre").value=="")
         {
-          alert("Ingrese nombre de la filial");
+          alert("Ingrese descripcion de la Acceso");
           document.getElementById("nombre").focus();
         }
-        else if(document.getElementById("direccion").value=="")
-        {
-          alert("Ingrese la direccion");
-          document.getElementById("direccion").focus();
-        } 
         else
         {
           if(document.getElementById("accion").value=="")
@@ -76,13 +71,18 @@ include('menu.php');
 <?php 
              if($accion=="guardar")
              {
-              $sql="INSERT INTO `bd_local`.`tbl_filial` (`nombre`, `direccion_filial`, `estado`)
-              VALUES ('".$_POST['nombre']."', '".$_POST['direccion']."', '".$_POST['estado']."');";
-              //  echo "SQL ".$sql;
-          //    echo "<script>alert('".$_POST['nombre']."');</script>";
-           //   echo "<script>alert('".$_POST['direccion']."');</script>";
-           //   echo "<script>alert('".$_POST['estado']."');</script>";
-                  $resultado=mysqli_query($conexion,$sql);
+              $contar="";
+              $consulta="SELECT COUNT(*) as conta FROM bd_local.tbl_acceso;";
+                $resultado=mysqli_query($conexion,$consulta);
+                while($row=mysqli_fetch_assoc($resultado))
+                    {
+                      $contar=$row["conta"];
+                    }
+                  $contarl=$contar+1;
+              $sql="INSERT INTO `bd_local`.`tbl_acceso` (`acc_id`, `acc_nombre`, `acc_estado`) VALUES ('AC-".$contarl."', '".$_POST["nombre"]."', '".$_POST["estado"]."');
+              ";
+              
+              $resultado=mysqli_query($conexion,$sql);
                   $accion="";
                   //echo "<script>alert('Informacion Guardada Satisfactoriamente');</script>";
              }
@@ -93,12 +93,12 @@ include('menu.php');
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>Control de Filiales</h1>
+            <h1>Modulo de Acceso</h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="inicio.php">Inicio</a></li>
-              <li class="breadcrumb-item active"><a href="control_filiales.php">Control de creacion de accesos</a></li>
+              <li class="breadcrumb-item active"><a href="control_accesos.php">Control de creacion de accesos</a></li>
               <li class="breadcrumb-item active">Crear nuevo Acceso</li>
             </ol>
           </div>
@@ -113,10 +113,10 @@ include('menu.php');
         <!-- SELECT2 EXAMPLE -->
         <div class="card card-default">
           <div class="card-header">
-            <h3 class="card-title">Nueva filial</h3>
+            <h3 class="card-title">Nuevo Acceso</h3>
           </div>
           <!-- /.card-header -->
-           <form name='formulario' id='formulario' class="principal" action="crear_filial.php" method="POST">
+           <form name='formulario' id='formulario' class="principal" action="crear_acceso.php" method="POST">
             <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
 
         
@@ -139,7 +139,7 @@ include('menu.php');
              </div>
              <br>
                            <div class="input-group-prepend">
-                    <button type="button" class="btn btn-danger" id="btnguardar" onclick="return Validar();">GUARDAR</button>
+                    <button type="button"  class="btn btn-success toastrDefaultSuccess" id="btnguardar" onclick="return Validar();">GUARDAR</button>
                   </div>
           </div>
         
@@ -345,5 +345,6 @@ include('menu.php');
     });
   });
 </script>
+
 </body>
 </html>

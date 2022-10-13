@@ -56,11 +56,12 @@ $con="";
     <section class="content-header">
     <div class="container-fluid">
         <!-- Info boxes -->
-        <div class="row">
-          <div class="col-12 col-sm-6 col-md-3">
-         
-            <!-- /.info-box -->
+        <div class="card card-default">
+          <div class="card-header">
+            <h1 class="card-title">Sistema de control de tickets</h1>
           </div>
+        <div class="row">
+          
           <!-- /.col -->
           <!-- /.col -->
 
@@ -82,6 +83,31 @@ $con="";
            
            
           ?>
+                <div class="col-md-12">
+           
+           <div class="card">
+       <div class="card-header">
+         <h3 class="card-title">Sistema de Control de tickets</h3>
+
+         <div class="card-tools">
+           <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+             <i class="fas fa-minus"></i>
+           </button>
+           <button type="button" class="btn btn-tool" data-card-widget="remove" title="Remove">
+             <i class="fas fa-times"></i>
+           </button>
+         </div>
+       </div>
+       <div class="card-body">
+         <img class="img-fluid pad" src="reportes/img/CEIBENA.png" alt="Photo">
+
+         <p>Sistema de gestion de tickets </p>
+       </div>
+          </div>
+       <!-- /.card-body -->
+      
+       <!-- /.card-footer-->
+     </div>
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
@@ -229,14 +255,92 @@ $con="";
                 </div>
                 <!-- /.row -->
               </div>
+              <div class="card">
+              <div class="card-header border-transparent">
+                <h3 class="card-title">Monitorieo de tickets</h3>
+
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <!-- <div class="card-body p-0">
+                <div class="table-responsive">
+                 
+                  <table class="table m-0">
+                    <thead>
+                    <tr>
+                      <th>Orden id</th>
+                      <th>Descripcion</th>
+                      <th>Estado</th>
+                      <th>Fecha</th>
+                    </tr>
+                    </thead>
+                    <tbody> -->
+                    <?php 
+              //       $id="";
+              //       $descripcion="";
+              //       $estado="";
+              //       $fecha="";
+              //       $color="";
+              //     $sql="select * from( select ti.tickes_id as id, ti.titulo as titulo, ti.t_fechaini as fecha ,concat(u.f_name,' ',u.l_name) 
+              //     as nombre, tic_estado FROM  bd_local.tbl_user as u
+              //      inner join bd_local.tbl_ticketsc as ti where ti.us_id='".$_COOKIE['id']."' 
+              //      and u.id=ti.us_id  ORDER BY ti.t_fechaini BETWEEN date_add(NOW(), INTERVAL -3 DAY) AND now() DESC limit 5 )t 
+              //      order by fecha asc";
+              //      $result=mysqli_query($conexion,$sql);
+              //      while($row=mysqli_fetch_assoc($result))
+              //      {
+                     
+              //  //   echo "<script>alert('hola');</script>";
+              //      $descripcion=$row['titulo']."";
+              //      $fecha=$row['fecha']."";
+              //      $id=$row['id']."";
+              //     $estado=$row['tic_estado']."";
+              //      if($estado='ACTIVO')
+              //      {
+              //       $color="badge badge-succes";
+              //      }
+              //      else
+              //      {
+              //       $color="badge badge-danger";
+              //      }
+                  ?>
+                    <!-- <tr>
+                      <td><a href="bandeja.php"><?php echo $id; ?></a></td>
+                      <td><?php echo $descripcion; ?></td>
+                      <td><span class='<?php echo $color; ?>'><?php echo $estado; ?></span></td>
+                      <td>
+                        <div class="sparkbar" data-color="#00a65a" data-height="20"><?php echo $fecha; ?></div>
+                      </td>
+                    </tr>
+                   <?php 
+                  //  }
+                   ?>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="card-footer clearfix">
+                <a href="titecks.php" class="btn btn-sm btn-info float-left">Nuevo</a>
+                <a href="registro_ticks.php" class="btn btn-sm btn-secondary float-right">Ver historial</a>
+              </div> -->
+              <!-- /.card-footer -->
+            </div>
               <?php
            }else if($con==0)
            {
             ?>
-               <div class="col-md-12">
+            <div class="col-md-12">
+           
             <div class="card">
         <div class="card-header">
-          <h3 class="card-title">Control de tickets</h3>
+          <h3 class="card-title">Sistema de Control de tickets</h3>
 
           <div class="card-tools">
             <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
@@ -248,13 +352,13 @@ $con="";
           </div>
         </div>
         <div class="card-body">
-          Envia tu solicitudes de apoyo tecnico!
+          <img class="img-fluid pad" src="reportes/img/CEIBENA.png" alt="Photo">
+
+          <p>Sistema de gestion de tickets </p>
         </div>
            </div>
         <!-- /.card-body -->
-        <div class="card-footer">
-          
-        </div>
+       
         <!-- /.card-footer-->
       </div>
             <?php
@@ -286,85 +390,7 @@ $con="";
             <!-- /.row -->
 
             <!-- TABLE: LATEST ORDERS -->
-            <div class="card">
-              <div class="card-header border-transparent">
-                <h3 class="card-title">Monitorieo de tickets</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </div>
-              <!-- /.card-header -->
-              <div class="card-body p-0">
-                <div class="table-responsive">
-                 
-                  <table class="table m-0">
-                    <thead>
-                    <tr>
-                      <th>Orden id</th>
-                      <th>Descripcion</th>
-                      <th>Estado</th>
-                      <th>Fecha</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <?php 
-                    $id="";
-                    $descripcion="";
-                    $estado="";
-                    $fecha="";
-                    $color="";
-                  $sql="select * from( select ti.tickes_id as id, ti.titulo as titulo, ti.t_fechaini as fecha ,concat(u.f_name,' ',u.l_name) 
-                  as nombre, tic_estado FROM  bd_local.tbl_user as u
-                   inner join bd_local.tbl_ticketsc as ti where ti.us_id='".$_COOKIE['id']."' 
-                   and u.id=ti.us_id  ORDER BY ti.t_fechaini BETWEEN date_add(NOW(), INTERVAL -3 DAY) AND now() DESC limit 5 )t 
-                   order by fecha asc";
-                   $result=mysqli_query($conexion,$sql);
-                   while($row=mysqli_fetch_assoc($result))
-                   {
-                     
-               //   echo "<script>alert('hola');</script>";
-                   $descripcion=$row['titulo']."";
-                   $fecha=$row['fecha']."";
-                   $id=$row['id']."";
-                  $estado=$row['tic_estado']."";
-                   if($estado='ACTIVO')
-                   {
-                    $color="badge badge-succes";
-                   }
-                   else
-                   {
-                    $color="badge badge-danger";
-                   }
-                  ?>
-                    <tr>
-                      <td><a href="bandeja.php"><?php echo $id; ?></a></td>
-                      <td><?php echo $descripcion; ?></td>
-                      <td><span class='<?php echo $color; ?>'><?php echo $estado; ?></span></td>
-                      <td>
-                        <div class="sparkbar" data-color="#00a65a" data-height="20"><?php echo $fecha; ?></div>
-                      </td>
-                    </tr>
-                   <?php 
-                   }
-                   ?>
-                    </tbody>
-                  </table>
-                </div>
-                <!-- /.table-responsive -->
-              </div>
-              <!-- /.card-body -->
-              <div class="card-footer clearfix">
-                <a href="titecks.php" class="btn btn-sm btn-info float-left">Nuevo</a>
-                <a href="registro_ticks.php" class="btn btn-sm btn-secondary float-right">Ver historial</a>
-              </div>
-              <!-- /.card-footer -->
-            </div>
+           
             <!-- /.card -->
           </div>
           <!-- /.col -->

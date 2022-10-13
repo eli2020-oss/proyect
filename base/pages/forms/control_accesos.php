@@ -120,7 +120,7 @@ include('menu.php');
         <!-- SELECT2 EXAMPLE -->
         <div class="card card-default">
           <div class="card-header">
-            <h3 class="card-title">Historial de filiales</h3>
+            <h3 class="card-title">Historial de Accesos</h3>
           </div>
           <!-- /.card-header -->
            <form name='formulario' id='formulario' class="principal" action="control_accesos.php" method="POST">
