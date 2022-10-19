@@ -55,6 +55,7 @@ function cambiar(id)
     echo "<script>window.open('form_reasignar.php?var1=$v1','_blank');</script>";
 
    }
+  
   ?>
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -164,9 +165,10 @@ function cambiar(id)
                         <td>".$row['descrip']."</td>
                         <td>".$row['fecha']."</td>
                         <td>
-                        <a class=' btn btn-primary btn-sm'  onclick='return cambiar(\"".$row["ids"]."\")' >
+                        <a class='btn btn-info swalDefaultInfo'  onclick='return cambiar(\"".$row["ids"]."\")' >
                         REASIGNAR
                           </a>
+                         
                         </td>
                       </tr>
                       ";

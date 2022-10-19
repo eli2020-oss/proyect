@@ -101,7 +101,7 @@ $con="";
        <div class="card-body">
          <img class="img-fluid pad" src="reportes/img/CEIBENA.png" alt="Photo">
 
-         <p>Sistema de gestion de tickets </p>
+      
        </div>
           </div>
        <!-- /.card-body -->
@@ -117,11 +117,7 @@ $con="";
                   <button type="button" class="btn btn-tool" data-card-widget="collapse">
                     <i class="fas fa-minus"></i>
                   </button>
-                  <div class="btn-group">
-                    <button type="button" class="btn btn-tool dropdown-toggle" data-toggle="dropdown">
-                      <i class="fas fa-wrench"></i>
-                    </button>
-                  </div>
+                 
                   <button type="button" class="btn btn-tool" data-card-widget="remove">
                     <i class="fas fa-times"></i>
                   </button>
@@ -255,19 +251,7 @@ $con="";
                 </div>
                 <!-- /.row -->
               </div>
-              <div class="card">
-              <div class="card-header border-transparent">
-                <h3 class="card-title">Monitorieo de tickets</h3>
-
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </div>
+              
               <!-- /.card-header -->
               <!-- <div class="card-body p-0">
                 <div class="table-responsive">
@@ -354,7 +338,7 @@ $con="";
         <div class="card-body">
           <img class="img-fluid pad" src="reportes/img/CEIBENA.png" alt="Photo">
 
-          <p>Sistema de gestion de tickets </p>
+          
         </div>
            </div>
         <!-- /.card-body -->

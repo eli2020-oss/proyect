@@ -49,12 +49,12 @@ include('Conexion.php');
 <script type="text/javascript">
  function cargar1(codigo)
       {
-        // alert("Entra");
+        alert("Entra");
      //  localStorage.clear();
      document.getElementById("accion").value="desabilitar";
          document.getElementById("cc").value=codigo;
           //var getInput =codigo;
-         alert(codigo);
+       //  alert(codigo);
          //localStorage.setItem("ab",getInput);
             document.getElementById("formulario").submit();
       } 
@@ -62,7 +62,7 @@ include('Conexion.php');
   
 function cambiar(e,id,user)
 		{
-      //alert(id);
+      //===alert(id);
       $.ajax({
 				type: 'POST',
 				url: "cambio_estado.php",
@@ -70,9 +70,9 @@ function cambiar(e,id,user)
 				success: function(data)
 				{
 				//	$("#example1").append(data);
-          //alert(data);
+        //alert(data);
          // document.getElementById("formulario").submit();
-
+         document.getElementById("formulario").submit();
 				},
 				error: function(error)
 				{

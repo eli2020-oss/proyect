@@ -18,7 +18,7 @@ $consulta=" SELECT us.id as identi,estado,email FROM bd_local.categorias_user as
                                  $permitir="ACTIVO";
                                   //echo $row['identi']."  ";
                                 }
-                               // echo $row['email']." ".$_GET['email'];
+                               // echo $row['email']." ".$_GET['email']
                           }
                           //$permitir='ACTIVO';
                          // $id='US-zw260US-6';
@@ -33,7 +33,7 @@ $consulta=" SELECT us.id as identi,estado,email FROM bd_local.categorias_user as
                          inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
                          inner join bd_local.tbl_user usat on usat.id=ti.us_id 
                          inner join bd_local.categorias_user catu on catu.id_categoria=ti.cate_id  and ti.o_us='".$id."' 
-                         and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO' ";
+                         and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO' group by  ti.tickes_id  ";
 // $consulta ="SELECT * FROM bd_local.tbl_user where email=$email ";
 //echo $consulta."";
 $resultado= $conexion -> query($consulta);

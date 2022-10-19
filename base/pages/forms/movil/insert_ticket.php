@@ -49,9 +49,9 @@ $fechaan="";
         }
        $fechande='0-0-0 0:0:0';
  
-              //CATEGORIA Y ASIGNACION DE USUARIO DE ATENCION DE TICKET
+              //CATEGORIA Y ASIGNACION DE USUARIO DE ATENCION DE TICKET 
                $sqlc="SELECT u.id as mante FROM bd_local.categorias_user as cu inner join bd_local.tbl_user as u inner join
-               bd_local.tbl_categoria as c where cu.id_user=u.id and cu.id_categoria=c.cate_id and cu.id_categoria='".$categoria."'  AND cu.estado='ACTIVO'"; 
+               bd_local.tbl_categoria as c where cu.id_user=u.id and cu.id_categoria=c.cate_id and cu.id_categoria='".$categoria."'  ORDER BY RAND() limit 1"; 
        //    echo "SQL ".$sqlc;
            $resultado=mysqli_query($conexion,$sqlc);
            while($row=mysqli_fetch_assoc($resultado))
@@ -91,7 +91,7 @@ $fechaan="";
                    `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$contador."', concat(CURDATE()+0,'-".$cambio."'), 
                    '".$emisor."', '".$man."', '".$descripcion."', concat(now()),
                     'ACTIVO', '".$emisor."', '".$ruta."');";
-                    echo $sql;
+                   // echo $sql;
                      $result=mysqli_query($conexion,$sql);
                      mysqli_close($conexion);
 

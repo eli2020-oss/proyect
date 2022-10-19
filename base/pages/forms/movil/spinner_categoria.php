@@ -5,7 +5,7 @@ include('conexion.php');
 // $consulta ="SELECT id_categoria,t_descripcion,cate_estado
 // FROM bd_local.categorias_user inner join bd_local.tbl_categoria where id_categoria=cate_id and cate_estado='ACTIVO'
 // and estado='ACTIVO'; ";
-$consulta="SELECT id_categoria ,t_descripcion,cate_estado
+$consulta="SELECT  DISTINCT id_categoria ,t_descripcion,cate_estado
 FROM bd_local.tbl_categoria as c 
 inner join bd_local.categorias_user cu on c.cate_id=cu.id_categoria 
 where id_categoria=cate_id and cate_estado='ACTIVO'

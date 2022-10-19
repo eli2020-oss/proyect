@@ -48,6 +48,18 @@ include('menu.php');
    
   
 </script>
+<script type="text/javascript">
+ function cargar3(codigo)
+      {
+        
+         document.getElementById("accion").value="recetiar";
+         document.getElementById("cc").value=codigo;
+         
+            document.getElementById("formulario").submit();
+      } 
+   
+  
+</script>
   <?php    
       //MANEJO DEL ESTADO DE LOS USUARIOS 
         if($accion=='desabilitar')
@@ -62,6 +74,29 @@ include('menu.php');
           $sql="UPDATE `bd_local`.`tbl_detalle_emple` SET `em_estado` = 'ACTIVO' WHERE (`id` = '".$_POST['cc']."');";
           //echo " el sql    ".$sql;
           $result=mysqli_query($conexion,$sql);
+        }
+        if($accion=="recetiar")
+        {
+         //
+        // $v1=base64_encode($_POST["cc"]);
+         //   ;
+        // echo "<script>alert('".$_POST['cc']."');</script>";
+          //  echo "<script>window.open('form_reasignar.php?var1=$v1','_blank');</script>";
+          function generateCode($length){
+            $chars = "vwyzABC01256";
+            $code = "";
+            $clean = strlen($chars) -1; 
+            while(strlen($code) < $length )
+            { 
+                $code .=$chars[mt_rand(0,$clean)];
+            }
+            return $code;
+        }
+        $sql="UPDATE `bd_local`.`tbl_user` SET `password` = '".generateCode(5)."' WHERE (`id` = '".$_POST['cc']."');        ";
+        //echo " el sql    ".$sql;
+        $result=mysqli_query($conexion,$sql);
+       echo "<script>alert('Nuevo PASSWORD: ".generateCode(5)."');</script>";
+
         }
     ?>
 <body class="hold-transition sidebar-mini">
@@ -126,13 +161,15 @@ include('menu.php');
                         <td>".$row['email']."</td>
                         <td>".$row['estado']."</td>
                         <td class='project-actions text-right'>
-                        <a class='btn btn-danger btn-sm' onclick='return cargar1(\"".$row["id"]."\")' >
+                        <a class='btn btn-danger swalDefaultError' onclick='return cargar1(\"".$row["id"]."\")' >
                            DESABILITAR
                         </a>
-                        <a class='btn btn-primary btn-sm' onclick='return cargar2(\"".$row["id"]."\")' >
+                        <a class='btn btn-success swalDefaultSucces' onclick='return cargar2(\"".$row["id"]."\")' >
                           HABILITAR
                         </a>
-                  
+                        <a class='btn btn-info swalDefaultInfo' onclick='return cargar3(\"".$row["id"]."\")' >
+                        RECETIAR
+                      </a>
 
                     </td>
                       </tr>

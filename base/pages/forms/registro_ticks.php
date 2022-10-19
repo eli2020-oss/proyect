@@ -41,7 +41,15 @@ function cambiar(id)
       
   
 </script>
-
+<script type="text/javascript">
+function cambiar1(id)
+		{
+     // alert(id);
+     document.getElementById("cc").value=id;
+     document.getElementById("rep").value=2;
+    document.getElementById("formulario").submit();
+		}
+</script>
 <body class="hold-transition sidebar-mini">
   <?php 
    $rep=isset($_POST["rep"])?$_POST["rep"]:"";
@@ -54,6 +62,16 @@ function cambiar(id)
 // echo "<script>alert('".$_POST['cc']."');</script>";
     echo "<script>window.open('reportes/reporte_chat.php?var1=$v1','_blank');</script>";
 
+   }
+   if($rep=="2")
+   {
+   // $_SESSION
+   //echo "<script>alert('llego');</script>";
+   $sql="UPDATE `bd_local`.`tbl_ticketsc` SET `tic_estado` = 'ACTIVO' WHERE (`tickes_id` = '".$_POST["cc"]."');
+   ";
+        // echo " el sql    ".$sql;
+         $result=mysqli_query($conexion,$sql);
+   
    }
   ?>
   <!-- Content Wrapper. Contains page content -->
@@ -184,9 +202,12 @@ function cambiar(id)
                         <td>".$row['descrip']."</td>
                         <td>".$row['fecha']."</td>
                         <td>
-                        <a class=' btn btn-primary btn-sm'  onclick='return cambiar(\"".$row["ids"]."\")' >
+                        <a class='btn btn-info swalDefaultInfo'  onclick='return cambiar(\"".$row["ids"]."\")' >
                         VER CHAT
                           </a>
+                          <a class='btn btn-success swalDefaultSucces'  onclick='return cambiar1(\"".$row["ids"]."\")' >
+                          ACTIVAR
+                              </a>
                         </td>
                       </tr>
                       ";
