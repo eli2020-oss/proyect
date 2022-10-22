@@ -130,9 +130,9 @@ include('menu.php');
         
              <div class="card">
              <div class="input-group-prepend">
-             <a href="crear_acceso.php" class="nav-link">
+             <!-- <a href="crear_acceso.php" class="nav-link">
                     <button type="button" class="btn btn-danger" id="btnguardar" >Crear nuevo acceso</button>
-                    </a>
+                    </a> -->
                   </div>
               <div class="card-body">
                 <table id="example1" class="table table-bordered table-striped">

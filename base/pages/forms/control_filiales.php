@@ -71,7 +71,14 @@ include('menu.php');
          
             document.getElementById("formulario").submit();
       } 
-   
+      function cargar3(codigo)
+      {
+      //  alert("Entra");
+         document.getElementById("accion").value="Modificar";
+         document.getElementById("cc").value=codigo;
+         
+            document.getElementById("formulario").submit();
+      } 
   
 </script>
 <?php
@@ -92,6 +99,20 @@ include('menu.php');
      $result=mysqli_query($conexion,$sql);
      //   echo "<script>alert('habilitar');</script>";
       //  echo "<script>alert('".$_POST['cc']."');</script>";
+        }
+        if($accion=='Modificar')
+        {
+          
+          //$sql="UPDATE `bd_local`.`tbl_filial` SET `estado` = 'ACTIVO' WHERE (`id_filial` =  '".$_POST['cc']."');";
+        // echo " el sql    ".$sql;
+    // $result=mysqli_query($conexion,$sql);
+   //  echo "<script>alert('Modificar');</script>";
+      //  echo "<script>alert('".$_POST['cc']."');</script>";
+      $v1=base64_encode($_POST["cc"]);
+   // $v2=base64_encode('22');
+ //   ;
+// echo "<script>alert('".$_POST['cc']."');</script>";
+    echo "<script>window.open('modificar_filial.php?var1=$v1','_blank');</script>";
         }
     ?>   
 <body class="hold-transition sidebar-mini">
@@ -158,13 +179,15 @@ include('menu.php');
                         <td>".$row['direccion_filial']."</td>
                         <td>".$row['estado']."</td>
                         <td class='project-actions text-right'>
-                        <a class='btn btn-danger btn-sm' onclick='return cargar1(\"".$row["id"]."\")' >
+                        <a class='btn btn-info swalDefaultInfo' onclick='return cargar1(\"".$row["id"]."\")' >
                            DESABILITAR
                         </a>
-                        <a class='btn btn-primary btn-sm' onclick='return cargar2(\"".$row["id"]."\")' >
+                        <a class='btn btn-success swalDefaultSuccess' onclick='return cargar2(\"".$row["id"]."\")' >
                           HABILITAR
                         </a>
-                  
+                        <a class='btn btn-warning swalDefaultWarning' onclick='return cargar3(\"".$row["id"]."\")' >
+                        MODIFICAR
+                      </a>
 
                     </td>
                       </tr>

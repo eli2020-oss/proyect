@@ -70,7 +70,7 @@ $_SESSION['avatar']=$avatar;
                $estado="";
                $sql="SELECT estado
                FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
-               where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-1';";
+               where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-1' and acc_estado='ACTIVO'";
               $result=mysqli_query($conexion,$sql);
               while($row=mysqli_fetch_assoc($result))
               { $estado=$row["estado"]; }
@@ -82,7 +82,7 @@ $_SESSION['avatar']=$avatar;
             $estado="";
             $sql="SELECT estado
             FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
-            where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-6';";
+            where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-6' and acc_estado='ACTIVO'";
            $result=mysqli_query($conexion,$sql);
            while($row=mysqli_fetch_assoc($result))
            { $estado=$row["estado"]; }
@@ -128,7 +128,7 @@ $_SESSION['avatar']=$avatar;
           $estado="";
           $sql="SELECT estado
           FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
-          where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-3';";
+          where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-3' and acc_estado='ACTIVO'";
          $result=mysqli_query($conexion,$sql);
          while($row=mysqli_fetch_assoc($result))
          { $estado=$row["estado"]; }
@@ -158,7 +158,7 @@ $_SESSION['avatar']=$avatar;
           $estado="";
           $sql="SELECT estado
           FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
-          where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-2';";
+          where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-2' and acc_estado='ACTIVO'";
          $result=mysqli_query($conexion,$sql);
          while($row=mysqli_fetch_assoc($result))
          { $estado=$row["estado"]; }
@@ -212,7 +212,7 @@ $_SESSION['avatar']=$avatar;
         $estado="";
         $sql="SELECT estado
         FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
-        where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-5';";
+        where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-5' and acc_estado='ACTIVO'";
        $result=mysqli_query($conexion,$sql);
        while($row=mysqli_fetch_assoc($result))
        { $estado=$row["estado"]; }
@@ -244,7 +244,7 @@ $_SESSION['avatar']=$avatar;
               <?php 
               $sql="SELECT estado
               FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
-              where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-2';";
+              where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-2' and acc_estado='ACTIVO'";
              $result=mysqli_query($conexion,$sql);
              while($row=mysqli_fetch_assoc($result))
              { $estado=$row["estado"]; }
@@ -266,7 +266,7 @@ $_SESSION['avatar']=$avatar;
           $estado="";
           $sql="SELECT estado
           FROM bd_local.tbl_user as us inner join bd_local.user_acceso as au inner join bd_local.tbl_acceso as ac
-          where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-8';";
+          where au.acc_id=ac.acc_id and au.us_id=us.id and au.us_id='".$_COOKIE["id"]."' and ac.acc_id='AC-8' and acc_estado='ACTIVO'";
          $result=mysqli_query($conexion,$sql);
          while($row=mysqli_fetch_assoc($result))
          { $estado=$row["estado"]; }

@@ -52,6 +52,7 @@ include('menu.php');
 </script>
 
 <?php
+$existir=''; 
  $contador=0;
  $sql2="SELECT count(id) as conta FROM bd_local.categorias_user;"; 
                   // echo "SQL ".$sql2;
@@ -88,7 +89,8 @@ include('menu.php');
                                 
                           }
                           $sql="SELECT id_categoria as cate, u.id as id,concat(u.f_name,' ',u.l_name) as nombre
-                          FROM bd_local.categorias_user  inner join bd_local.tbl_user as u where u.id=id_user";
+                          FROM bd_local.categorias_user  inner join bd_local.tbl_user as u where u.id=id_user and
+                           id_categoria='".$_POST['cmbtareas']."' and  u.id='".$_POST['cmbuser']."'";
                           $existir; 
                           $user='';
                         $resultado=mysqli_query($conexion,$sql);
@@ -97,12 +99,13 @@ include('menu.php');
                             if($row['cate']==$_POST['cmbtareas'] && $row['id']==$_POST['cmbuser'])
                             {
                                 $existir=true;
-                                
+                              //  echo " el sql                                   ".$row['cate']." ".$_POST['cmbtareas']." ".$row['id']." ".$_POST['cmbuser'];
                                  $user=$row['nombre'];
                             }
-                            else if($row['cate']!=$_POST['cmbtareas'] && $row['id']!=$_POST['cmbuser'])
+                            else 
                             {
                                 $existir=false;
+                                echo " el sql                                             ".$row['cate']." ".$_POST['cmbtareas']." ".$row['id']." ".$_POST['cmbuser'];
                                
                             }
                           
@@ -112,13 +115,15 @@ include('menu.php');
                             echo "<script>alert('La tarea ya fue asignada a el usuario ".$user."');</script>";
                         }else if($existir==false)
                         {
-                            $sql="INSERT INTO `bd_local`.`categorias_user` (`id`, `id_user`, `id_categoria`, `t_descripcion`, `estado`) VALUES ('CU-".$contador."', '".$_POST['cmbuser']."', '".$_POST['cmbtareas']."', '".$t_categoria."', '".$final."');";
+                          echo "<script>alert('Tarea asignada ');</script>";
+                           $sql="INSERT INTO `bd_local`.`categorias_user` (`id`, `id_user`, `id_categoria`, `t_descripcion`, `estado`) VALUES ('CU-".$contador."', '".$_POST['cmbuser']."', '".$_POST['cmbtareas']."', '".$t_categoria."', '".$final."');";
                              //  echo " el sql    ".$sql;
-                                 $result=mysqli_query($conexion,$sql);
+                            $result=mysqli_query($conexion,$sql);
                                 
                         }
+          
                 }
-
+               
   ?>
 <body class="hold-transition sidebar-mini">
  <div class="content-wrapper">

@@ -4,9 +4,19 @@ include('menu.php');
  // $_SESSION["login"];
       include("Conexion.php"); 
     $accion=isset($_POST["accion"])?$_POST["accion"]:"";
-    $v1="";
     $v1=base64_decode($_GET["var1"]);
-    $v2=base64_decode($_GET["var2"]);
+  //  $v2=base64_decode($_GET["var2"]);
+  $id="";
+  $nombre="";
+  $direccion="";
+  $sql="SELECT * FROM bd_local.tbl_filial where id_filial='".$v1."'";
+  $result=mysqli_query($conexion,$sql);
+  while($row=mysqli_fetch_assoc($result))
+  {
+     $id=$row["id_filial"];
+     $nombre=$row["nombre"];
+     $direccion=$row["direccion_filial"];
+  }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -67,7 +77,7 @@ include('menu.php');
           if(document.getElementById("accion").value=="")
           {
             //alert('entra');
-            document.getElementById("accion").value="guardar";
+            document.getElementById("accion").value="modificar";
           //  alert( document.getElementById("accion").value="guardar";);
           }
           document.getElementById("formulario").submit();
@@ -77,10 +87,10 @@ include('menu.php');
     
 </script>
 <?php 
-             if($accion=="guardar")
+             if($accion=="Modificar")
              {
-              $sql="INSERT INTO `bd_local`.`tbl_filial` (`nombre`, `direccion_filial`, `estado`)
-              VALUES ('".$_POST['nombre']."', '".$_POST['direccion']."', '".$_POST['estado']."');";
+              $sql="UPDATE `bd_local`.`tbl_filial` SET `nombre` = '".$_POST['nombre']."', `direccion_filial` = '".$_POST['direccion']."', `estado` = '".$_POST['estado']."' WHERE (`id_filial` = '".$id."');
+              ";
               //  echo "SQL ".$sql;
           //    echo "<script>alert('".$_POST['nombre']."');</script>";
            //   echo "<script>alert('".$_POST['direccion']."');</script>";
@@ -128,13 +138,13 @@ include('menu.php');
               <h5>Recoleccion de informacion</h5>
               <div class="col-sm-10">
               <label for="inputEmail3" class="col-sm-2 col-form-label" >Nombre:</label>
-               <input class="form-control" type="text" name="nombre" id="nombre">
+               <input class="form-control" type="text" name="nombre" id="nombre"  value="<?php echo $nombre; ?>">
                <br>
                <div class="col-sm-12">
                       <!-- textarea -->
                       <div class="form-group">
                         <label>Direccion:</label>
-                        <textarea class="form-control" id="direccion" name="direccion" rows="2" ></textarea>
+                        <textarea class="form-control" id="direccion" name="direccion" rows="2"  value=""><?php echo $direccion; ?></textarea>
                       </div>
                     </div>
                     <div class="form-group">
@@ -147,7 +157,7 @@ include('menu.php');
              </div>
              <br>
                            <div class="input-group-prepend">
-                    <button type="button" class="btn btn-danger" id="btnguardar" onclick="return Validar();">GUARDAR</button>
+                    <button type="button" class="btn btn-danger" id="btnguardar" onclick="return Validar();">Modificar</button>
                   </div>
           </div>
         
