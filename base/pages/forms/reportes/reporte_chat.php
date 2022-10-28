@@ -18,7 +18,21 @@ $categoria="";
 
     //   echo "<script>alert('ACTIVIDAD GENERAL DE USUARIO".$v1."');</script>";
       $sql="SELECT  c.tickes_id, concat(f_name,' ') as nombreu ,titulo,tk_descripcion,t_fechaini as inicio,tfechafinal as final
-      ,nombre, t_categoria as nombre_cate, MONTHNAME(c.t_fechaini) as namemes
+      ,nombre, t_categoria as nombre_cate,  (select case month(t_fechaini)
+when 1 then 'Enero'
+when 2 then 'Febrero'
+when 3 then 'Marzo'
+when 4 then 'Abril'
+when 5 then 'Mayo'
+when 6 then 'Junio'
+when 7 then 'Julio'
+when 8 then 'Agosto'
+when 9 then 'Septiembre'
+when 10 then 'Octubre'
+when 11 then 'Noviembre'
+when 12 then 'Diciembre' 
+end as mes from  bd_local.tbl_ticketsc
+ where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()) limit 1) as namemes
       FROM bd_local.tbl_ticketsc as c inner join bd_local.tbl_categoria as ca 
       inner join bd_local.tbl_filial inner join bd_local.tbl_user where  c.tickes_id='".$v1."' and  ca.cate_id=c.cate_id
       and  o_us=id limit 1;";

@@ -97,7 +97,7 @@ include('menu.php');
            //   echo "<script>alert('".$_POST['estado']."');</script>";
                   $resultado=mysqli_query($conexion,$sql);
                   $accion="";
-                  //echo "<script>alert('Informacion Guardada Satisfactoriamente');</script>";
+                  echo "<script>alert('Se Modifico con exito');</script>";
              }
  ?>    
 <body class="hold-transition sidebar-mini">
@@ -126,7 +126,7 @@ include('menu.php');
         <!-- SELECT2 EXAMPLE -->
         <div class="card card-default">
           <div class="card-header">
-            <h3 class="card-title">Nueva filial</h3>
+            <h3 class="card-title">Modificar filial</h3>
           </div>
           <!-- /.card-header -->
            <form name='formulario' id='formulario' class="principal" action="crear_filial.php" method="POST">

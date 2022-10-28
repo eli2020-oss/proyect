@@ -149,7 +149,7 @@ function cambiar(id)
                  //echo $_POST['cmbuser'];
                    if($vacio!="")
                    { 
-                    $sql="SELECT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre,
+                    $sql="SELECT DISTINCT ti.tickes_id as ids,concat(f_name,' ',l_name ) as nombre,
                     ti.titulo as descrip,ti.tfechafinal as fecha, ti.tic_estado as estado 
                     FROM bd_local.tbl_ticketsc as ti inner join bd_local.tbl_user as us 
                     inner join bd_local.tbl_categoria as ca inner join bd_local.categorias_user as cu

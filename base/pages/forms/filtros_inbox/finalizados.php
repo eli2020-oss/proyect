@@ -1,11 +1,11 @@
 <?php 
 session_start();
-include("Conexion.php");
+include("../Conexion.php");
 //$estado=$_POST["estado"];
 //$idticket=$_POST["ida"];
 //$v1=isset($_GET["var1"])?$_GET["var1"]:"";
 //echo "<script>alert('".$v1."');</script>";
-//echo $v1;
+//echo "Parar";
 $accion=isset($_POST["accion"])?$_POST["accion"]:"";
 $estado='ACTIVO';
 ?> 
@@ -61,7 +61,18 @@ $estado='ACTIVO';
  //echo "<script> alert(".$accion.");</script>";
 ?>
 <div class="container-fluid">
- 
+<!-- <div class="mailbox-controls">
+                
+                <div class="btn-group">
+                  <button type="button" class="btn btn-default btn-sm" onClick="return mover();">
+                     <i class="far fa-circle text-danger"> MIS TICKETS</i>
+                  </button>
+                 d
+                </div>
+              
+                </div>
+              
+              </div> -->
            
 <table  class="table table-head-fixed text-nowrap" name="table">
                   <tbody>
@@ -86,27 +97,7 @@ $estado='ACTIVO';
                                 }
                                
                           }
-                          if ($permitir=='ACTIVO') 
-                          {
-                             //Usuario ADMINISTRADOR
-                           
-                          $sql="select
-                          ti.tickes_id as ids,
-                          concat(u.f_name,' ',u.l_name) nombre,
-                          fnc_fecha(t_fechaini) as fecha,
-                          ti.titulo as titulo,ti.tic_estado as estado
-                          from
-                          bd_local.tbl_ticketsc ti
-                          inner join bd_local.tbl_user u on u.id=ti.o_us
-                          inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
-                          inner join bd_local.tbl_user usat on usat.id=ti.us_id 
-                          inner join bd_local.categorias_user catu on catu.id_categoria=ti.cate_id 
-                          and ti.us_id='".$id."' and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO' group by   ti.tickes_id";
-                            
-                        // echo "administrador". $_SESSION["mis"];
-                         }
-                         else 
-                         {
+                         
                           $verboton=false;
                         // USUARIO BASE SIN PERMISOS
                          $sql="select
@@ -119,11 +110,12 @@ $estado='ACTIVO';
                          inner join bd_local.tbl_user u on u.id=ti.o_us
                          inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
                          inner join bd_local.tbl_user usat on usat.id=ti.us_id 
+                         inner join bd_local.tbl_detalle d on d.tickes_id=ti.tickes_id
                          inner join bd_local.categorias_user catu on catu.id_categoria=ti.cate_id  and ti.o_us='".$_COOKIE["id"]."' 
-                         and catu.estado='ACTIVO' and ti.tic_estado='ACTIVO'  group by  ti.tickes_id ";
+                         and catu.estado='ACTIVO' and ti.tic_estado='FINALIZADO' where YEAR(ti.t_fechaini) =YEAR(curdate()) and MONTH(ti.t_fechaini) =MONTH(curdate()) group by  ti.tickes_id ";
                            //echo $sql;
-                           //echo "sin permisos".$sql;
-                         }
+                         // echo "sin permisos".$sql;
+                         
                           $result=mysqli_query($conexion,$sql);
                           $data="";
                           while($row=mysqli_fetch_assoc($result))

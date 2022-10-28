@@ -91,7 +91,7 @@ include('Conexion.php');
   ?> 
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="#" class="h1">Coopererativa Ceibeña</a>
+      <a href="#" class="h1">Cooperativa Ceibeña</a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Inicio de sesion</p>

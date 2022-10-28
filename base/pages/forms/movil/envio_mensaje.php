@@ -17,7 +17,7 @@ include ("conexion.php");
     
                                 $contador=$row['c'];
                               } 
-                              $cod=$contador+3; 
+                              $cod=$contador+1; 
 
                       $consulta="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
                       `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$cod."', '".$codigo."', 

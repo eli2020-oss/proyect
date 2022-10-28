@@ -142,8 +142,10 @@ function cambiar(id,user)
                   <select  class="form-control select2" id="cmbuser" name="cmbuser" style="width: 100%;" onchange="return cambio();" >
                  <?php 
                     echo "<option value=''>[----SELECCIONE UN USUARIO----]</option>";
-                      $sql="SELECT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
-                      inner join  bd_local.tbl_detalle_emple as e where u.id=e.id and e.em_estado='ACTIVO'";
+                      $sql="SELECT DISTINCT u.id as codigo,concat(u.f_name,' ',u.l_name) as nombre FROM bd_local.tbl_user as u 
+                      inner join  bd_local.tbl_detalle_emple as e 
+                      inner join bd_local.categorias_user as c where u.id=e.id
+                      and u.id=c.id_user and e.em_estado='ACTIVO' and c.estado='ACTIVO'";
                       $result=mysqli_query($conexion,$sql);
                       while($row=mysqli_fetch_assoc($result)) 
                       {

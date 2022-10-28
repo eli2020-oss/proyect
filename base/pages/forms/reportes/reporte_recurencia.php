@@ -5,14 +5,28 @@ $mes="";
 $nombre="";
 $filial="";
 $completos="";
-$sql="SELECT MONTHNAME(c.t_fechaini) as namemes, (SELECT  nombre FROM bd_local.tbl_filial 
-inner join bd_local.tbl_ticketsc where id_filial=tk_filial group by id_filial ORDER BY id_filial DESC LIMIT 1) as nombre,
+$sql="SELECT (select case month(t_fechaini)
+when 1 then 'Enero'
+when 2 then 'Febrero'
+when 3 then 'Marzo'
+when 4 then 'Abril'
+when 5 then 'Mayo'
+when 6 then 'Junio'
+when 7 then 'Julio'
+when 8 then 'Agosto'
+when 9 then 'Septiembre'
+when 10 then 'Octubre'
+when 11 then 'Noviembre'
+when 12 then 'Diciembre' 
+end as mes from  bd_local.tbl_ticketsc
+ where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()) limit 1) as namemes, (SELECT  nombre FROM bd_local.tbl_filial 
+inner join bd_local.tbl_ticketsc where id_filial=tk_filial group by id_filial ORDER BY id_filial asc LIMIT 1) as nombre,
 (SELECT Count(tk_filial) FROM bd_local.tbl_filial 
 inner join bd_local.tbl_ticketsc where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()) 
-and id_filial=tk_filial group by id_filial ORDER BY id_filial DESC LIMIT 1) as filial,
+and id_filial=tk_filial group by id_filial ORDER BY id_filial ASC LIMIT 1) as filial,
 (SELECT count(tic_estado) FROM bd_local.tbl_ticketsc as c
 inner join bd_local.tbl_categoria as ca inner join bd_local.tbl_filial
- where YEAR(c.t_fechaini) =YEAR(curdate()) and MONTH(c.t_fechaini) =MONTH(curdate()) and ca.cate_id=c.cate_id and id_filial=tk_filial and tic_estado='FINALIZADO' ) as completos
+ where YEAR(c.t_fechaini) =YEAR(curdate()) and MONTH(c.t_fechaini) =MONTH(curdate()) and ca.cate_id=c.cate_id and id_filial=tk_filial  ) as completos
 FROM bd_local.tbl_ticketsc as c
 inner join bd_local.tbl_categoria as ca inner join bd_local.tbl_filial
  where YEAR(c.t_fechaini) =YEAR(curdate()) and MONTH(c.t_fechaini) =MONTH(curdate()) 
@@ -207,7 +221,7 @@ $pdf->SetFont('Arial', '', 10);
 $pdf->SetWidths(array(7, 25, 30, 30,40,40));
 //$pdf->Ln(25);
 // $pdf->setXY(30,60);
-$i=1;
+$i=0;
 $sql="SELECT c.tickes_id as codigo,t_categoria as categoria,titulo,nombre as filial,tk_area as area
 ,tk_nivel as nivel,tic_estado as estado FROM bd_local.tbl_detalle 
 inner join bd_local.tbl_ticketsc as c

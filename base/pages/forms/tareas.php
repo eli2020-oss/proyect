@@ -134,8 +134,9 @@ include('menu.php');
                 <table id="example1" class="table table-bordered table-striped">
                   <thead>
                   <tr>
-                    <th>Identificador</th>
-                    <th>Nombre</th>
+                    <th>ID</th>
+                    <th>Tarea</th>
+                    <th>Encargado</th>
                     <th>Estado</th>
                     <th></th>
                   </tr>
@@ -151,6 +152,7 @@ include('menu.php');
                     {
                       echo "
                       <tr>
+                      <td>".$row['cate']."</td>
                         <td>".$row['descrip']."</td>
                         <td>".$row['nombre']."</td>
                         <td>".$row['estado']."</td>

@@ -6,6 +6,7 @@ $_SESSION["ticketid"]=$codigo;
 $cc=isset($_POST["cc"])?$_POST["cc"]:"";
 $ca=isset($_POST["ca"])?$_POST["ca"]:"";
 $user="";
+$ruta="";
 $estado="";
  // echo "<script>alert('".$_SESSION['ticketid']."');</script>";
       include("Conexion.php"); 
@@ -18,7 +19,7 @@ $estado="";
         $sql="SELECT tic_estado FROM bd_local.tbl_ticketsc where tickes_id='".$codigo."';";                       
         $result=mysqli_query($conexion,$sql);
             while($row=mysqli_fetch_assoc($result)){ $estado=$row['tic_estado'];}
-         // echo "<script>alert('".$estado."');</script>"; 
+       //  echo "<script>alert('".$estado."');</script>"; 
     ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -62,7 +63,7 @@ $estado="";
     $v1=base64_encode($_POST["ca"]);
     $v2=base64_encode($_POST['cc']);
  //   ;
-// echo "<script>alert('".$_POST['cc']."');</script>";
+// 
     echo "<script>window.open('map.php?var1=$v1&var2=$v2','_blank');</script>";
 
    }
@@ -126,6 +127,8 @@ $estado="";
             <!-- Main content -->
             <div class="invoice p-3 mb-3">
               <!-- title row -->
+              <?php if($origen!=$user)
+              {?>
               <div class="row">
                 <div class="col-12">
                   <h4>
@@ -154,6 +157,48 @@ $estado="";
                 </div>
                 <!-- /.col -->
                 <?php 
+              }else
+              {
+                $destino="";
+                $sql="select
+                concat(u.f_name,' ',u.l_name) nombre
+               from
+                bd_local.tbl_ticketsc ti
+                inner join bd_local.tbl_user u on u.id=ti.us_id
+                inner join bd_local.tbl_categoria ct on ct.cate_id=ti.cate_id
+                inner join bd_local.tbl_user usat on usat.id=ti.us_id  and ti.tickes_id='".$_SESSION["ticketid"]."' and ti.tic_estado='ACTIVO'
+                ";                       
+                $result=mysqli_query($conexion,$sql);
+                    while($row=mysqli_fetch_assoc($result)){ $destino=$row['nombre'];}
+                ?>
+                 <div class="row">
+                <div class="col-12">
+                  <h4>
+                    <i class="fas fa-globe"></i>   <?php echo $titulo; ?>
+                    <small class="float-right">Fecha: <?php echo $fechain; ?></small>
+                  </h4>
+                </div>
+                <!-- /.col -->
+              </div>
+              <!-- info row -->
+              <div class="row invoice-info">
+                <div class="col-sm-4 invoice-col">
+                  De:
+                  <address>
+                    <strong><?php echo $origen; ?>.</strong><br>
+                    <?php echo $inicial; ?>
+                  </address>
+                </div>
+                <!-- /.col -->
+                <div class="col-sm-4 invoice-col">
+                  Para:
+                  <address>
+                    <strong><?php echo $destino; ?></strong><br>
+                    <?php echo $categoria; ?>
+                  </address>
+                </div>
+                <?php
+              }
                 if($longitud=="")
                 {
 
@@ -198,7 +243,7 @@ $estado="";
     
                                 $contador=$row['c'];
                               } 
-                              $cod=$contador+3; 
+                              $cod=$contador+1; 
                              $fechanew="121022";
                               if($_FILES["archivo"]["error"]>0){
 
@@ -232,15 +277,23 @@ $estado="";
                      
                       
                                   }
+
                                   $sql="INSERT INTO `bd_local`.`tbl_detalle` (`deta_id`, `tickes_id`, `o_user`, `d_user`, 
                                   `d_descrip`, `fecha`, `estado`, `respuesta`, `archivo`) VALUES ('DLL-".$cod."', '".$codigo."', 
                                   '', '".$_COOKIE["id"]."', '".$_POST['message']."', concat(now()),
                                    'ACTIVO', '".$_COOKIE['id']."', '".$ruta."');";
                                   $result=mysqli_query($conexion,$sql);
+                                 // echo "<script>alert('ver');</script>";
+                             // echo $sql;
                                 }
                     ?>
                      <input type="hidden" name="accion" id="accion" value="<?php echo $accion; ?>">
-                     
+                     <?php 
+                     if($estado=="FINALIZADO")
+                     {
+
+                     }else{
+                     ?>
                       <div class="input-group">
                       <input type="hidden" name="codigo" id="codigo" value="<?php echo $codigo; ?>">
                       <input type="hidden" name="cc" id="cc" value="<?php echo $cc; ?>">
@@ -252,6 +305,7 @@ $estado="";
                             <input multiple type="file" class="form-control" id="archivo" name="archivo" >   
                         </span>
                       </div>
+                      <?php }?>
                  </form>
                   </div>
                   <!-- /.card-footer-->

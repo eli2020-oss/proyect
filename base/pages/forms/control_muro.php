@@ -24,7 +24,7 @@ $codigo=$_SESSION['ticketid'];
                   where ti.tickes_id=de.tickes_id and u.id=de.respuesta and de.tickes_id='".$codigo."' ORDER BY de.fecha DESC )t 
                   order by fecha asc ";
 
-                 //echo "SENTENCIA DE SQL ".$sql;
+                // echo "SENTENCIA DE SQL ".$sql;
                   $result=mysqli_query($conexion,$sql);
                   while($row=mysqli_fetch_assoc($result))
                   {
@@ -47,7 +47,7 @@ $codigo=$_SESSION['ticketid'];
                         
                         // $listar=null;
                         $directorio=opendir($carpeta);
-                      // echo $directorio."";
+                     
                         if($carpeta=='')
                         {}
                         else{
@@ -77,7 +77,7 @@ $codigo=$_SESSION['ticketid'];
                       <span class="direct-chat-timestamp float-right"><?php echo $fecha; ?></span>
                     </div>
                     <!-- /.direct-chat-infos -->
-                    <img class="direct-chat-img" src='<?php echo $avatar ?>' alt="Message User Image">
+                    <img class="direct-chat-img" src='reportes/img/user.png' alt="Message User Image">
                     <!-- /.direct-chat-img -->
                     <div class="direct-chat-text">
                     <?php echo $descrip; ?>
@@ -99,7 +99,7 @@ $codigo=$_SESSION['ticketid'];
                       <span class="direct-chat-timestamp float-left"><?php echo $fecha; ?></span>
                     </div>
                     <!-- /.direct-chat-infos -->
-                    <img class="direct-chat-img" src='<?php echo $avatar ?>' alt="Message User Image">
+                    <img class="direct-chat-img" src='reportes/img/programmer.png' alt="Message User Image">
                     <!-- /.direct-chat-img -->
                     <div class="direct-chat-text">
                     <?php echo $descrip; ?>

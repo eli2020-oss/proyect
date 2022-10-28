@@ -51,6 +51,11 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
       $("#box").load("filtros_inbox/normal.php");
       return false;
     }
+    function final()
+    {
+      $("#box").load("filtros_inbox/finalizados.php");
+      return false;
+    }
 </script>
 
 </head>
@@ -120,7 +125,7 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
                 <li class="nav-item">
                   <a href="registro_ticks.php" class="nav-link">
                     <i class="far fa-circle text-danger"></i>
-                  FINALIZADO
+                  HISTORIAL
                   </a>
                 </li>
                
@@ -136,7 +141,7 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
                 <li class="nav-item">
                   <a href="#" class="nav-link" onClick="return emergencia();">
                     <i class="far fa-circle text-danger"></i>
-                  EMEGERCIA
+                    EMERGENCIA
                   </a>
                   <li class="nav-item">
                   <a href="#" class="nav-link" onClick="return media();">
@@ -146,6 +151,12 @@ $codigo=isset($_POST["codigo"])?$_POST["codigo"]:"";
                   <a href="#" class="nav-link" onClick="return normal();">
                     <i class="far fa-circle text-primary"></i>
                    NORMAL
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a href="#" class="nav-link" onClick="return final();">
+                    <i class="far fa-circle text-danger"></i>
+                  FINALIZADO
                   </a>
                 </li>
               </ul>

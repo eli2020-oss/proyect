@@ -185,14 +185,16 @@ include('menu.php');
                         <a class='btn btn-success swalDefaultSuccess' onclick='return cargar2(\"".$row["id"]."\")' >
                           HABILITAR
                         </a>
-                        <a class='btn btn-warning swalDefaultWarning' onclick='return cargar3(\"".$row["id"]."\")' >
-                        MODIFICAR
-                      </a>
+                     
 
                     </td>
                       </tr>
                       ";
-                   }?>
+                   }
+                    //   <a class='btn btn-warning swalDefaultWarning' onclick='return cargar3(\"".$row["id"]."\")' >
+                      //   MODIFICAR
+                      // </a>
+                   ?>
                   </tbody>
                 
                 </table>

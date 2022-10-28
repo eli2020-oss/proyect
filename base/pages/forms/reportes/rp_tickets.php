@@ -7,7 +7,21 @@ $sin_atender="";
 $atendidos="";
 $total_sin="";
 $total_atendido="";
-$sql="SELECT MONTHNAME(t.t_fechaini) as namemes,count(t.tic_estado) as delmes,(count(tic_estado) -(SELECT  count(tickes_id) FROM bd_local.tbl_ticketsc where t_fechaini between (NOW() - INTERVAL 2 day) and now()  and tic_estado='ACTIVO')) as fuera
+$sql="SELECT (select case month(t_fechaini)
+when 1 then 'Enero'
+when 2 then 'Febrero'
+when 3 then 'Marzo'
+when 4 then 'Abril'
+when 5 then 'Mayo'
+when 6 then 'Junio'
+when 7 then 'Julio'
+when 8 then 'Agosto'
+when 9 then 'Septiembre'
+when 10 then 'Octubre'
+when 11 then 'Noviembre'
+when 12 then 'Diciembre' 
+end as mes from  bd_local.tbl_ticketsc
+ where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()) limit 1) as namemes,count(t.tic_estado) as delmes,(count(tic_estado) -(SELECT  count(tickes_id) FROM bd_local.tbl_ticketsc where t_fechaini between (NOW() - INTERVAL 2 day) and now()  and tic_estado='ACTIVO')) as fuera
     ,(SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where tic_estado='ACTIVO' and MONTH(t_fechaini) =MONTH(curdate()))/(SELECT count(tic_estado) FROM bd_local.tbl_ticketsc  where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()))*100 as porcen_sin_mes
     ,(SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where  tic_estado='FINALIZADO' and MONTH(t_fechaini) =MONTH(curdate()))/(SELECT count(tic_estado) FROM bd_local.tbl_ticketsc  where YEAR(t_fechaini) =YEAR(curdate()) and MONTH(t_fechaini) =MONTH(curdate()))*100 as porcen_atendido_mes,
      (SELECT  count(tickes_id)  FROM bd_local.tbl_ticketsc where tic_estado='FINALIZADO' and MONTH(t_fechaini) =MONTH(curdate())) as atendido_mes

@@ -43,15 +43,15 @@ $fechaan="";
  }
  else
  {
-         $cambio;
-        for ($i = 0; $i <= $contadord; $i++) {
-        $cambio=$i+1;
-        }
+         $cambio= $contadord+1;
+        // for ($i = 0; $i <= $contadord; $i++) {
+        // $cambio=$i+1;
+        // }
        $fechande='0-0-0 0:0:0';
  
               //CATEGORIA Y ASIGNACION DE USUARIO DE ATENCION DE TICKET 
                $sqlc="SELECT u.id as mante FROM bd_local.categorias_user as cu inner join bd_local.tbl_user as u inner join
-               bd_local.tbl_categoria as c where cu.id_user=u.id and cu.id_categoria=c.cate_id and cu.id_categoria='".$categoria."'  ORDER BY RAND() limit 1"; 
+               bd_local.tbl_categoria as c where cu.id_user=u.id and cu.id_categoria=c.cate_id and cu.id_categoria='".$categoria."' and cu.estado='ACTIVO' ORDER BY RAND() limit 1"; 
        //    echo "SQL ".$sqlc;
            $resultado=mysqli_query($conexion,$sqlc);
            while($row=mysqli_fetch_assoc($resultado))
@@ -70,7 +70,7 @@ $fechaan="";
                           } 
                         }
                // echo "pRIMERO  ".$contador;
-               $contador=$contador+3; 
+               $contador=$contador+1; 
                $consulta="INSERT INTO `bd_local`.`tbl_ticketsc` (`tickes_id`, `o_us`, `us_id`, 
                `cate_id`, `tk_nivel`, `titulo`, `tk_descripcion`, `t_fechaini`, `tfechafinal`,
                 `cc`, `tk_filial`, `tk_area`, `latitud`, `longitud`, `tic_estado`) VALUES (concat(CURDATE()+0,'-".$cambio."'),

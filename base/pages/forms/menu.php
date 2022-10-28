@@ -4,12 +4,15 @@ include('conexion.php');
 $nombre="";
 $login= $_COOKIE["id"]."";
 $avatar='';
+$estado="";
 $sql="SELECT  concat(us.f_name,' ',us.l_name) as nombre,
- au.acc_id as acid, ac.acc_nombre, ac.acc_id as acceso,avatar,estado,acc_estado
+au.acc_id as acid, ac.acc_nombre, ac.acc_id as acceso,avatar,estado,acc_estado,em_estado
 FROM  bd_local.tbl_user as us 
 inner join bd_local.user_acceso as au 
-inner join  bd_local.tbl_acceso as ac where au.acc_id=ac.acc_id 
-and au.us_id=us.id and au.us_id='".$login."';";
+inner join  bd_local.tbl_acceso as ac
+inner join bd_local.tbl_detalle_emple as de
+where au.acc_id=ac.acc_id 
+and au.us_id=us.id and de.id=us.id and au.us_id='".$login."';";
 //echo $sql;
   $result=mysqli_query($conexion,$sql);
       while($row=mysqli_fetch_assoc($result))
@@ -18,11 +21,16 @@ and au.us_id=us.id and au.us_id='".$login."';";
        $avatar=$row['avatar'];
       $_SESSION[$row["acceso"]]=isset($row["acid"])?$row["acid"]:"";
      // $_SESSION[$row["acc_estado"]]=isset($row["estado"])?$row["estado"]:"";
-        
+        $estado=$row["em_estado"];
       }
 $_SESSION['name']=$nombre;
 $_SESSION['avatar']=$avatar;
-
+if($estado=="INACTIVO")
+{
+ setcookie('id','',time()-60*60*24*30,'/');
+setcookie('sess','',time()-60*60*24*30,'/');
+header('Location: index1.php');
+}
 ?>
 
 <div class="wrapper">
@@ -53,9 +61,7 @@ $_SESSION['avatar']=$avatar;
    <div class="sidebar">
       <!-- Sidebar user (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-        <div class="image">
-          <img styte='max-width: 50px;' src='<?php echo $avatar ?>' class="img-circle elevation-2" alt="User Image">
-        </div>
+       
         <div class="info">
             <a href="perfil.php" class="d-block"><?php echo $nombre; ?></a>
         </div>

@@ -43,7 +43,7 @@ $descripcion=$_POST["textarea"];
  
               //CATEGORIA Y ASIGNACION DE USUARIO DE ATENCION DE TICKET
                $sqlc="SELECT u.id as mante FROM bd_local.categorias_user as cu inner join bd_local.tbl_user as u inner join
-               bd_local.tbl_categoria as c where cu.id_user=u.id and cu.id_categoria=c.cate_id and cu.id_categoria='".$categoria."'  ORDER BY RAND() limit 1"; 
+               bd_local.tbl_categoria as c where cu.id_user=u.id and cu.id_categoria=c.cate_id and cu.id_categoria='".$categoria."' and cu.estado='ACTIVO' ORDER BY RAND() limit 1"; 
           // echo "CATEGORIA Y ASIGNACION DE USUARIO DE ATENCION DE TICKET  ".$sqlc;
           
            $resultado=mysqli_query($conexion,$sqlc);
@@ -65,7 +65,7 @@ $descripcion=$_POST["textarea"];
                           } 
                          
                 //echo "pRIMERO  ".$contador;
-               $contador=$contador+3; 
+               $contador=$contador+1; 
           //    echo "sEGUNDO   ".$contador;
                   // echo "<script>alert('".$contador."');</script>";
                 if($_FILES["archivo"]["error"]>0){

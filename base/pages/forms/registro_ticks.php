@@ -205,6 +205,7 @@ function cambiar1(id)
                         <a class='btn btn-info swalDefaultInfo'  onclick='return cambiar(\"".$row["ids"]."\")' >
                         VER CHAT
                           </a>
+                    
                           <a class='btn btn-success swalDefaultSucces'  onclick='return cambiar1(\"".$row["ids"]."\")' >
                           ACTIVAR
                               </a>
